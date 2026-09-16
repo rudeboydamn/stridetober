@@ -28,5 +28,5 @@ export const DEMO_WEEKS = [
            linden:[8410,9010,8300,9210,8604,9730,7740],
            maple:[5120,6340,5980,6110,5870,6720,6740] },
     derived:["hazel"],
-    judgeNote:"Ash edged Hazel by a margin the Judge describes as 'a vigorous lunch break'. Maple's tribute finally landed; the trail noticed." },
+    judgeNote:"Ash edged Hazel by a margin the Judge describes as 'a vigorous lunch break'. Maple's screenshot finally landed; the trail noticed." },
 ];

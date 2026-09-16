@@ -1,0 +1,120 @@
+/* ═══════════ STRIDETOBER — TOKENS ═══════════
+   Spec: docs/PLAN.md §3.2–§3.4, §4.1. Raw palette uses --light-* / --dark-*
+   names on purpose: tests/css.test.js reads them to prove contrast, and
+   tests/data.test.js reads --light-walker-* to validate walker colors. */
+
+:root {
+  /* raw — light */
+  --light-bg:#FBF5EA; --light-surface:#FFFDF8; --light-surface-2:#F3E8D6; --light-line:#E7D8C2; --light-line-strong:#A48A6E;
+  --light-ink:#2A1C13; --light-ink-2:#5E4838; --light-ink-3:#7A6352;
+  --light-accent:#E0661B; --light-on-accent:#2A1C13; --light-accent-ink:#A6420E;
+  --light-down:#A8321A; --light-up:#56692A; --light-ribbon:#5F6F2E; --light-on-ribbon:#FBF5EA;
+  --light-gold:#C9961A; --light-gold-ink:#8A5F07; --light-eve:#5B2B45; --light-seal-ring:transparent;
+  --light-walker-cranberry:#A3303F; --light-walker-goldenrod:#A87A0B; --light-walker-moss:#5E7F32; --light-walker-spruce:#2E6E68;
+  --light-walker-denim:#4B6FA0; --light-walker-fig:#6E3F73; --light-walker-cinnamon:#8F4B29; --light-walker-rosehip:#B34D6B;
+
+  /* raw — dark */
+  --dark-bg:#17110D; --dark-surface:#221913; --dark-surface-2:#2C211A; --dark-line:#3A2C22; --dark-line-strong:#7A624C;
+  --dark-ink:#F7ECDD; --dark-ink-2:#D2BFAB; --dark-ink-3:#A89280;
+  --dark-accent:#F28A3E; --dark-on-accent:#17110D; --dark-accent-ink:#F7A45F;
+  --dark-down:#EE7355; --dark-up:#AFC06D; --dark-ribbon:#AFC06D; --dark-on-ribbon:#17110D;
+  --dark-gold:#F2C14E; --dark-gold-ink:#F2C14E; --dark-eve:#C99BC0; --dark-seal-ring:#A89280;
+  --dark-walker-cranberry:#E0677A; --dark-walker-goldenrod:#EBC04F; --dark-walker-moss:#9DBF5E; --dark-walker-spruce:#5FB3A9;
+  --dark-walker-denim:#86A8D8; --dark-walker-fig:#B98AC4; --dark-walker-cinnamon:#D08A5E; --dark-walker-rosehip:#E68AA6;
+
+  /* theme-independent */
+  --seal:#A8321A; --on-seal:#FBF5EA;
+  --leaf-1:#C0452A; --leaf-2:#E0661B; --leaf-3:#D9A21B; --leaf-4:#7C8B3F;
+
+  /* semantic — light (default) */
+  color-scheme: light;
+  --bg:var(--light-bg); --surface:var(--light-surface); --surface-2:var(--light-surface-2);
+  --line:var(--light-line); --line-strong:var(--light-line-strong);
+  --ink:var(--light-ink); --ink-2:var(--light-ink-2); --ink-3:var(--light-ink-3);
+  --accent:var(--light-accent); --on-accent:var(--light-on-accent); --accent-ink:var(--light-accent-ink);
+  --down:var(--light-down); --up:var(--light-up); --ribbon:var(--light-ribbon); --on-ribbon:var(--light-on-ribbon);
+  --gold:var(--light-gold); --gold-ink:var(--light-gold-ink); --eve:var(--light-eve); --seal-ring:var(--light-seal-ring);
+  --walker-cranberry:var(--light-walker-cranberry); --walker-goldenrod:var(--light-walker-goldenrod);
+  --walker-moss:var(--light-walker-moss); --walker-spruce:var(--light-walker-spruce);
+  --walker-denim:var(--light-walker-denim); --walker-fig:var(--light-walker-fig);
+  --walker-cinnamon:var(--light-walker-cinnamon); --walker-rosehip:var(--light-walker-rosehip);
+  --shadow-1: 0 1px 0 rgb(42 28 19 / .06), 0 10px 24px -14px rgb(42 28 19 / .28);
+  --grain-opacity: .05;
+  --leaf-opacity: .75;
+  --sky-morning:#FBE7D2; --sky-afternoon:#FCE2B6; --sky-dusk:#F7CDA8; --sky-night:#E6DCD0; --sky-eve:#EADCE6;
+  --sky: var(--sky-afternoon);
+
+  /* type */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
+  --step--1: clamp(.75rem, .72rem + .15vw, .8125rem);
+  --step-0:  clamp(1rem, .96rem + .2vw, 1.0625rem);
+  --step-1:  clamp(1.1875rem, 1.1rem + .45vw, 1.375rem);
+  --step-2:  clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --step-3:  clamp(2.125rem, 1.7rem + 2.2vw, 3.25rem);
+  --step-4:  clamp(2.75rem, 2rem + 4.5vw, 5.5rem);
+
+  /* space, radius, layout */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px;
+  --r-sm:8px; --r-md:14px; --r-lg:22px; --r-pill:999px;
+  --gutter:16px; --max:1120px;
+  --head-h:64px; --tab-h:64px;
+
+  /* motion */
+  --ease-settle: cubic-bezier(.22,1,.36,1);
+  --ease-swing:  cubic-bezier(.45,.05,.55,.95);
+  --ease-stamp:  cubic-bezier(.2,.9,.3,1.35);
+  --ease-exit:   cubic-bezier(.4,0,1,1);
+  --dur-press:120ms; --dur-quick:200ms; --dur-enter:320ms; --dur-stamp:560ms; --dur-count:900ms;
+}
+
+/* Dark mapping — identical under both selectors below. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg:var(--dark-bg); --surface:var(--dark-surface); --surface-2:var(--dark-surface-2);
+    --line:var(--dark-line); --line-strong:var(--dark-line-strong);
+    --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --ink-3:var(--dark-ink-3);
+    --accent:var(--dark-accent); --on-accent:var(--dark-on-accent); --accent-ink:var(--dark-accent-ink);
+    --down:var(--dark-down); --up:var(--dark-up); --ribbon:var(--dark-ribbon); --on-ribbon:var(--dark-on-ribbon);
+    --gold:var(--dark-gold); --gold-ink:var(--dark-gold-ink); --eve:var(--dark-eve); --seal-ring:var(--dark-seal-ring);
+    --walker-cranberry:var(--dark-walker-cranberry); --walker-goldenrod:var(--dark-walker-goldenrod);
+    --walker-moss:var(--dark-walker-moss); --walker-spruce:var(--dark-walker-spruce);
+    --walker-denim:var(--dark-walker-denim); --walker-fig:var(--dark-walker-fig);
+    --walker-cinnamon:var(--dark-walker-cinnamon); --walker-rosehip:var(--dark-walker-rosehip);
+    --shadow-1: 0 1px 0 rgb(0 0 0 / .4), 0 12px 28px -14px rgb(0 0 0 / .7);
+    --grain-opacity: .04;
+    --leaf-opacity: .55;
+    --sky-morning:#2A2019; --sky-afternoon:#2E2316; --sky-dusk:#331F1A; --sky-night:#1F1A2A; --sky-eve:#241A2C;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:var(--dark-bg); --surface:var(--dark-surface); --surface-2:var(--dark-surface-2);
+  --line:var(--dark-line); --line-strong:var(--dark-line-strong);
+  --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --ink-3:var(--dark-ink-3);
+  --accent:var(--dark-accent); --on-accent:var(--dark-on-accent); --accent-ink:var(--dark-accent-ink);
+  --down:var(--dark-down); --up:var(--dark-up); --ribbon:var(--dark-ribbon); --on-ribbon:var(--dark-on-ribbon);
+  --gold:var(--dark-gold); --gold-ink:var(--dark-gold-ink); --eve:var(--dark-eve); --seal-ring:var(--dark-seal-ring);
+  --walker-cranberry:var(--dark-walker-cranberry); --walker-goldenrod:var(--dark-walker-goldenrod);
+  --walker-moss:var(--dark-walker-moss); --walker-spruce:var(--dark-walker-spruce);
+  --walker-denim:var(--dark-walker-denim); --walker-fig:var(--dark-walker-fig);
+  --walker-cinnamon:var(--dark-walker-cinnamon); --walker-rosehip:var(--dark-walker-rosehip);
+  --shadow-1: 0 1px 0 rgb(0 0 0 / .4), 0 12px 28px -14px rgb(0 0 0 / .7);
+  --grain-opacity: .04;
+  --leaf-opacity: .55;
+  --sky-morning:#2A2019; --sky-afternoon:#2E2316; --sky-dusk:#331F1A; --sky-night:#1F1A2A; --sky-eve:#241A2C;
+}
+
+/* Sky band follows the viewer's clock; Hallowed Eve wins. */
+html[data-daypart="morning"]   { --sky: var(--sky-morning); }
+html[data-daypart="afternoon"] { --sky: var(--sky-afternoon); }
+html[data-daypart="dusk"]      { --sky: var(--sky-dusk); }
+html[data-daypart="night"]     { --sky: var(--sky-night); }
+html[data-eve]                 { --sky: var(--sky-eve); }
+
+@media (min-width: 480px)  { :root { --gutter: 20px; } }
+@media (min-width: 768px)  { :root { --gutter: 32px; } }
+@media (min-width: 1024px) { :root { --gutter: 48px; --tab-h: 0px; } }
+@media (min-width: 1440px) { :root { --max: 1200px; } }

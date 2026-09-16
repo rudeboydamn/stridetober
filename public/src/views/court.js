@@ -1,8 +1,8 @@
 // The Court — home, per phase. Spec: docs/PLAN.md §5.2.
 import { nextMilestone, countdownParts, parseLocal } from "../lib/time.js";
 import { n, esc, rich, fill, pick } from "../lib/format.js";
-import { totals, together } from "../lib/stats.js";
-import { SPRITE, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal } from "../lib/fx.js";
+import { totals, together, purse } from "../lib/stats.js";
+import { SPRITE, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced } from "../lib/fx.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
@@ -91,7 +91,7 @@ function tribute(ctx) {
         <p class="tribute-line">Send your $20 to Dammy BEFORE October 4th!</p>
         <a class="btn btn-primary btn-ring" href="${esc(ctx.challenge.venmoUrl)}" target="_blank" rel="noopener">Pay the Tribute 🪙</a>
         <p class="caption">Venmo @${esc(ctx.challenge.venmoHandle)}</p>
-        <p class="pot">The pot so far: <b class="num" data-count="${pot}">${n(pot)}</b> dollars · ${sworn} sworn</p>
+        <p class="pot">The pot so far: <b class="num" data-count="${pot}">${n(pot)}</b> dollars · ${sworn} sworn · splits 50/30/20</p>
       </div>
       <span class="stamp tribute-stamp">NO $20 = NO COMPETING!</span>
     </div>
@@ -144,7 +144,7 @@ function how() {
   const steps = [
     ["Walk", "Oct 4 – Nov 1. Every step counts."],
     ["Report", "Screenshot your week. Send it DIRECTLY TO DAMMY — NOT THE GROUP CHAT!"],
-    ["Win", "Most total steps takes the pot. Crowned November 1."],
+    ["Win", "Top three split the pot — 50/30/20. Crowned November 1."],
   ];
   return `
   <section class="wrap section" data-reveal>
@@ -179,6 +179,50 @@ function job() {
 }
 
 const flourish = `<p class="wrap flourish">Fall into Healthy Habits</p>`;
+
+// ── crowned: the coronation (M24) and the paying podium ───
+function coronation(ctx) {
+  const champ = ctx.standings[0];
+  if (!champ) return "";
+  const { pot, shares } = purse(ctx.walkers, ctx.challenge);
+  const seen = ctx.crownedSeen;
+  const rows = ctx.copy.PODIUM.map((p, i) => {
+    const r = ctx.standings[i];
+    if (!r) return "";
+    const sent = ctx.challenge.payouts?.[p.place];
+    return `<li class="card podium-row${i === 0 ? " first" : ""}" style="--c:var(--walker-${r.walker.color});--i:${i}">
+      <span class="podium-medal" aria-hidden="true">${p.medal}</span>
+      ${crest(r.walker)}
+      <a class="podium-name" href="#/walker/${r.walker.id}">${esc(r.walker.name)}</a>
+      <span class="num podium-total" data-count="${r.total}">${n(r.total)}</span>
+      <span class="chip pay-chip">${esc(p.share)} — $${n(shares[i].amount)}${sent ? " · sent ✓" : ""}</span>
+    </li>`;
+  }).join("");
+  const allSent = shares.every(s => ctx.challenge.payouts?.[s.place]);
+  return `
+  <section class="hero coronation" data-reveal>
+    <div class="wrap coronation-grid">
+      <div class="coronation-stage">
+        <span class="crown-slot">
+          <svg class="crown${seen ? "" : " dropping"}" viewBox="0 0 64 40" aria-hidden="true"><use href="${SPRITE}#wreath"/></svg>
+          ${crest(champ.walker, "crest-56")}
+        </span>
+        ${seal("Champion", { size: "seal-96", cls: seen ? "" : "stamping", label: "The October Step Champion" })}
+      </div>
+      <span class="ribbon">All rise</span>
+      <h1 class="hero-title">THE OCTOBER STEP CHAMPION</h1>
+      <p class="coronation-name">${esc(champ.walker.name)}</p>
+      <p class="coronation-total"><b class="num" data-count="${champ.total}">${n(champ.total)}</b> steps over four weeks</p>
+    </div>
+  </section>
+  <section class="wrap section" data-reveal>
+    <header class="section-head"><h2 class="h2">The Podium</h2><p class="sub">Three walkers leave richer.</p></header>
+    <ol class="podium">${rows}</ol>
+    <p class="sub payout-line">${allSent
+      ? "The pot has been sent. The matter is settled."
+      : `Dammy sends the $${n(pot)} pot by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
+  </section>`;
+}
 
 // ── walking / counting / crowned sections ─────────────────
 function ledgerPreview(ctx) {
@@ -256,11 +300,17 @@ export function render(ctx) {
     return hero(ctx) + countdownCard(ctx) + tribute(ctx) + roll(ctx)
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
-  return hero(ctx) + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + how();
+  return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
+    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + how();
 }
 
 export function mount(root, ctx) {
   reveal(root);
+  // Coronation burst fires once per device; later views just bob (M24).
+  if (ctx.phase === "crowned" && !ctx.crownedSeen) {
+    try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }
+    setTimeout(() => burst({}), reduced() ? 0 : 300);
+  }
   const bottle = root.querySelector(".bottle");
   const slot = root.querySelector(".bubble-slot");
   const lines = ctx.copy.BOTTLE;

@@ -10,7 +10,8 @@ export const CHALLENGE = {
   finalBell: "2026-11-01T00:00",    // "the clock strikes 12:00 AM"
   judge: { name: "Dammy Henry", title: "The Fairly Impartial Judge" },
   champion: null,                   // set to a walker id when week 4 posts
-  payoutSent: false,                // flip when the Venmo goes out
+  split: [0.5, 0.3, 0.2],           // the pot pays three places: 1st / 2nd / 3rd
+  payouts: { 1: false, 2: false, 3: false }, // flip each when its Venmo lands
   weeks: [                          // Sun 00:00 → Sat 23:59; screenshots due Sunday
     { n:1, start:"2026-10-04", end:"2026-10-10", due:"2026-10-11" },
     { n:2, start:"2026-10-11", end:"2026-10-17", due:"2026-10-18" },

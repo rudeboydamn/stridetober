@@ -7,7 +7,7 @@ export const PHASE_LINES = {
               sub:"Four weeks. Twenty dollars. One champion. The leaves are watching." },
   walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. The Judge counts them." },
   counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The Judge is counting. The ledger is frozen-ish." },
-  crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot is settled by Venmo." },
+  crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot splits three ways by Venmo." },
 };
 
 export const COURT_WALKING = [ // hero line, rotates by week number
@@ -86,6 +86,12 @@ export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED
   { plea:"It's too spooky out.", ruling:"Spookiness is not a defense. Especially not this week." },
   { plea:"I was pacing during a call.", ruling:"Pacing counts. Show the screenshot next time.", pardon:true },
   { plea:"Big steps run in my family.", ruling:"Then the family may also pay tribute." },
+];
+
+export const PODIUM = [ // the pot pays three places (challenge.split); medal is canon — third gets a chestnut
+  { place:1, medal:"🥇", title:"THE OCTOBER STEP CHAMPION",    share:"half the pot" },
+  { place:2, medal:"🥈", title:"The Runner-Up",                share:"30% of the pot" },
+  { place:3, medal:"🌰", title:"Third Place, First Chestnut",  share:"20% of the pot" },
 ];
 
 export const TOASTS = {

@@ -222,6 +222,27 @@ export function tickCountdown(root, parts) {
   return true;
 }
 
+// ── M13 Reading of the Ledger (FLIP) ───────────────────────
+// Record each [data-id] child's top, run applyNewOrder() to re-append them in
+// their new order, then animate each row from its old position.
+export function flip(list, applyNewOrder) {
+  if (!list) { applyNewOrder(); return; }
+  if (reduced()) { applyNewOrder(); return; }
+  const tops = new Map([...list.children].map(el => [el.dataset.id, el.getBoundingClientRect().top]));
+  applyNewOrder();
+  [...list.children].forEach((el, i) => {
+    const old = tops.get(el.dataset.id);
+    const dy = old == null ? 0 : old - el.getBoundingClientRect().top;
+    if (!dy) return;
+    el.style.transition = "none";
+    el.style.transform = `translateY(${dy}px)`;
+    void el.offsetWidth;
+    el.style.transition = `transform 700ms var(--ease-settle) ${i * 40}ms`;
+    el.style.transform = "";
+    el.addEventListener("transitionend", () => { el.style.transition = ""; }, { once: true });
+  });
+}
+
 // ── M21 rake the leaves ────────────────────────────────────
 export function rake(pile, line, milestones) {
   if (!pile || !line) return;

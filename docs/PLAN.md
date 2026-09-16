@@ -497,7 +497,7 @@ Home. Its content is a stack of cards in `.wrap` (single column mobile; two-colu
 3. **Buy-in card.** Left: wax seal 56px embossed `$20`. Right: heading `The Tribute`, body `Send your $20 to Dammy BEFORE October 4th!` (verbatim), primary button `Pay the Tribute 🪙` → `CHALLENGE.venmoUrl` (new tab, `rel="noopener"`), with the muster-only pulse ring (M14). Under the button, caption `--ink-3`: `Venmo @Dammyhenry`. Bottom-right of the card, ink stamp `NO $20 = NO COMPETING!` (§3.5 stamp, static here).
 4. **The Roll.** Heading `The Roll of the Sworn`, sub `Walkers appear here as their tribute lands.` Roster grid (`auto-fill, minmax(min(160px,100%),1fr)`): each card = 40px crest, name, and either a PAID wax seal (stamp M8, `thud` on the card) or a hollow `--line-strong` outline seal captioned `tribute pending`. Empty state: centered card, hollow seal, `The Roll awaits its first tribute.` + margin note `the early bird avoids the guilt`.
 5. **What you need.** Heading `The Sworn Kit`. Three check rows: `A step tracker` ✓, `Two functioning feet` ✓, then `NO EXCUSES` rendered as a red ink stamp, not a checkbox. Each ✓ draws on (M11-style `draw`) as the card reveals.
-6. **How it works** — three compact cards in a row (stack on mobile): `Walk` `Oct 4 – Nov 1. Every step counts.` / `Report` `Screenshot your week. Send it DIRECTLY TO DAMMY — NOT THE GROUP CHAT!` / `Win` `Most total steps takes the pot. Crowned November 1.` Link `Read the full Decree →` to `#/rules`.
+6. **How it works** — three compact cards in a row (stack on mobile): `Walk` `Oct 4 – Nov 1. Every step counts.` / `Report` `Screenshot your week. Send it DIRECTLY TO DAMMY — NOT THE GROUP CHAT!` / `Win` `Top three split the pot — 50/30/20. Crowned November 1.` Link `Read the full Decree →` to `#/rules`.
 7. **Dammy's Job** card — kicker `DAMMY'S JOB:`, the five flyer bullets verbatim (§6.2).
 
 **Walking phase** (Oct 4 → Nov 1 00:00):
@@ -555,7 +555,7 @@ The rules, read aloud. Heading `The Decree`, kicker `SO ORDERED`. Sections as nu
 1. **The Season** — the week table (§1.2, verbatim): four weeks, Sun→Sat, screenshots due each Sunday; `Kickoff October 4 · The clock strikes 12:00 AM on November 1st`.
 2. **The Tribute** — `$20 to Dammy by Venmo before October 4th.` + `NO $20 = NO COMPETING!` stamp. Venmo button (text + 🪙).
 3. **The Evidence** — `Send your screenshot DIRECTLY TO DAMMY — NOT THE GROUP CHAT!` + `No screenshot = No steps!` stamp.
-4. **The Reckoning** — `The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… THE OCTOBER STEP CHAMPION!` + `Dammy will send the funds through Venmo to the person with the most steps on November 1st.`
+4. **The Reckoning** — `The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… THE OCTOBER STEP CHAMPION!` + `The pot pays three places: 50% to the Champion, 30% to second, 20% to third. Dammy will send the funds through Venmo on November 1st.`
 5. **The Fine Print** — verbatim: `No participation trophies. No sympathy points. And there will definitely be NO rounding up because you were "basically" at 10,000.` Plus the honour-system line: `The Judge trusts your tracker. He also, on occasion, asks questions.`
 - Footer line in Caveat: `The Judge's word is fairly final.`
 
@@ -588,7 +588,7 @@ Field journal of things spotted mid-walk. Heading `Fall Finds`, kicker `THE FIEL
 
 Recruitment card, built to be shared. Heading `The Summons`, kicker `YOU ARE HEREBY INVITED`.
 
-- A parchment card that reads like the flyer condensed: `OCTOBER STEPS CHALLENGE`, `Oct 4 – Nov 1`, `$20 buy-in — Venmo @Dammyhenry before Oct 4`, `Weekly screenshots to Dammy`, `Most total steps takes the pot`. Wax seal `S`.
+- A parchment card that reads like the flyer condensed: `OCTOBER STEPS CHALLENGE`, `Oct 4 – Nov 1`, `$20 buy-in — Venmo @Dammyhenry before Oct 4`, `Weekly screenshots to Dammy`, `Top three split the pot — 50/30/20`. Wax seal `S`.
 - Buttons: `Share the Summons` (`navigator.share`, copy fallback + toast) and `Pay the Tribute 🪙` → Venmo.
 - Muster-only: after Oct 4 the card gains `The season has begun — latecomers may still pay tribute, but the walking will not wait for them.`
 
@@ -801,7 +801,8 @@ export const CHALLENGE = {
   finalBell: "2026-11-01T00:00",    // "the clock strikes 12:00 AM"
   judge: { name: "Dammy Henry", title: "The Fairly Impartial Judge" },
   champion: null,                   // set to a walker id when week 4 posts
-  payoutSent: false,                // flip when the Venmo goes out
+  split: [0.5, 0.3, 0.2],           // the pot pays three places: 1st / 2nd / 3rd
+  payouts: { 1: false, 2: false, 3: false }, // flip each when its Venmo lands
   weeks: [                          // Sun 00:00 → Sat 23:59; screenshots due Sunday
     { n:1, start:"2026-10-04", end:"2026-10-10", due:"2026-10-11" },
     { n:2, start:"2026-10-11", end:"2026-10-17", due:"2026-10-18" },
@@ -846,7 +847,7 @@ export const ANNOUNCEMENT = null
 
 **`copy.js`** — exports every pool in §6 exactly as keyed there (`PHASE_LINES`, `COURT_WALKING`, `COUNTDOWN_LABELS`, `DOSSIER_LINES`, `NO_STEPS_WEEK`, `AS_COUNTED`, `DERIVED_NOTE`, `TOGETHER_LINES`, `VERDICTS`, `EXCUSES`, `TOASTS`, `DECOY_TOASTS`, `BOTTLE`, `RAKE_LINES`, `MARGIN_NOTES`, `HONOURS`).
 
-**`demo.js`** — loaded **only** when `?demo=1` is in the URL; `main.js` swaps it in for walkers/weeks so every phase can be previewed pre-launch. Six fictional walkers named after trees — `ash` "Ash Alder" 🦉 spruce · `rowan` "Rowan Birch" 🍁 cranberry · `hazel` "Hazel Thorne" 🦊 goldenrod · `linden` "Linden Marsh" 🐿️ denim · `maple` "Maple Grove" 🍄 fig · `hollis` "Hollis Yew" 🦔 moss — two posted weeks of plausible numbers, one `null` screenshot, and one `derived` split, so every UI state is exercised. Demo mode shows a `DEMO` ribbon in the header so screenshots are never mistaken for real standings.
+**`demo.js`** — loaded **only** when `?demo=1` is in the URL; `main.js` swaps it in for walkers/weeks so every phase can be previewed pre-launch. Six fictional walkers named after trees — `ash` "Ash Alder" 🦉 spruce · `rowan` "Rowan Birch" 🍁 cranberry · `hazel` "Hazel Thorne" 🦊 goldenrod · `linden` "Linden Marsh" 🐿️ denim · `maple` "Maple Grove" 🍄 fig · `hollis` "Hollis Yew" 🦔 moss — four posted weeks of plausible numbers, one `null` screenshot, one `derived` split, and a week-4 lead change (Hazel takes the crown by 1,472), so every UI state incl. coronation is exercised. Demo mode shows a `DEMO` ribbon in the header so screenshots are never mistaken for real standings.
 
 ### 7.2 `lib/time.js`
 

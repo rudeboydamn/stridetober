@@ -100,6 +100,10 @@ html.js [data-reveal]:not(.is-in) { opacity: 0; }
 .toast { animation: toast-in 320ms var(--ease-settle) both; }
 .toast.is-out { opacity: 0; transform: translateY(8px); transition: opacity 200ms, transform 200ms; animation: none; }
 
+/* ── M13 reading: deltas stay hidden until read, then pop ─ */
+.reading .delta { visibility: hidden; }
+.delta.pop-in { animation: pop 320ms var(--ease-stamp) both; }
+
 /* ── M19 group-chat decoy ───────────────────────────────── */
 .nope { animation: nope 360ms var(--ease-settle); }
 

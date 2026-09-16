@@ -20,7 +20,7 @@ export function render(ctx) {
       <ul class="summons-terms">
         <li><b>$20 buy-in</b> — Venmo @${esc(c.venmoHandle)} before Oct 4</li>
         <li><b>Weekly screenshots</b> to Dammy, due each Sunday</li>
-        <li><b>Most total steps</b> takes the pot</li>
+        <li><b>Top three split the pot</b> — 50% / 30% / 20%</li>
       </ul>
       <p class="summons-count">${sworn ? `${sworn} sworn · $${n(sworn * c.buyIn)} in the pot` : "The Roll is open"}</p>
       ${ctx.phase !== "muster" ? `<p class="summons-late">The season has begun — latecomers may still pay tribute, but the walking will not wait for them.</p>` : ""}
@@ -46,7 +46,7 @@ export function mount(root, ctx) {
     try {
       await navigator.share({
         title: "Stridetober",
-        text: "The October Steps Challenge. $20 to Dammy before Oct 4. Most total steps is crowned THE OCTOBER STEP CHAMPION!",
+        text: "The October Steps Challenge. $20 to Dammy before Oct 4. Top three split the pot — 50/30/20 — and first place is crowned THE OCTOBER STEP CHAMPION!",
         url,
       });
     } catch (e) {

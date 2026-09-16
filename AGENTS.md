@@ -13,7 +13,8 @@ Task 1, needs Dammy's go) · static site, no build, no framework, zero deps.
 
 ## 1. What this is
 
-An October step challenge. $20 buy-in by Venmo to Dammy, winner takes the pot.
+An October step challenge. $20 buy-in by Venmo to Dammy; the pot pays three
+places — **50% / 30% / 20%** (`challenge.split`, `challenge.payouts`).
 Four weeks, **Sunday 00:00 → Saturday 23:59**; screenshots are due each Sunday
 (Oct 11, 18, 25, Nov 1). Most total steps is crowned THE OCTOBER STEP CHAMPION
 on Nov 1. Officiated by Dammy Henry, "The *Fairly* Impartial Judge" — he does

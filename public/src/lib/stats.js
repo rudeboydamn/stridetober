@@ -129,3 +129,27 @@ export function together(t) {
   const miles = steps / MILE;
   return { steps, miles, km: miles * 1.609344, marathons: miles / MARATHON };
 }
+
+// The pot: paid × buyIn, split per challenge.split ([0.5, 0.3, 0.2] → 1st/2nd/3rd).
+// Amounts are whole dollars: pot is always a multiple of $20 and each share a multiple of $2.
+export function purse(walkers, challenge) {
+  const pot = paidWalkers(walkers).length * challenge.buyIn;
+  return { pot, shares: challenge.split.map((pct, i) => ({ place: i + 1, pct, amount: Math.round(pot * pct) })) };
+}
+
+// Head-to-head record between two walkers across posted weeks.
+// Missing weeks still count (a NO SCREENSHOT is a loss — "No screenshot = No steps!").
+export function h2h(aId, bId, weeks) {
+  const byWeek = weeks.map(w => {
+    const a = w.steps?.[aId], b = w.steps?.[bId];
+    const an = isNum(a) ? a : 0, bn = isNum(b) ? b : 0;
+    return { week: w.week, a: isNum(a) ? a : null, b: isNum(b) ? b : null,
+             winner: an > bn ? "a" : bn > an ? "b" : "tie" };
+  });
+  return {
+    byWeek,
+    aWins: byWeek.filter(w => w.winner === "a").length,
+    bWins: byWeek.filter(w => w.winner === "b").length,
+    ties: byWeek.filter(w => w.winner === "tie").length,
+  };
+}

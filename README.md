@@ -1,7 +1,7 @@
 # 🍂 Stridetober
 
 The official ledger of the October Steps Challenge. $20 buy-in, four weeks,
-winner takes the pot. Officiated by Dammy Henry, The *Fairly* Impartial Judge.
+top three split the pot 50/30/20. Officiated by Dammy Henry, The *Fairly* Impartial Judge.
 
 > **Picking this up as an agent?** Read [AGENTS.md](AGENTS.md) first, then the
 > full spec + task list in [docs/PLAN.md](docs/PLAN.md).
@@ -23,7 +23,7 @@ npm test                                # the deploy gate (Vercel runs this)
 ```
 
 Preview the whole challenge before it starts: `http://localhost:4173/?demo=1`
-loads fictional walkers and two posted weeks so every phase renders. Inside demo
+loads fictional walkers and four posted weeks so every phase renders. Inside demo
 mode, `&now=2026-10-18T10:00` time-travels (e.g. `2026-10-31T23:30` for Hallowed
 Eve, `2026-11-01T09:00` for counting). `?motion=reduce` previews reduced motion.
 

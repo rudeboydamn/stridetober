@@ -40,7 +40,7 @@ export function render(ctx) {
 
   const reckoning = `
     <p>The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… <strong class="champion-line">THE OCTOBER STEP CHAMPION!</strong></p>
-    <p>Dammy will send the funds through Venmo to the person with the most steps on November 1st.</p>`;
+    <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. Dammy will send the funds through Venmo on November 1st.</p>`;
 
   const fine = `
     <p class="decree-quote">No participation trophies. No sympathy points. And there will definitely be NO rounding up because you were "basically" at 10,000.</p>

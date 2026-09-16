@@ -14,27 +14,31 @@ import * as checkin from "./views/checkin.js";
 import * as decree from "./views/decree.js";
 import * as excuses from "./views/excuses.js";
 import * as summons from "./views/summons.js";
+import * as dossier from "./views/dossier.js";
+import * as compare from "./views/compare.js";
+import * as finds from "./views/finds.js";
 
 const root = document.documentElement;
 const view = document.getElementById("view");
-const params = new URLSearchParams(location.search);
+const query = new URLSearchParams(location.search);
 
 // ?demo=1 swaps in the fictional fixture; ?now= time-travel only works inside demo (PLAN §10.7).
-const DEMO = params.get("demo") === "1";
+const DEMO = query.get("demo") === "1";
 let walkers = WALKERS, allWeeks = WEEKS;
 if (DEMO) {
   const demo = await import("../data/demo.js");
   walkers = demo.DEMO_WALKERS;
   allWeeks = demo.DEMO_WEEKS;
 }
-const offset = DEMO && params.get("now") ? parseLocal(params.get("now")) - Date.now() : 0;
+const offset = DEMO && query.get("now") ? parseLocal(query.get("now")) - Date.now() : 0;
 const clock = () => new Date(Date.now() + offset);
 
 // Demo weeks carry future "posted" stamps; only count what has been posted by the (demo) clock.
 const weeksAt = now => (DEMO ? allWeeks.filter(w => !w.posted || parseLocal(w.posted) <= now) : allWeeks);
 
-let crownedSeen = false;
-try { crownedSeen = localStorage.getItem("stridetober:crowned-seen") === "1"; } catch { /* private mode */ }
+const crownedSeen = () => {
+  try { return localStorage.getItem("stridetober:crowned-seen") === "1"; } catch { return false; }
+};
 
 function buildContext(now) {
   const weeks = weeksAt(now);
@@ -53,11 +57,12 @@ function buildContext(now) {
     copy: COPY,
     finds: FALL_FINDS,
     demo: DEMO,
+    crownedSeen: crownedSeen(),
   };
 }
 
 const signature = now =>
-  phaseSignature({ now, challenge: CHALLENGE, weeks: weeksAt(now), crownedSeen, announcement: ANNOUNCEMENT });
+  phaseSignature({ now, challenge: CHALLENGE, weeks: weeksAt(now), crownedSeen: crownedSeen(), announcement: ANNOUNCEMENT });
 
 // ── router ────────────────────────────────────────────────
 const ROUTES = [
@@ -66,10 +71,16 @@ const ROUTES = [
   { path: "/check-in", mod: checkin,  name: "checkin", tab: 2, title: "Check-in" },
   { path: "/rules",    mod: decree,   name: "decree",  tab: 3, title: "The Decree" },
   { path: "/excuses",  mod: excuses,  name: "excuses", tab: 3, title: "Court of Excuses" },
+  { path: "/finds",    mod: finds,    name: "finds",   tab: 3, title: "Fall Finds" },
   { path: "/invite",   mod: summons,  name: "summons", tab: 3, title: "The Summons" },
+  // parameterized (PLAN §5): params land in render(ctx, params)/mount(root, ctx, params)
+  { match: /^\/walker\/([a-z0-9-]+)$/i, mod: dossier, name: "dossier", tab: -1,
+    title: null, params: m => ({ id: m[1] }) },
+  { match: /^\/compare(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?$/i, mod: compare, name: "compare", tab: 3,
+    title: "Settle It", params: m => ({ a: m[1], b: m[2] }) },
 ];
 const OFF_TRAIL = {
-  name: "off-trail", tab: -1, title: "Off the trail",
+  name: "off-trail", tab: -1, title: "Off the trail", params: () => ({}),
   mod: {
     render: () => `<section class="wrap section"><div class="card off-trail" data-reveal>
       <h1 class="h2">Off the trail.</h1>
@@ -80,10 +91,17 @@ const OFF_TRAIL = {
 
 const currentRoute = () => {
   const path = location.hash.replace(/^#/, "").replace(/\/+$/, "") || "/";
-  return ROUTES.find(r => r.path === path) || OFF_TRAIL;
+  for (const r of ROUTES) {
+    if (r.path === path) return { route: r, params: {} };
+    if (r.match) {
+      const m = r.match.exec(path);
+      if (m) return { route: r, params: r.params(m) };
+    }
+  }
+  return { route: OFF_TRAIL, params: {} };
 };
 
-let ctx = null, sig = "", route = null, lastEve = null;
+let ctx = null, sig = "", route = null, params = {}, lastEve = null;
 
 function applyChrome(now) {
   root.dataset.daypart = daypart(now);
@@ -98,7 +116,10 @@ function applyChrome(now) {
     : ctx.phase === "counting" ? "Counting" : "Crowned";
   document.getElementById("demoFlag").hidden = !DEMO;
 
-  document.title = route.title ? `${route.title} — Stridetober` : "Stridetober";
+  const titleText = route.title === null
+    ? (ctx.walkers.find(w => w.id === params.id)?.name || "Dossier")
+    : route.title;
+  document.title = titleText ? `${titleText} — Stridetober` : "Stridetober";
   const tabbar = document.getElementById("tabbar");
   tabbar.dataset.tab = route.tab;
   tabbar.style.setProperty("--tab", Math.max(0, route.tab));
@@ -133,11 +154,13 @@ function render({ transition = false, focus = false } = {}) {
   const now = clock();
   ctx = buildContext(now);
   sig = signature(now);
-  route = currentRoute();
+  const found = currentRoute();
+  route = found.route;
+  params = found.params;
   const swap = () => {
-    view.innerHTML = route.mod.render(ctx);
+    view.innerHTML = route.mod.render(ctx, params);
     applyChrome(now);
-    if (route.mod.mount) route.mod.mount(view, ctx); else reveal(view);
+    if (route.mod.mount) route.mod.mount(view, ctx, params); else reveal(view);
   };
   if (transition) {
     try { scrollTo({ top: 0, left: 0, behavior: "instant" }); } catch { scrollTo(0, 0); }

@@ -951,6 +951,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 > - `nextMilestone({now, challenge, weeks})` takes the context fields rather than the whole context.
 > - §7.6 rule "champion equals the week-4 steps leader" is implemented as the **overall total** leader, per the flyer's "MOST TOTAL STEPS".
 > - `copy.js` gained `LEDGER_EMPTY`.
+> - `/assets/*` is served `max-age=0, must-revalidate`, not `immutable`. The sprite is not content-hashed, so a year-long cache would strand returning phones on stale icons whenever a symbol is added. `/finds/*` stays immutable because photos get new filenames.
 
 ### Task 1 — Scaffold & deploy gate 🔒
 - [x] Create the tree per §2.1 (empty `public/` is fine — placeholder `index.html` allowed, must be noindex).

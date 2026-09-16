@@ -23,7 +23,21 @@ npm test                                # the deploy gate (Vercel runs this)
 ```
 
 Preview the whole challenge before it starts: `http://localhost:4173/?demo=1`
-loads fictional walkers and two posted weeks so every phase renders.
+loads fictional walkers and two posted weeks so every phase renders. Inside demo
+mode, `&now=2026-10-18T10:00` time-travels (e.g. `2026-10-31T23:30` for Hallowed
+Eve, `2026-11-01T09:00` for counting). `?motion=reduce` previews reduced motion.
+
+## Regenerating the OG image and icons
+
+`tools/og.html` and `tools/icon.html` are the sources. Render them with headless Chrome:
+
+```bash
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$CHROME" --headless=new --hide-scrollbars --virtual-time-budget=5000 --window-size=1200,630 --screenshot=public/og.png tools/og.html
+"$CHROME" --headless=new --hide-scrollbars --virtual-time-budget=5000 --window-size=512,512 --screenshot=public/icon-512.png tools/icon.html
+"$CHROME" --headless=new --hide-scrollbars --virtual-time-budget=5000 --window-size=192,192 --screenshot=public/icon-192.png tools/icon.html
+"$CHROME" --headless=new --hide-scrollbars --virtual-time-budget=5000 --window-size=180,180 --screenshot=public/apple-touch-icon.png tools/icon.html
+```
 
 ## Deploy
 

@@ -1,0 +1,139 @@
+/* ═══════════ STRIDETOBER — MOTION ═══════════
+   "Leaves, not lasers." Spec: PLAN §4. transform/opacity only (stroke draw-ons
+   on small SVGs are the one exception). Every loop has a reduced-motion exit. */
+
+/* ── keyframes (PLAN §4.3, verbatim) ────────────────────── */
+@keyframes leaf-fall   {from{transform:translate3d(0,-12vh,0)}to{transform:translate3d(0,112vh,0)}}
+@keyframes leaf-sway   {0%,100%{transform:translateX(-18px) rotate(-8deg)}50%{transform:translateX(18px) rotate(10deg)}}
+@keyframes leaf-flutter{0%,100%{transform:rotateX(0) rotateY(0)}50%{transform:rotateX(55deg) rotateY(25deg)}}
+@keyframes view-in     {from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade-out    {to{opacity:0}}
+@keyframes settle      {from{opacity:0;transform:translateY(14px) rotate(-.4deg)}to{opacity:1;transform:none}}
+@keyframes digit-out   {to{opacity:0;transform:translateY(60%) rotate(6deg)}}
+@keyframes digit-in    {from{opacity:0;transform:translateY(-60%) rotate(-4deg)}to{opacity:1;transform:none}}
+@keyframes seal-stamp  {0%{opacity:0;transform:scale(1.8) rotate(-18deg)}60%{opacity:1;transform:scale(.94) rotate(-6deg)}80%{transform:scale(1.03) rotate(-9deg)}100%{transform:scale(1) rotate(-8deg)}}
+@keyframes slam        {0%{opacity:0;transform:scale(2.2) rotate(-14deg)}55%{opacity:1;transform:scale(.92) rotate(-5deg)}100%{transform:scale(1) rotate(-6deg)}}
+@keyframes thud        {0%,100%{transform:none}30%{transform:translateY(2px)}60%{transform:translateY(-1px)}}
+@keyframes gavel       {0%{transform:rotate(0)}40%{transform:rotate(-35deg)}70%{transform:rotate(10deg)}100%{transform:rotate(0)}}
+@keyframes draw        {to{stroke-dashoffset:0}}
+@keyframes ring        {from{opacity:.55;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
+@keyframes flicker     {0%,100%{opacity:1}42%{opacity:.88}47%{opacity:.62}52%{opacity:.94}70%{opacity:.8}}
+@keyframes blink       {50%{opacity:.35}}
+@keyframes tally       {0%,12%{stroke-dashoffset:var(--len)}20%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes nope        {0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes pop         {from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes bob         {0%,100%{transform:translateY(-2px)}50%{transform:translateY(2px)}}
+@keyframes crown-drop  {0%{opacity:0;transform:translateY(-40px) rotate(-10deg)}70%{opacity:1;transform:translateY(3px) rotate(2deg)}100%{transform:none}}
+@keyframes flap        {0%,100%{transform:scaleY(1)}50%{transform:scaleY(.55)}}
+@keyframes toast-in    {from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes tittle-sway {0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@keyframes pulse       {50%{opacity:.6}}
+
+/* ── M1 leaf layer (PLAN §4.5) ──────────────────────────── */
+.leaves { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; contain: strict; }
+.leaf {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  color: var(--tint);
+  opacity: var(--leaf-opacity);
+  animation: leaf-fall var(--dur) linear var(--delay) infinite;
+  will-change: transform;
+}
+.leaf-sway { display: block; width: 100%; height: 100%; animation: leaf-sway var(--sway) var(--ease-swing) infinite; }
+.leaf-flip { display: block; width: 100%; height: 100%; fill: currentColor; animation: leaf-flutter var(--flip) ease-in-out infinite; }
+.leaf.bat .leaf-flip { animation: flap 180ms ease-in-out infinite; }
+.site-head, .site-foot, .tabbar { isolation: isolate; }
+
+/* ── M3 route change ────────────────────────────────────── */
+::view-transition-old(root) { animation: 160ms var(--ease-exit) both fade-out; }
+::view-transition-new(root) { animation: 320ms var(--ease-settle) both view-in; }
+.view-enter { animation: view-in 320ms var(--ease-settle) both; }
+
+/* ── M4 settle-in reveal (hidden only when JS is running) ─ */
+html.js [data-reveal]:not(.is-in) { opacity: 0; }
+[data-reveal].is-in { animation: settle var(--dur-stamp) var(--ease-settle) both; animation-delay: calc(min(var(--i, 0), 8) * 60ms); }
+
+/* ── M6/M7 countdown ────────────────────────────────────── */
+.digit .d-out { animation: digit-out 380ms var(--ease-settle) forwards; }
+.digit .d-in { animation: digit-in 380ms var(--ease-settle) both; }
+.countdown.urgent .cd-colon { animation: blink 1s steps(1) infinite; }
+.countdown-card[data-witching] .candle { animation: flicker 3s infinite; }
+
+/* ── M8/M9 seals, stamps, thud ──────────────────────────── */
+.is-in .seal.stamps, .seal.stamps.is-in { animation: seal-stamp var(--dur-stamp) var(--ease-stamp) both; animation-delay: calc(var(--i, 0) * 90ms); }
+.is-in .thuds, .thuds.is-in { animation: thud 240ms var(--ease-settle) both; animation-delay: calc(var(--i, 0) * 90ms + 310ms); }
+.stamp.slams { animation: slam 480ms var(--ease-stamp) both; }
+.seal.stamping { animation: seal-stamp var(--dur-stamp) var(--ease-stamp) both; }
+.thud-now { animation: thud 240ms var(--ease-settle) 300ms both; }
+
+/* ── M10 gavel ──────────────────────────────────────────── */
+.gavel-strike { animation: gavel 280ms var(--ease-settle); transform-origin: 80% 80%; }
+
+/* ── M11 margin note draw-on ────────────────────────────── */
+.note svg path { stroke-dasharray: var(--len, 80); stroke-dashoffset: var(--len, 80); }
+.is-in .note svg path, .note.is-in svg path { animation: draw 700ms ease-out 200ms forwards; }
+.check-row svg path { stroke-dasharray: 30; stroke-dashoffset: 30; }
+.is-in .check-row svg path { animation: draw 500ms ease-out forwards; animation-delay: calc(var(--i, 0) * 180ms + 200ms); }
+
+/* ── M14 buttons: muster-only ring on the tribute CTA ───── */
+.btn-ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px var(--accent);
+  animation: ring 2.4s var(--ease-settle) infinite;
+  pointer-events: none;
+}
+
+/* ── M18 counting tally ─────────────────────────────────── */
+.tally.counting path { --len: 24; stroke-dasharray: var(--len); animation: tally 2.4s infinite both; }
+.tally.counting path:nth-child(2) { animation-delay: 120ms; }
+.tally.counting path:nth-child(3) { animation-delay: 240ms; }
+.tally.counting path:nth-child(4) { animation-delay: 360ms; }
+.tally.counting path:nth-child(5) { animation-delay: 480ms; }
+
+/* ── M17 toast ──────────────────────────────────────────── */
+.toast { animation: toast-in 320ms var(--ease-settle) both; }
+.toast.is-out { opacity: 0; transform: translateY(8px); transition: opacity 200ms, transform 200ms; animation: none; }
+
+/* ── M19 group-chat decoy ───────────────────────────────── */
+.nope { animation: nope 360ms var(--ease-settle); }
+
+/* ── M20 bottle bubble ──────────────────────────────────── */
+.bubble { animation: pop 240ms var(--ease-stamp) both; transform-origin: 100% 100%; }
+
+/* ── M22/M25 wordmark tittle, jack, candle ──────────────── */
+.wm-tittle { animation: tittle-sway 3s ease-in-out infinite; }
+html[data-eve] .wm-jack { animation: flicker 3s infinite; }
+.tl-node.today .tl-dot { animation: flicker 3s infinite; }
+
+/* ── M24 coronation ─────────────────────────────────────── */
+.crown { animation: bob 3s ease-in-out infinite; }
+.crown.dropping { animation: crown-drop 700ms var(--ease-stamp) both, bob 3s ease-in-out 700ms infinite; }
+
+/* ── M2 fallback pulse ──────────────────────────────────── */
+.pulse { animation: pulse 400ms ease-in-out; }
+
+/* ── reduced motion (PLAN §4.2): near-zero, never animation:none ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: .01ms !important;
+  }
+  .leaves { display: none; }
+  .tally.counting path { animation-name: none !important; stroke-dasharray: none; }
+}
+html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-motion="reduce"] *::after {
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: .01ms !important;
+}
+html[data-motion="reduce"] .leaves { display: none; }
+html[data-motion="reduce"] .tally.counting path { animation-name: none !important; stroke-dasharray: none; }

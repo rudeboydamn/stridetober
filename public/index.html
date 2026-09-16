@@ -4,34 +4,100 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#FBF5EA">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#FBF5EA" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17110D" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Stridetober">
 <title>Stridetober</title>
+<meta name="description" content="The October Steps Challenge. $20 buy-in, four weeks, one October Step Champion. Officiated, fairly impartially, by Dammy Henry.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stridetober">
+<meta property="og:title" content="Stridetober 🍂 Walk it. Track it. Win it!">
+<meta property="og:description" content="Oct 4 – Nov 1. $20 buy-in to Dammy. Most total steps is crowned THE OCTOBER STEP CHAMPION.">
+<meta property="og:image" content="https://stridetober.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍂</text></svg>">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,600..700,100,0;1,9..144,600..700,100,1&family=Inter:wght@400..700&family=Caveat:wght@600&display=swap">
-<style>
-  /* PLACEHOLDER — Task 2 replaces this with styles/*.css per docs/PLAN.md §3. */
-  :root{--bg:#FBF5EA;--surface:#FFFDF8;--line:#E7D8C2;--ink:#2A1C13;--ink-2:#5E4838;--accent-ink:#A6420E;--ribbon:#5F6F2E;--on-ribbon:#FBF5EA}
-  *{box-sizing:border-box}html{overflow-x:clip;-webkit-text-size-adjust:100%}
-  body{margin:0;min-height:100svh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:400 16px/1.55 Inter,system-ui,sans-serif}
-  .card{max-width:34rem;margin:24px;padding:48px 32px;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:22px}
-  .ribbon{display:inline-block;background:var(--ribbon);color:var(--on-ribbon);font:700 12px Inter;letter-spacing:.16em;text-transform:uppercase;padding:6px 20px;transform:rotate(-1.5deg);clip-path:polygon(0 0,100% 0,calc(100% - 10px) 50%,100% 100%,0 100%,10px 50%)}
-  h1{font:600 clamp(2.75rem,8vw,4.5rem)/1.04 Fraunces,serif;letter-spacing:-.01em;margin:18px 0 6px}
-  h1 em{color:var(--accent-ink)}
-  .dates{font:600 19px Fraunces,serif;color:var(--ink-2);margin:0 0 18px}
-  .note{font:600 24px Caveat,cursive;color:var(--accent-ink);transform:rotate(-2deg);display:inline-block}
-  .fine{font-size:12px;color:var(--ink-2);margin-top:28px}
-</style>
+<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/base.css">
+<link rel="stylesheet" href="/styles/components.css">
+<link rel="stylesheet" href="/styles/views.css">
+<link rel="stylesheet" href="/styles/motion.css">
+<script>
+  /* Before first paint: JS flag, saved theme, QA motion flag, sky band. */
+  (function () {
+    var d = document.documentElement, h = new Date().getHours();
+    d.classList.add("js");
+    try { var t = localStorage.getItem("stridetober:theme"); if (t === "dark" || t === "light") d.dataset.theme = t; } catch (e) {}
+    if (/[?&]motion=reduce\b/.test(location.search)) d.dataset.motion = "reduce";
+    d.dataset.daypart = h >= 5 && h <= 10 ? "morning" : h >= 11 && h <= 16 ? "afternoon" : h >= 17 && h <= 19 ? "dusk" : "night";
+  })();
+</script>
 </head>
 <body>
-<main class="card">
-  <span class="ribbon">October Steps Challenge</span>
-  <h1>Stride<em>tober</em></h1>
-  <p class="dates">October 4 – November 1</p>
-  <span class="note">the leaves are gathering…</span>
-  <p class="fine">Walk it. Track it. Win it! · The Judge is <em>fairly</em> ready.</p>
+<a class="skip-link" href="#view">Skip to content</a>
+<div class="leaves" aria-hidden="true"></div>
+
+<header class="site-head" id="siteHead">
+  <div class="wrap site-head-row">
+    <a class="wordmark" href="#/" aria-label="Stridetober — back to the Court">
+      <span aria-hidden="true">Str<span class="wm-i">ı<svg class="wm-tittle" viewBox="0 0 24 24"><use href="/assets/sprite.svg#leaf-maple"/></svg></span>de<em>t<span class="wm-o"><span class="wm-o-letter">o</span><svg class="wm-jack" viewBox="0 0 24 24"><use href="/assets/sprite.svg#jack"/></svg></span>ber</em></span>
+    </a>
+    <nav class="head-nav" aria-label="Sections">
+      <a class="head-link" data-route="court" href="#/">Court</a>
+      <a class="head-link" data-route="ledger" href="#/ledger">Ledger</a>
+      <a class="head-link" data-route="checkin" href="#/check-in">Check-in</a>
+      <a class="head-link" data-route="decree" href="#/rules">Decree</a>
+      <a class="head-link" data-route="excuses" href="#/excuses">Excuses</a>
+      <a class="head-link" data-route="summons" href="#/invite">Summons</a>
+    </nav>
+    <span class="demo-flag" id="demoFlag" hidden>DEMO</span>
+    <span class="phase-chip" id="phaseChip">Muster</span>
+  </div>
+</header>
+
+<div class="wrap" id="annoSlot"></div>
+
+<main id="view" tabindex="-1">
+  <noscript><p>Stridetober needs JavaScript to count steps. The Judge regrets the inconvenience, fairly.</p></noscript>
 </main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="leaf-pile" id="leafPile" aria-hidden="true"></div>
+    <p class="rake-line" id="rakeLine">Rake the pile. It does nothing.</p>
+    <p class="signoff">“Fairly impartial. Entirely unforgiving.” — The Judge</p>
+    <p class="fine">Stridetober · Oct 4 – Nov 1 · unlisted, noindex, judge's rulings <em>fairly</em> final</p>
+  </div>
+</footer>
+
+<nav class="tabbar" id="tabbar" aria-label="Main" data-tab="0">
+  <a class="tab" data-tab="0" href="#/"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#gavel"/></svg>Court</a>
+  <a class="tab" data-tab="1" href="#/ledger"><svg class="icon" aria-hidden="true" viewBox="0 0 32 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 4v16M11 4v16M16 4v16M21 4v16M3 17L25 7"/></g></svg>Ledger</a>
+  <a class="tab" data-tab="2" href="#/check-in"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#check"/></svg>Check-in</a>
+  <button class="tab" data-tab="3" id="moreTab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#chevron"/></svg>More</button>
+</nav>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+  <span class="sheet-grab" aria-hidden="true"></span>
+  <h2 class="sheet-title" id="sheetTitle">More from the Court</h2>
+  <a class="sheet-link" href="#/rules"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#scroll"/></svg><span>The Decree<small>The rules, read aloud</small></span></a>
+  <a class="sheet-link" href="#/excuses"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#gavel"/></svg><span>Court of Excuses<small>All pleas are heard</small></span></a>
+  <a class="sheet-link" href="#/invite"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#share"/></svg><span>The Summons<small>Recruit a rival</small></span></a>
+  <button class="sheet-link" id="themeRow" type="button"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#theme"/></svg><span>Theme</span><b id="themeVal">Auto</b></button>
+</div>
+
+<canvas id="burst" aria-hidden="true"></canvas>
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>

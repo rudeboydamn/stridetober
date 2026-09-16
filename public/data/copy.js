@@ -40,6 +40,11 @@ export const DOSSIER_LINES = { // picked by rank band; {name} interpolated
 export const NO_STEPS_WEEK = "NO SCREENSHOT";   // stamp text, verbatim flyer
 export const AS_COUNTED = "as last counted";    // ledger preview caption
 
+export const LEDGER_EMPTY = {                     // before Week 1 is posted
+  head: "No steps counted yet.",
+  sub: "Everyone is tied at zero — the most flattering the Ledger will ever be.",
+};
+
 export const DERIVED_NOTE = {
   head: "Days measured from the chart",
   body: "This week's daily split was read off the submitted chart and scaled to the reported total. The total itself is as sworn. Days marked ~ are estimates, good to roughly ±1,000.",

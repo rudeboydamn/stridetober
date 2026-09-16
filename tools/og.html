@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- Link-preview card (iMessage, WhatsApp, Slack). Screenshot at exactly 1200×630 → public/og.png.
+     Regenerate: see README "Regenerating the OG image and icons". -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,600..700,100,0;1,9..144,600..700,100,1&family=Inter:wght@400..700&family=Caveat:wght@600&display=block">
+<style>
+  *{box-sizing:border-box;margin:0}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{position:relative;background:#FBF5EA;color:#2A1C13;font-family:Inter,sans-serif}
+  .sky{position:absolute;inset:0;background:linear-gradient(180deg,#FCE2B6 0%,rgba(252,226,182,.35) 55%,rgba(251,245,234,0) 100%)}
+  .frame{position:absolute;inset:22px;border:1.5px solid #CDB79B;border-radius:28px}
+  .copy{position:absolute;left:86px;top:92px;width:760px}
+  .ribbon{display:inline-block;padding:10px 30px;background:#5F6F2E;color:#FBF5EA;font:700 18px/1 Inter;letter-spacing:.18em;text-transform:uppercase;
+    clip-path:polygon(0 0,100% 0,calc(100% - 14px) 50%,100% 100%,0 100%,14px 50%);transform:rotate(-1.5deg)}
+  .mark{margin-top:26px;font:700 148px/1 Fraunces;letter-spacing:-.03em;font-variation-settings:"SOFT" 100}
+  .mark em{color:#A6420E;font-variation-settings:"SOFT" 100,"WONK" 1}
+  .tag{margin-top:18px;font:italic 600 48px/1.1 Fraunces;font-variation-settings:"SOFT" 100,"WONK" 1}
+  .facts{margin-top:26px;color:#5E4838;font:500 30px/1.3 Inter}
+  .facts b{color:#2A1C13;font-weight:700}
+  .note{position:absolute;left:92px;bottom:58px;color:#A6420E;font:600 34px/1 Caveat;transform:rotate(-2deg)}
+  .seal{position:absolute;right:120px;top:150px;width:230px;height:230px;transform:rotate(-8deg);filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+  .seal span{position:absolute;inset:0;display:grid;place-items:center;color:#FBF5EA;font:800 64px/1 Inter;letter-spacing:.02em}
+  .leaf{position:absolute;fill:currentColor}
+  .url{position:absolute;right:92px;bottom:60px;color:#7A6352;font:600 22px/1 Inter;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<div class="frame"></div>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <path id="maple" d="M12 1.2l1.7 3.6 2.4-1.2-.5 4.9 3.4-2.6.8 2.2 3-.5-1.5 3.5 1.5 1.2-4.9 4 .8 2.2-5-.9-.8 4.4H11l-.8-4.4-5 .9.8-2.2-4.9-4 1.5-1.2L1.1 8.1l3 .5.8-2.2 3.4 2.6-.5-4.9 2.4 1.2z M11.4 18.5h1.2V23h-1.2z"/>
+    <path id="oak" d="M12 1.5c1.7 1 1.2 2.7 2.5 3.3 1.3.6 2.7-.4 3.2 1 .5 1.3-1.1 2.1-.4 3.2.6 1 2.3.9 2.3 2.3s-1.9 1.4-2 2.7c-.1 1.2 1.4 2 .7 3.2-.7 1.1-2.3.3-3.2 1.1-.8.7-.4 2.2-1.6 2.8V23h-3v-1.9c-1.2-.6-.8-2.1-1.6-2.8-.9-.8-2.5 0-3.2-1.1-.7-1.2.8-2 .7-3.2-.1-1.3-2-1.3-2-2.7s1.7-1.3 2.3-2.3c.7-1.1-.9-1.9-.4-3.2.5-1.4 1.9-.4 3.2-1C10.8 4.2 10.3 2.5 12 1.5z"/>
+    <path id="birch" fill-rule="evenodd" d="M12 1.5C6.3 6.2 4.8 11.4 6.3 16c1 3.1 3.4 5 5.7 6.5 2.3-1.5 4.7-3.4 5.7-6.5C19.2 11.4 17.7 6.2 12 1.5zM11.5 6.5h1v14h-1z"/>
+  </defs>
+</svg>
+<svg class="leaf" viewBox="0 0 24 24" style="left:880px;top:40px;width:54px;color:#C0452A;transform:rotate(-24deg)"><use href="#maple"/></svg>
+<svg class="leaf" viewBox="0 0 24 24" style="left:1070px;top:70px;width:40px;color:#D9A21B;transform:rotate(38deg)"><use href="#oak"/></svg>
+<svg class="leaf" viewBox="0 0 24 24" style="left:960px;top:420px;width:46px;color:#7C8B3F;transform:rotate(-60deg)"><use href="#birch"/></svg>
+<svg class="leaf" viewBox="0 0 24 24" style="left:1100px;top:400px;width:36px;color:#E0661B;transform:rotate(18deg)"><use href="#maple"/></svg>
+<svg class="leaf" viewBox="0 0 24 24" style="left:720px;top:48px;width:30px;color:#E0661B;transform:rotate(70deg)"><use href="#birch"/></svg>
+<div class="seal">
+  <svg viewBox="-2 -2 104 104" width="230" height="230"><path fill="#A8321A" d="M50 7Q58.8 0.3 64.7 9.6Q75.3 6.3 77.6 17.1Q88.7 17.5 87.2 28.5Q97.5 32.7 92.3 42.5Q100.5 50 92.3 57.5Q97.5 67.3 87.2 71.5Q88.7 82.5 77.6 82.9Q75.3 93.7 64.7 90.4Q58.8 99.7 50 93Q41.2 99.7 35.3 90.4Q24.7 93.7 22.4 82.9Q11.3 82.5 12.8 71.5Q2.5 67.3 7.7 57.5Q-0.5 50 7.7 42.5Q2.5 32.7 12.8 28.5Q11.3 17.5 22.4 17.1Q24.7 6.3 35.3 9.6Q41.2 0.3 50 7Z"/><circle cx="50" cy="50" r="33" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.6"/></svg>
+  <span>$20</span>
+</div>
+<div class="copy">
+  <span class="ribbon">October Steps Challenge</span>
+  <p class="mark">Stride<em>tober</em></p>
+  <p class="tag">Walk it. Track it. Win it!</p>
+  <p class="facts"><b>Oct 4 – Nov 1</b> · $20 to Dammy · most steps wins</p>
+</div>
+<p class="note">officiated, <em>fairly</em> impartially, by the Judge</p>
+<p class="url">stridetober.vercel.app</p>
+</body>
+</html>

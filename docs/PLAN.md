@@ -944,38 +944,46 @@ These run in Vercel's build; a violation blocks deploy:
 
 Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px and 320px minimum). Commit per task with the §1.4 prefixes. Tasks marked 🔒 touch files nothing else touches that week — parallel lanes per §2.4.
 
+> **Build status (updated 2026-09-16):** R1 "Muster" is built and deployed with the Vercel CLI (`vercel --prod`). Done: Tasks 2–6 and 10. Partly done: Task 1 (the GitHub repo and Git integration still need Dammy's go), Task 7 (ledger preview, Judge's Report and Together tile are done; `getwell` announcement mode is not), and Task 8 (standings rows/table and honours shelf are done; charts, `fx.flip` Reading and `fx.burst` wiring are not). Not started: Tasks 9, 11–15.
+> Deviations from this plan, all deliberate:
+> - §5.5 Check-in copy follows the locked §1.2 rule: the week *ends* Saturday night and screenshots are due Sunday. The "accepts Sunday too" line was dropped, and the kicker reads "Due every Sunday".
+> - `stats.honours()` returns `{key, who, detail}`; views look up the label and description in `HONOURS`.
+> - `nextMilestone({now, challenge, weeks})` takes the context fields rather than the whole context.
+> - §7.6 rule "champion equals the week-4 steps leader" is implemented as the **overall total** leader, per the flyer's "MOST TOTAL STEPS".
+> - `copy.js` gained `LEDGER_EMPTY`.
+
 ### Task 1 — Scaffold & deploy gate 🔒
-- [ ] Create the tree per §2.1 (empty `public/` is fine — placeholder `index.html` allowed, must be noindex).
+- [x] Create the tree per §2.1 (empty `public/` is fine — placeholder `index.html` allowed, must be noindex).
 - [ ] `package.json`, `vercel.json` (`framework:null`, `buildCommand:"npm test"`, `outputDirectory:"public"`, `headers`: `X-Robots-Tag: noindex` on all routes, `Cache-Control: public, max-age=31536000, immutable` on `/assets/*` and `/finds/*`), `.gitignore`, `tests/smoke.test.js` asserting `public/` and `data/` exist.
 - [ ] Copy this file to `docs/PLAN.md`; write `AGENTS.md` per §9.1, `CLAUDE.md` (`@AGENTS.md`), `README.md` per §9.3.
 - [ ] **With Dammy's confirmation only:** `gh repo create rudeboydamn/stridetober --private --source . --push`, then link Vercel project `stridetober` on team `team_kIfFmKlwOwuG0sniRCGfMwiY` (Vercel MCP `create_git_project` or dashboard). Confirm a preview deploy builds and `npm test` is the gate.
 - Done when: pushing a branch yields a green preview deployment.
 
 ### Task 2 — Tokens, base & chrome
-- [ ] `styles/tokens.css` verbatim from §3.2–§3.4 (raw + semantic, dark block pasted under both selectors), `base.css`, `components.css` (card, buttons, ribbon, seal, stamp, crest, chips, harvest line, countdown, timeline, toast, sheet), `motion.css` (§4.3 verbatim + §4.2 reduced-motion).
-- [ ] `index.html` shell: fonts link (§3.3), meta (noindex, theme-color, og tags), header/wordmark/phase chip, `<main id="view">`, tab bar + More sheet, footer with `.leaf-pile`, `#burst` canvas, `.leaves` layer, grain `body::before`.
-- [ ] `assets/sprite.svg` — all §3.6 symbols, hand-drawn, `currentColor` (`seal`, `wreath` two-tone as specced).
-- [ ] `tests/css.test.js`: brace balance + WCAG contrast of every §3.2 pair (the values in the table are the assertions).
+- [x] `styles/tokens.css` verbatim from §3.2–§3.4 (raw + semantic, dark block pasted under both selectors), `base.css`, `components.css` (card, buttons, ribbon, seal, stamp, crest, chips, harvest line, countdown, timeline, toast, sheet), `motion.css` (§4.3 verbatim + §4.2 reduced-motion).
+- [x] `index.html` shell: fonts link (§3.3), meta (noindex, theme-color, og tags), header/wordmark/phase chip, `<main id="view">`, tab bar + More sheet, footer with `.leaf-pile`, `#burst` canvas, `.leaves` layer, grain `body::before`.
+- [x] `assets/sprite.svg` — all §3.6 symbols, hand-drawn, `currentColor` (`seal`, `wreath` two-tone as specced).
+- [x] `tests/css.test.js`: brace balance + WCAG contrast of every §3.2 pair (the values in the table are the assertions).
 - Done when: the shell renders at 320–1440px in both themes with zero console errors.
 
 ### Task 3 — Data files & copy pools 🔒
-- [ ] `data/challenge.js` verbatim §7.1; `walkers.js`, `weeks.js`, `finds.js` empty per schema; `copy.js` complete per §6; `demo.js` per §7.1.
+- [x] `data/challenge.js` verbatim §7.1; `walkers.js`, `weeks.js`, `finds.js` empty per schema; `copy.js` complete per §6; `demo.js` per §7.1.
 - Done when: `node --test` imports all six files cleanly.
 
 ### Task 4 — Pure libs (TDD) 🔒
-- [ ] Write `tests/time.test.js` + `tests/stats.test.js` first, covering §7.2/§7.4 incl. the Oct-31 `isEve`, the Saturday→Sunday status flip, DST-free local parsing, standings with `null` steps and `null` days.
-- [ ] Implement `lib/time.js`, `lib/format.js`, `lib/stats.js`.
+- [x] Write `tests/time.test.js` + `tests/stats.test.js` first, covering §7.2/§7.4 incl. the Oct-31 `isEve`, the Saturday→Sunday status flip, DST-free local parsing, standings with `null` steps and `null` days.
+- [x] Implement `lib/time.js`, `lib/format.js`, `lib/stats.js`.
 - Done when: tests pass; `phaseOf` is correct at each boundary minute.
 
 ### Task 5 — Boot, router & Court (muster)
-- [ ] `src/main.js`: `buildContext`, hash router, 1s tick (§7.7), view-transition swap (M3), theme init, `?demo=1` and `?motion=reduce` params.
-- [ ] `lib/fx.js`: `reduced()`, `leaves()` (M1/§4.5 seeded `mulberry32(1004)`), `countUp` (M5), `reveal` (M4), `toast` (M17).
-- [ ] `views/court.js` muster phase per §5.2: hero+sky, countdown (M6/M7), tribute card (M14 ring), Roll with PAID stamps (M8), sworn kit, how-it-works, Dammy's Job.
+- [x] `src/main.js`: `buildContext`, hash router, 1s tick (§7.7), view-transition swap (M3), theme init, `?demo=1` and `?motion=reduce` params.
+- [x] `lib/fx.js`: `reduced()`, `leaves()` (M1/§4.5 seeded `mulberry32(1004)`), `countUp` (M5), `reveal` (M4), `toast` (M17).
+- [x] `views/court.js` muster phase per §5.2: hero+sky, countdown (M6/M7), tribute card (M14 ring), Roll with PAID stamps (M8), sworn kit, how-it-works, Dammy's Job.
 - Done when: `?demo=1` shows a full muster Court; countdown ticks live; leaves fall.
 
 ### Task 6 — Decree, Check-in, Summons, OG/icons
-- [ ] `views/decree.js` (§5.6), `views/checkin.js` (§5.5 incl. decoy M19 + client-side `.ics`), `views/summons.js` (§5.10 + `navigator.share`/copy fallback).
-- [ ] `tools/og.html` → screenshot to `public/og.png` (1200×630); `tools/icon.html` → `icon-192/512`, `apple-touch-icon`, SVG favicon data-URI (🍂). `manifest.webmanifest`.
+- [x] `views/decree.js` (§5.6), `views/checkin.js` (§5.5 incl. decoy M19 + client-side `.ics`), `views/summons.js` (§5.10 + `navigator.share`/copy fallback).
+- [x] `tools/og.html` → screenshot to `public/og.png` (1200×630); `tools/icon.html` → `icon-192/512`, `apple-touch-icon`, SVG favicon data-URI (🍂). `manifest.webmanifest`.
 - **R1 "Muster" ships here.** Done when: all three routes + meta verify at every §9.4 width.
 
 ### Task 7 — Court: walking & counting phases
@@ -992,7 +1000,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 - **R2 "Walking" ships here** (demo data + runbook dry run, §9.2, rehearsed against fake screenshots).
 
 ### Task 10 — Court of Excuses
-- [ ] `views/excuses.js` per §5.8: plea draw, gavel M10, OVERRULED slam M9 / PARDONED seal M8, plea counter.
+- [x] `views/excuses.js` per §5.8: plea draw, gavel M10, OVERRULED slam M9 / PARDONED seal M8, plea counter.
 ### Task 11 — Settle It
 - [ ] `views/compare.js` per §5.7: picker, VS hero, two-walker `climbChart`, `VERDICTS`, share/copy, self-compare gag.
 ### Task 12 — Counting, crowned & coronation

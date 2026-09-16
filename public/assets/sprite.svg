@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <!-- Stridetober icon sprite (PLAN §3.6). Single-color symbols use currentColor.
+       Use: <svg><use href="/assets/sprite.svg#leaf-maple"/></svg> -->
+
+  <symbol id="leaf-maple" viewBox="0 0 24 24">
+    <path d="M12 1.2l1.7 3.6 2.4-1.2-.5 4.9 3.4-2.6.8 2.2 3-.5-1.5 3.5 1.5 1.2-4.9 4 .8 2.2-5-.9-.8 4.4H11l-.8-4.4-5 .9.8-2.2-4.9-4 1.5-1.2L1.1 8.1l3 .5.8-2.2 3.4 2.6-.5-4.9 2.4 1.2z"/>
+    <path d="M11.4 18.5h1.2V23h-1.2z"/>
+  </symbol>
+
+  <symbol id="leaf-oak" viewBox="0 0 24 24">
+    <path d="M12 1.5c1.7 1 1.2 2.7 2.5 3.3 1.3.6 2.7-.4 3.2 1 .5 1.3-1.1 2.1-.4 3.2.6 1 2.3.9 2.3 2.3s-1.9 1.4-2 2.7c-.1 1.2 1.4 2 .7 3.2-.7 1.1-2.3.3-3.2 1.1-.8.7-.4 2.2-1.6 2.8V23h-3v-1.9c-1.2-.6-.8-2.1-1.6-2.8-.9-.8-2.5 0-3.2-1.1-.7-1.2.8-2 .7-3.2-.1-1.3-2-1.3-2-2.7s1.7-1.3 2.3-2.3c.7-1.1-.9-1.9-.4-3.2.5-1.4 1.9-.4 3.2-1C10.8 4.2 10.3 2.5 12 1.5z"/>
+  </symbol>
+
+  <symbol id="leaf-birch" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" d="M12 1.5C6.3 6.2 4.8 11.4 6.3 16c1 3.1 3.4 5 5.7 6.5 2.3-1.5 4.7-3.4 5.7-6.5C19.2 11.4 17.7 6.2 12 1.5zM11.5 6.5h1v14h-1z"/>
+  </symbol>
+
+  <symbol id="acorn" viewBox="0 0 24 24">
+    <path d="M11.3 1.5h1.4v3.3h-1.4z"/>
+    <path d="M4.5 9.6C4.5 6.5 7.8 4.4 12 4.4s7.5 2.1 7.5 5.2c0 .8-.6 1.3-1.4 1.3H5.9c-.8 0-1.4-.5-1.4-1.3z"/>
+    <path d="M6.2 12.1h11.6c0 5.2-2.5 9.4-5.8 10.4-3.3-1-5.8-5.2-5.8-10.4z"/>
+  </symbol>
+
+  <symbol id="pumpkin" viewBox="0 0 24 24">
+    <path d="M11.1 2.3c1.5-.5 2.7.3 2.9 1.7l.3 2.5-2.5.4z"/>
+    <path d="M12 6.6c-1.4-1-3.9-1.3-6-.1C3.1 8.1 2.3 11.8 2.8 15c.6 4 3.1 6.5 5.8 6.5 1.4 0 2.3-.6 3.4-.6s2 .6 3.4.6c2.7 0 5.2-2.5 5.8-6.5.5-3.2-.3-6.9-3.2-8.5-2.1-1.2-4.6-.9-6 .1z"/>
+  </symbol>
+
+  <symbol id="jack" viewBox="0 0 24 24">
+    <path d="M11.1 2.3c1.5-.5 2.7.3 2.9 1.7l.3 2.5-2.5.4z"/>
+    <path fill-rule="evenodd" d="M12 6.6c-1.4-1-3.9-1.3-6-.1C3.1 8.1 2.3 11.8 2.8 15c.6 4 3.1 6.5 5.8 6.5 1.4 0 2.3-.6 3.4-.6s2 .6 3.4.6c2.7 0 5.2-2.5 5.8-6.5.5-3.2-.3-6.9-3.2-8.5-2.1-1.2-4.6-.9-6 .1zM6.8 12.6l2-2.9 2 2.9zm6.4 0l2-2.9 2 2.9zM6.5 15.2c1.4 1 3 1.5 5.5 1.5s4.1-.5 5.5-1.5c-.3 2.6-2.6 4.2-5.5 4.2s-5.2-1.6-5.5-4.2z"/>
+  </symbol>
+
+  <symbol id="seal" viewBox="-2 -2 104 104">
+    <path d="M50 7Q58.8 0.3 64.7 9.6Q75.3 6.3 77.6 17.1Q88.7 17.5 87.2 28.5Q97.5 32.7 92.3 42.5Q100.5 50 92.3 57.5Q97.5 67.3 87.2 71.5Q88.7 82.5 77.6 82.9Q75.3 93.7 64.7 90.4Q58.8 99.7 50 93Q41.2 99.7 35.3 90.4Q24.7 93.7 22.4 82.9Q11.3 82.5 12.8 71.5Q2.5 67.3 7.7 57.5Q-0.5 50 7.7 42.5Q2.5 32.7 12.8 28.5Q11.3 17.5 22.4 17.1Q24.7 6.3 35.3 9.6Q41.2 0.3 50 7Z"/>
+    <circle cx="50" cy="50" r="33" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.6"/>
+  </symbol>
+
+  <symbol id="gavel" viewBox="0 0 24 24">
+    <path d="M9.1 4.9l2.8-2.8 6 6-2.8 2.8z"/>
+    <path d="M11.5 7.3l1.2 1.2-8.1 8.1-1.2-1.2z"/>
+    <path d="M12 20.3h9.5v2.2H12z"/>
+  </symbol>
+
+  <symbol id="wreath" viewBox="0 0 64 40">
+    <g stroke-width="1.2" stroke-linejoin="round">
+      <ellipse cx="9" cy="31" rx="5.2" ry="2.4" transform="rotate(-70 9 31)"/>
+      <ellipse cx="8.5" cy="22.5" rx="5.2" ry="2.4" transform="rotate(-95 8.5 22.5)"/>
+      <ellipse cx="11" cy="14.5" rx="5.2" ry="2.4" transform="rotate(-125 11 14.5)"/>
+      <ellipse cx="16.5" cy="8.5" rx="5.2" ry="2.4" transform="rotate(-150 16.5 8.5)"/>
+      <ellipse cx="55" cy="31" rx="5.2" ry="2.4" transform="rotate(70 55 31)"/>
+      <ellipse cx="55.5" cy="22.5" rx="5.2" ry="2.4" transform="rotate(95 55.5 22.5)"/>
+      <ellipse cx="53" cy="14.5" rx="5.2" ry="2.4" transform="rotate(125 53 14.5)"/>
+      <ellipse cx="47.5" cy="8.5" rx="5.2" ry="2.4" transform="rotate(150 47.5 8.5)"/>
+      <path d="M26 6l3-4.5 3 3.5 3-3.5 3 4.5-3 1.6h-6z"/>
+      <circle cx="32" cy="36" r="3"/>
+    </g>
+  </symbol>
+
+  <symbol id="sneaker" viewBox="0 0 64 32">
+    <path fill-rule="evenodd" d="M6 24c0-5.5 1.8-12.6 6.2-13.8 3.1-.8 5.2 1.9 9.3 3l10.2 2.7c5 1.3 9.3 1.6 14.3 3.6 4.1 1.6 9.2 2.4 11.4 4.5H6zm15.2-9.7l2.2.6-.7 2.3-2.2-.6zm4.4 1.2l2.2.6-.7 2.3-2.2-.6zm4.4 1.2l2.2.6-.7 2.3-2.2-.6z"/>
+    <path opacity=".55" d="M4 25h53.5c2.5 0 4.5 1.6 4.5 3.5S60 32 57.5 32H6.5C4.6 32 3 30.6 3 28.8V26c0-.6.4-1 1-1z"/>
+  </symbol>
+
+  <symbol id="candle" viewBox="0 0 24 24">
+    <path d="M12 1.5c2 2.5 3 4.3 3 5.7a3 3 0 0 1-6 0c0-1.4 1-3.2 3-5.7z"/>
+    <path d="M8 11h8v11.5H8z"/>
+  </symbol>
+
+  <symbol id="moon" viewBox="0 0 24 24">
+    <path d="M15.5 2.5a9 9 0 1 0 6 15.8A10 10 0 0 1 15.5 2.5z"/>
+  </symbol>
+
+  <symbol id="bat" viewBox="0 0 32 16">
+    <path d="M16 4c.8 0 1.4.6 1.6 1.4l.9-1.7.3 2.1C20 4.5 23 2.8 27 3.5c-1.4 1-2 2.3-1.8 3.8 1.5-.3 3.2.2 4.8 1.4-2.2-.1-3.8.7-4.6 2.2-1.3-.8-2.9-.8-4.2.4-.6-1.4-2-2.1-3.5-1.8L16 12l-1.7-2.5c-1.5-.3-2.9.4-3.5 1.8-1.3-1.2-2.9-1.2-4.2-.4-.8-1.5-2.4-2.3-4.6-2.2 1.6-1.2 3.3-1.7 4.8-1.4.2-1.5-.4-2.8-1.8-3.8 4-.7 7 1 8.2 2.3l.3-2.1.9 1.7C14.6 4.6 15.2 4 16 4z"/>
+  </symbol>
+
+  <symbol id="bottle" viewBox="0 0 36 72">
+    <path d="M11 1.5h14v8H11z"/>
+    <path d="M13 9.5h10v4H13z"/>
+    <path d="M9 13.5h18c2.4 0 4 1.8 4 4.2V66c0 2.5-2 4.5-4.5 4.5h-17C7 70.5 5 68.5 5 66V17.7c0-2.4 1.6-4.2 4-4.2z"/>
+  </symbol>
+
+  <symbol id="check" viewBox="0 0 24 24">
+    <path d="M4 12.5l5 5L20 6.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="chevron" viewBox="0 0 24 24">
+    <path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="share" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v12M7 8l5-5 5 5"/>
+      <path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>
+    </g>
+  </symbol>
+
+  <symbol id="copy" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="12" height="12" rx="2"/>
+      <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>
+    </g>
+  </symbol>
+
+  <symbol id="lock" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="11" width="14" height="10" rx="2"/>
+      <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+    </g>
+  </symbol>
+
+  <symbol id="calendar" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="5" width="17" height="15.5" rx="2"/>
+      <path d="M3.5 10h17M8 3v4M16 3v4"/>
+    </g>
+  </symbol>
+
+  <symbol id="scroll" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M7 4h11a2 2 0 0 1 2 2v1h-4"/>
+      <path d="M16 7v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1h4"/>
+      <path d="M7 4a2 2 0 0 0-2 2v11M10 9h3M10 13h3"/>
+    </g>
+  </symbol>
+
+  <symbol id="theme" viewBox="0 0 24 24">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M12 3.5v17" />
+    </g>
+    <path d="M12 3.5a8.5 8.5 0 0 1 0 17z"/>
+  </symbol>
+</svg>

@@ -1,3 +1,11 @@
 {
-  "preview": "python3 -m http.server 4173 -d public"
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "stridetober",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4173", "-d", "public"],
+      "port": 4173
+    }
+  ]
 }

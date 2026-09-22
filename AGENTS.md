@@ -4,8 +4,8 @@ Everything a fresh agent needs to continue this project. **Read `docs/PLAN.md`
 first** — it is the full design spec and implementation plan (§8 is the task
 list). This file is the map, the weekly job, and the traps.
 
-**Live:** https://stridetober.vercel.app (once the Vercel project is linked —
-Task 1, needs Dammy's go) · static site, no build, no framework, zero deps.
+**Live:** https://stridetober.vercel.app · **Repo:** github.com/rudeboydamn/stridetober
+(public) · static site, no build, no framework, zero deps.
 **Preview locally:** `python3 -m http.server 4173 -d public` ·
 **Demo mode:** append `?demo=1` to any URL (fictional tree-named walkers).
 
@@ -35,7 +35,8 @@ not compete by default.
 ## 3. The weekly job (Sundays: Oct 11, 18, 25, Nov 1)
 
 1. Screenshots go in `checkins/week-N/<walker-id>/`. **Read every one** —
-   money is on it.
+   money is on it. They are git-ignored: the repo is public, so walkers'
+   screenshots never leave this machine.
 2. Rules of evidence (identical every week, full text PLAN §9.2):
    - A week is Sun 00:00 → Sat 23:59. Apps whose week starts Monday misalign
      the headline — **read the per-day bars**.
@@ -89,7 +90,7 @@ Widths: 320/375/390/430/768/1024/1280/1440. Themes: light+dark × reduced motion
 
 ## 7. Deploy
 
-Today: `npm test`, commit to `main`, push, then `vercel --prod --scope
-dammys-projects-9bcc048a`. Vercel runs `npm test` as the build command, so a red
-test cannot deploy. Never force past it. Once Vercel's Git integration is connected,
-`main` → production and every branch/PR → preview.
+Vercel's Git integration is connected: a push to `main` deploys production, and
+every other branch or PR gets a preview URL. Vercel runs `npm test` as the build
+command, so a red test cannot deploy. Never force past it. Run `npm test` before
+you push. `vercel --prod --scope dammys-projects-9bcc048a` is a manual fallback only.

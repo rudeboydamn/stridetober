@@ -41,13 +41,13 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 ## Deploy
 
-Git integration (once linked — see PLAN §10): `main` deploys production, every
-branch/PR gets a preview. Vercel's build command is `npm test`, so bad data
+Git integration is connected: `main` deploys production, every branch/PR gets a
+preview. Vercel's build command is `npm test`, so bad data
 cannot ship. Manual fallback: `vercel --prod`.
 
 ## Posting a week (the only recurring job)
 
-Sundays: screenshots land in `checkins/week-N/` → apply the rules of evidence
+Sundays: screenshots land in `checkins/week-N/` (git-ignored) → apply the rules of evidence
 (PLAN §9.2) → append to `WEEKS` in `public/data/weeks.js` → `npm test` → push.
 
 ## Exposure

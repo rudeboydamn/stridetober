@@ -2,3 +2,6 @@
 .DS_Store
 node_modules
 .env*
+# Public repo: walkers' check-in screenshots stay on this machine.
+checkins/*
+!checkins/.gitkeep

@@ -6,7 +6,7 @@
 
 **Architecture:** Static site: no framework, no build step, native ES modules, served from `public/` by Vercel. Weekly data lives in plain JS data files that an agent edits from screenshots. Everything else (ranks, honours, charts, phases, countdowns) is computed in the browser from those files plus the viewer's clock. Pure logic lives in `public/src/lib/` and is covered by `node --test`. Vercel runs the tests as its build command, so bad data cannot deploy.
 
-**Tech stack:** HTML, CSS custom properties, vanilla JS modules, hand-rolled SVG charts, a `<canvas>` leaf burst, Google Fonts (Fraunces, Inter, Caveat), Node ≥ 20 `node:test`, Vercel Git integration, private GitHub repo. Zero npm dependencies.
+**Tech stack:** HTML, CSS custom properties, vanilla JS modules, hand-rolled SVG charts, a `<canvas>` leaf burst, Google Fonts (Fraunces, Inter, Caveat), Node ≥ 20 `node:test`, Vercel Git integration, public GitHub repo. Zero npm dependencies.
 
 **Spec:** this document. The design spec and the plan are one file on purpose.
 
@@ -38,7 +38,7 @@
 4. **Pipeline.** Dammy collects screenshots. An agent reads them, edits `public/data/weeks.js`, writes the Judge's note and pushes, and Vercel deploys. No database, no logins, no API.
 
 ### 1.3 Defaults chosen (Dammy can override before Task 1)
-- **Hosting:** private GitHub repo `rudeboydamn/stridetober`, linked to Vercel project `stridetober` in team `team_kIfFmKlwOwuG0sniRCGfMwiY`. This is the same Git-integration pattern as henrymoney and keystonevale. `main` deploys production, and every branch or PR gets a preview URL. **Confirm with Dammy before creating the repo or the project.**
+- **Hosting:** public GitHub repo `rudeboydamn/stridetober`, linked to Vercel project `stridetober` in team `team_kIfFmKlwOwuG0sniRCGfMwiY`. This is the same Git-integration pattern as henrymoney and keystonevale. `main` deploys production, and every branch or PR gets a preview URL. Connected 2026-09-22.
 - **Stack:** static with zero dependencies. It worked for Big Steppas, loads instantly on an iPhone, and has nothing to upgrade mid-challenge.
 - **Themes:** light "Parchment", an automatic dark "Harvest Moon", and a one-day "Hallowed Eve" accent on the final day, Oct 31.
 - **Time:** all times are the viewer's local wall-clock time, because steps are counted by each walker's own phone calendar. The site never converts time zones.
@@ -76,7 +76,7 @@ stridetober/
 ├── vercel.json               framework null, buildCommand "npm test", outputDirectory "public", headers
 ├── .gitignore                .vercel .DS_Store node_modules .env*
 ├── .claude/launch.json       local preview: python3 -m http.server 4173 -d public
-├── checkins/week-N/<id>/     screenshot evidence, tracked in the private repo, never deployed
+├── checkins/week-N/<id>/     screenshot evidence, git-ignored (public repo), never deployed
 ├── tools/
 │   ├── og.html               1200×630 link-preview card, screenshotted to public/og.png
 │   └── icon.html             512×512 app icon, screenshotted to public/icon-*.png
@@ -953,7 +953,7 @@ These run in Vercel's build; a violation blocks deploy:
 
 Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px and 320px minimum). Commit per task with the §1.4 prefixes. Tasks marked 🔒 touch files nothing else touches that week — parallel lanes per §2.4.
 
-> **Build status (updated 2026-09-21):** R1, R2 and R3 are built. The public repo is `rudeboydamn/stridetober`, but Vercel's Git integration is **not** connected: production is deployed with `vercel --prod`. Still open: the `getwell` announcement mode (Task 7) and the Task 15 final sweep.
+> **Build status (updated 2026-09-22):** R1, R2 and R3 are built. The public repo `rudeboydamn/stridetober` is connected to Vercel: a push to `main` deploys production. Still open: the `getwell` announcement mode (Task 7) and the Task 15 final sweep.
 > **Optimization pass (2026-09-21):**
 > - Fraunces is served as one instance (opsz 72, weight 600), which cuts it from ~141KB to ~41KB. No stylesheet may ask for weight 700 (`tests/css.test.js`), and `font-synthesis: style` keeps the browser from faking a bold.
 > - `index.html` modulepreloads main.js's whole static import graph, which removes the 3-level request waterfall. `tests/smoke.test.js` fails if a module is missing or stale.
@@ -1091,7 +1091,7 @@ Target: empty array.
 
 ## 10. Open knobs (decide before the relevant task; defaults are sane)
 
-1. **Repo & Vercel project** — `rudeboydamn/stridetober` private repo + `stridetober` on team `team_kIfFmKlwOwuG0sniRCGfMwiY`. **Not yet created — needs Dammy's go** (Task 1). Verified 2026-09-16: no such project exists on the team.
+1. **Repo & Vercel project** — `rudeboydamn/stridetober` public repo + `stridetober` on team `team_kIfFmKlwOwuG0sniRCGfMwiY`. Done: Git integration connected 2026-09-22, `main` deploys production. Check-in screenshots are git-ignored because the repo is public.
 2. **Venmo handle** — flyer says `Dammyhenry`; confirm the URL `https://venmo.com/Dammyhenry` resolves before shipping the tribute button.
 3. **Roster** — `walkers.js` starts empty; ids/crests/colors get assigned in payment order. First-come crests.
 4. **Does Dammy walk?** Default no (he's the Judge, same as Big Steppas). If he competes, he still holds the pot — update Decree copy.

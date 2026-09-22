@@ -1,6 +1,6 @@
 // The Summons — a recruitment card built to be shared. Spec: docs/PLAN.md §5.10.
 import { esc, n } from "../lib/format.js";
-import { icon, seal, toast, reveal } from "../lib/fx.js";
+import { icon, seal, reveal, share } from "../lib/fx.js";
 
 export function render(ctx) {
   const c = ctx.challenge;
@@ -36,21 +36,9 @@ export function render(ctx) {
 
 export function mount(root, ctx) {
   reveal(root);
-  const url = `${location.origin}/`;
-  const copy = () => navigator.clipboard?.writeText(url)
-    .then(() => toast(esc(ctx.copy.TOASTS.copied)))
-    .catch(() => toast(`Copy this link: <b>${esc(url)}</b>`))
-    ?? toast(`Copy this link: <b>${esc(url)}</b>`);
-  root.querySelector("#shareBtn").addEventListener("click", async () => {
-    if (!navigator.share) { copy(); return; }
-    try {
-      await navigator.share({
-        title: "Stridetober",
-        text: "The October Steps Challenge. $20 to Dammy before Oct 4. Top three split the pot — 50/30/20 — and first place is crowned THE OCTOBER STEP CHAMPION!",
-        url,
-      });
-    } catch (e) {
-      if (e.name !== "AbortError") copy();
-    }
-  });
+  root.querySelector("#shareBtn").addEventListener("click", () => share({
+    title: "Stridetober",
+    text: "The October Steps Challenge. $20 to Dammy before Oct 4. Top three split the pot — most total steps is crowned THE OCTOBER STEP CHAMPION!",
+    url: `${location.origin}/`,
+  }, ctx.copy.TOASTS.copied));
 }

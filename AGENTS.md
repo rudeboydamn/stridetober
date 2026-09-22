@@ -74,6 +74,10 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
 - Highlight colors must never collide with a walker color — best day is a gold
   **outline** + 🔥, quietest is a hatch pattern + 😴.
 - `esc()` every data-file string before it enters `innerHTML`.
+- Fraunces ships at **weight 600 only** (opsz 72) to keep it ~41KB. Never ask it for 700;
+  `tests/css.test.js` fails if a stylesheet does.
+- Adding a module? Add its `<link rel="modulepreload">` to `index.html` too, or
+  `tests/smoke.test.js` fails. Dynamic imports (`demo.js`) are the exception.
 - Conventional commits: `feat:` `fix:` `style:` `data(week-N):` `docs:` `test:`.
 
 ## 6. Verify (do not skip)
@@ -85,5 +89,7 @@ Widths: 320/375/390/430/768/1024/1280/1440. Themes: light+dark × reduced motion
 
 ## 7. Deploy
 
-Git integration: `main` → production, every branch/PR → preview. Vercel runs
-`npm test` as the build command — a red test cannot deploy. Never force past it.
+Today: `npm test`, commit to `main`, push, then `vercel --prod --scope
+dammys-projects-9bcc048a`. Vercel runs `npm test` as the build command, so a red
+test cannot deploy. Never force past it. Once Vercel's Git integration is connected,
+`main` → production and every branch/PR → preview.

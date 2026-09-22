@@ -122,6 +122,63 @@ html[data-eve] .wm-jack { animation: flicker 3s infinite; }
 /* ── M2 fallback pulse ──────────────────────────────────── */
 .pulse { animation: pulse 400ms ease-in-out; }
 
+/* ── M26 wind gusts: a few leaves blow across every 35–70s ─ */
+@keyframes gust-fly {
+  0%   { opacity: 0; transform: translate3d(-8vw, 0, 0) rotate(0); }
+  8%   { opacity: var(--leaf-opacity); }
+  50%  { transform: translate3d(50vw, var(--arc), 0) rotate(calc(var(--turns) * .5)); }
+  92%  { opacity: var(--leaf-opacity); }
+  100% { opacity: 0; transform: translate3d(108vw, calc(var(--arc) * .4), 0) rotate(var(--turns)); }
+}
+@keyframes gust-push { 0%, 100% { transform: none; } 45% { transform: translateX(34px); } }
+.gust-leaf {
+  position: absolute;
+  left: 0;
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  color: var(--tint);
+  opacity: 0;
+  animation: gust-fly var(--dur) cubic-bezier(.25, .1, .25, 1) var(--delay) both;
+  will-change: transform;
+}
+.gust-leaf svg { width: 100%; height: 100%; }
+.leaves.gusting { animation: gust-push 2.6s ease-in-out; }
+
+/* ── M27 the samara: one ambient "leaf" is a spinning maple seed ─ */
+@keyframes samara-spin { to { transform: rotate(360deg); } }
+.leaf.samara .leaf-flip { animation: samara-spin var(--flip) linear infinite; }
+.leaf.samara .leaf-sway { animation-duration: calc(var(--sway) * 1.6); }
+
+/* ── M30 crest wiggle: hover on a mouse, tap on a phone ─── */
+@keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg) scale(1.06); } 55% { transform: rotate(9deg); } 80% { transform: rotate(-4deg); } }
+.crest.wiggle { animation: wiggle 520ms var(--ease-settle); }
+@media (hover: hover) and (pointer: fine) {
+  .crest:hover, a:hover > .crest, .roll-card:hover .crest { animation: wiggle 520ms var(--ease-settle); }
+}
+
+/* ── M31 the harvest sky: sun rises by day, moon and stars by night ─ */
+@keyframes rise { from { transform: translateY(46px); } to { transform: none; } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes twinkle { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+.sky-orb { animation: rise 1.8s var(--ease-settle) both; }
+html[data-daypart="afternoon"] .sky-orb { animation: rise 1.8s var(--ease-settle) both, breathe 7s ease-in-out 1.8s infinite; }
+.sky-star { animation: twinkle 2.8s ease-in-out infinite; }
+.sky-star:nth-of-type(2) { animation-delay: .9s; }
+.sky-star:nth-of-type(3) { animation-delay: 1.7s; }
+
+/* ── M33 the squirrel: crosses once a session, pauses to judge you ─ */
+@keyframes scurry {
+  0%   { transform: translateX(0); }
+  40%  { transform: translateX(calc(-50vw - 40px)); }
+  52%  { transform: translateX(calc(-50vw - 40px)); }
+  100% { transform: translateX(calc(-100vw - 140px)); }
+}
+@keyframes hop { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-8px) rotate(4deg); } }
+.squirrel { animation: scurry 5.4s linear forwards; }
+.sq-body { animation: hop 240ms ease-in-out infinite alternate; }
+.squirrel.fled { opacity: 0; transition: opacity 300ms; }
+
 /* ── reduced motion (PLAN §4.2): near-zero, never animation:none ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

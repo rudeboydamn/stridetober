@@ -69,3 +69,14 @@ test("wax seal: text reaches 4.5:1; the seal or its dark-theme ring reaches 3:1"
   assert.ok(contrast(raw("seal"), raw("light-bg")) >= 3);
   assert.ok(contrast(raw("dark-seal-ring"), raw("dark-bg")) >= 3);
 });
+
+// Fraunces is served at one weight (600, opsz 72) to keep it at ~40KB instead of
+// ~140KB. Asking for 700 would make the browser fetch nothing better and fake it.
+test("display font is only ever requested at weight 600", () => {
+  for (const f of readdirSync(DIR).filter(f => f.endsWith(".css"))) {
+    const css = readFileSync(`${DIR}/${f}`, "utf8");
+    for (const [decl, weight] of css.matchAll(/font:\s*(?:italic\s+)?(\d{3})\s[^;]*var\(--font-display\)/g)) {
+      assert.equal(weight, "600", `${f}: "${decl}" asks Fraunces for ${weight}`);
+    }
+  }
+});

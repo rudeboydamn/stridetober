@@ -1,6 +1,6 @@
 // Settle It — head-to-head adjudication. Spec: docs/PLAN.md §5.7.
 import { n, esc, rich, fill } from "../lib/format.js";
-import { crest, icon, toast, reveal } from "../lib/fx.js";
+import { crest, icon, reveal, share } from "../lib/fx.js";
 import { h2h } from "../lib/stats.js";
 import { climbChart } from "../lib/charts.js";
 
@@ -117,22 +117,12 @@ export function mount(root, ctx, params = {}) {
   reveal(root);
   const btn = root.querySelector("#shareBtn");
   if (!btn) return;
-  const url = location.href;
-  const copy = () => navigator.clipboard?.writeText(url)
-    .then(() => toast(esc(ctx.copy.TOASTS.copied)))
-    .catch(() => toast(`Copy this link: <b>${esc(url)}</b>`))
-    ?? toast(`Copy this link: <b>${esc(url)}</b>`);
-  btn.addEventListener("click", async () => {
+  btn.addEventListener("click", () => {
     const A = ctx.walkers.find(w => w.id === params.a), B = ctx.walkers.find(w => w.id === params.b);
-    if (!navigator.share) { copy(); return; }
-    try {
-      await navigator.share({
-        title: `Settle It — ${A.short} vs ${B.short}`,
-        text: `The Judge adjudicates: ${A.short} vs ${B.short}, Stridetober.`,
-        url,
-      });
-    } catch (e) {
-      if (e.name !== "AbortError") copy();
-    }
+    share({
+      title: `Settle It — ${A.short} vs ${B.short}`,
+      text: `The Judge adjudicates: ${A.short} vs ${B.short}, Stridetober.`,
+      url: location.href,
+    }, ctx.copy.TOASTS.copied);
   });
 }

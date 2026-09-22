@@ -423,6 +423,14 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 | M23 | **Bats** | Hallowed Eve only | 2 of the leaves swap to the `bat` symbol with `flap 180ms infinite`, tinted `--ink-2` | Hidden |
 | M24 | **Coronation** | Crowned phase, first view per device | The wreath runs `crown-drop 700ms var(--ease-stamp)` then `bob 3s ease-in-out infinite`. The seal stamps at +500ms and a 110-leaf burst fires at +300ms. `localStorage["stridetober:crowned-seen"]="1"`; later views only bob. | Static crown |
 | M25 | **Candle** | Timeline "today" node, witching hour | `flicker 3s infinite` | Static |
+| M26 | **Wind gust** | Every 35–70s (first one 12–20s after load), visible tab only | 4 leaves (6 at ≥768) blow left→right on `gust-fly` 2.6–3.6s with an arc and 540–960° of spin; the ambient layer leans 34px (`gust-push` 2.6s). Gust leaves are temporary and don't count toward the 6/10 ambient cap. `fx.blowGust()` spawns one, `fx.gusts()` schedules them | None |
+| M27 | **Samara** | Always: the last ambient leaf (not on Hallowed Eve) | A maple seed (`#samara`) that spins (`samara-spin .55s linear`) and sways 1.6× slower | Hidden with the layer |
+| M28 | **Leaf puff** | Click on any `.btn-primary` (delegated in `main.js`) | `fx.puff()`: a 12-leaf burst from the button's center at `power: .45` | None |
+| M29 | **Jump in the pile** | Tap the footer leaf pile | Every pile leaf is kicked at 2.2× strength, a 34-leaf burst rises from the tap at `power: .75`, and the rake line gains a quip from `JUMP_LINES` | Quip only |
+| M30 | **Crest wiggle** | Hover (mouse) or tap on any walker crest | `wiggle 520ms` | None |
+| M31 | **Harvest sky** | Court hero, behind the sneaker and bottle, keyed to `html[data-daypart]` | Morning: a pale sun low on the left. Afternoon: a gold sun high up, `breathe 7s`. Dusk: a big orange sun half set behind the horizon. Night: a crescent moon and three `twinkle 2.8s` stars. Hallowed Eve: an orange harvest moon. The orb rises into place once (`rise 1.8s`) | Static |
+| M32 | **Milestone** | An open page crosses kickoff or the Final Bell | Full leaf burst + toast from `MILESTONE_TOASTS` | Toast only |
+| M33 | **The squirrel** | The Court, 18s into a visit, once per session | 🐿️ carrying 🌰 scurries right→left along the top of the tab bar (`scurry 5.4s`, pausing mid-way to judge you) while it `hop`s. Tap: a 14-leaf burst and a toast from `SQUIRREL_LINES` | Never appears |
 
 ### 4.5 Leaf layer (`fx.leaves(container, { eve })`)
 - Markup per leaf: `<span class="leaf" style="--x:12%;--dur:17s;--delay:-6s;--sway:3.8s;--flip:2.2s;--size:22px;--tint:var(--leaf-2)"><span class="leaf-sway"><svg class="leaf-flip"><use href="/assets/sprite.svg#leaf-maple"/></svg></span></span>`
@@ -945,7 +953,14 @@ These run in Vercel's build; a violation blocks deploy:
 
 Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px and 320px minimum). Commit per task with the §1.4 prefixes. Tasks marked 🔒 touch files nothing else touches that week — parallel lanes per §2.4.
 
-> **Build status (updated 2026-09-16):** R1 "Muster" is built and deployed with the Vercel CLI (`vercel --prod`). Done: Tasks 2–6 and 10. Partly done: Task 1 (the GitHub repo and Git integration still need Dammy's go), Task 7 (ledger preview, Judge's Report and Together tile are done; `getwell` announcement mode is not), and Task 8 (standings rows/table and honours shelf are done; charts, `fx.flip` Reading and `fx.burst` wiring are not). Not started: Tasks 9, 11–15.
+> **Build status (updated 2026-09-21):** R1, R2 and R3 are built. The public repo is `rudeboydamn/stridetober`, but Vercel's Git integration is **not** connected: production is deployed with `vercel --prod`. Still open: the `getwell` announcement mode (Task 7) and the Task 15 final sweep.
+> **Optimization pass (2026-09-21):**
+> - Fraunces is served as one instance (opsz 72, weight 600), which cuts it from ~141KB to ~41KB. No stylesheet may ask for weight 700 (`tests/css.test.js`), and `font-synthesis: style` keeps the browser from faking a bold.
+> - `index.html` modulepreloads main.js's whole static import graph, which removes the 3-level request waterfall. `tests/smoke.test.js` fails if a module is missing or stale.
+> - The 1s tick sleeps while the tab is hidden. The phase signature no longer reads `localStorage` every second; that read re-rendered the coronation mid-ceremony.
+> - Phone charts are drawn at the card's real width (`phoneWidth`) with 12px axis labels (`tests/charts.test.js`). Podium names are 44px tap targets.
+> - `fx.share()` replaces two copies of the share-or-copy code, and `rake()` reads layout once per frame.
+> - The new fall motion is M26–M33 in §4.4.
 > Deviations from this plan, all deliberate:
 > - §5.5 Check-in copy follows the locked §1.2 rule: the week *ends* Saturday night and screenshots are due Sunday. The "accepts Sunday too" line was dropped, and the kicker reads "Due every Sunday".
 > - `stats.honours()` returns `{key, who, detail}`; views look up the label and description in `HONOURS`.

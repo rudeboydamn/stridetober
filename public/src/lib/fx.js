@@ -1,6 +1,6 @@
 // Visual effects and small shared UI builders. Spec: docs/PLAN.md §4.
 // Every effect checks reduced() first and degrades to its final state.
-import { n, rich } from "./format.js";
+import { n, esc, rich } from "./format.js";
 
 export const SPRITE = "/assets/sprite.svg";
 
@@ -42,7 +42,7 @@ export const tallySvg = (counting = true) =>
 export const note = (text, cls = "") =>
   `<span class="note ${cls}">${rich(text)}<svg viewBox="0 0 46 30" aria-hidden="true"><path d="M3 4c10 1 22 6 30 18m0 0l-8-2m8 2l1-8"/></svg></span>`;
 
-// ── M1 leaves ──────────────────────────────────────────────
+// ── M1 leaves (+ M27: one of them is a spinning maple samara) ──
 export function leaves(container, { eve = false } = {}) {
   if (!container) return;
   const rand = mulberry32(1004);
@@ -52,17 +52,44 @@ export function leaves(container, { eve = false } = {}) {
   let html = "";
   for (let i = 0; i < count; i++) {
     const bat = eve && i < 2;
+    const samara = !eve && i === count - 1;
     const dur = r(14, 22);
     const style = [
       `--x:${r(0, 96).toFixed(1)}%`, `--dur:${dur.toFixed(1)}s`, `--delay:${(-r(0, dur)).toFixed(1)}s`,
-      `--sway:${r(3.2, 4.6).toFixed(2)}s`, `--flip:${r(1.8, 2.6).toFixed(2)}s`, `--size:${Math.round(r(14, 28))}px`,
+      `--sway:${r(3.2, 4.6).toFixed(2)}s`, `--flip:${samara ? ".55" : r(1.8, 2.6).toFixed(2)}s`, `--size:${Math.round(r(14, 28))}px`,
       `--tint:${bat ? "var(--ink-2)" : `var(--leaf-${1 + Math.floor(rand() * 4)})`}`,
     ].join(";");
-    const shape = bat ? "bat" : shapes[i % shapes.length];
-    html += `<span class="leaf${bat ? " bat" : ""}" style="${style}"><span class="leaf-sway">` +
+    const shape = bat ? "bat" : samara ? "samara" : shapes[i % shapes.length];
+    html += `<span class="leaf${bat ? " bat" : samara ? " samara" : ""}" style="${style}"><span class="leaf-sway">` +
       `<svg class="leaf-flip" viewBox="${bat ? "0 0 32 16" : "0 0 24 24"}"><use href="${SPRITE}#${shape}"/></svg></span></span>`;
   }
   container.innerHTML = html;
+}
+
+// ── M26 wind gusts: every 35–70s a few leaves blow across ──
+export function blowGust(container) {
+  if (!container || document.hidden || reduced()) return;
+  const shapes = ["leaf-maple", "leaf-oak", "leaf-birch"];
+  const r = (a, b) => a + Math.random() * (b - a);
+  const count = matchMedia("(min-width: 768px)").matches ? 6 : 4;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("span");
+    el.className = "gust-leaf";
+    el.style.cssText = `--y:${r(12, 72).toFixed(0)}vh;--size:${r(16, 28).toFixed(0)}px;--dur:${r(2.6, 3.6).toFixed(2)}s;` +
+      `--delay:${(i * r(.12, .3)).toFixed(2)}s;--arc:${r(-10, 8).toFixed(0)}vh;--turns:${r(540, 960).toFixed(0)}deg;` +
+      `--tint:var(--leaf-${1 + (i % 4)})`;
+    el.innerHTML = `<svg viewBox="0 0 24 24"><use href="${SPRITE}#${shapes[i % 3]}"/></svg>`;
+    el.addEventListener("animationend", () => el.remove(), { once: true });
+    container.appendChild(el);
+  }
+  container.classList.remove("gusting");
+  void container.offsetWidth;
+  container.classList.add("gusting");
+}
+
+export function gusts(container) {
+  const next = ms => setTimeout(() => { blowGust(container); next(35_000 + Math.random() * 35_000); }, ms);
+  next(12_000 + Math.random() * 8_000);
 }
 
 // ── M2 leaf burst ──────────────────────────────────────────
@@ -87,7 +114,7 @@ function makeSprites() {
   }));
 }
 
-export function burst({ x, y, count, from } = {}) {
+export function burst({ x, y, count, from, power = 1 } = {}) {
   if (reduced()) {
     if (from) { from.classList.remove("pulse"); void from.offsetWidth; from.classList.add("pulse"); }
     return;
@@ -107,7 +134,7 @@ export function burst({ x, y, count, from } = {}) {
   const total = count ?? (w >= 768 ? 110 : 60);
   const ox = x ?? w / 2, oy = y ?? h * .25;
   for (let i = 0; i < total; i++) {
-    bits.push({ x: ox, y: oy, vx: rnd(-6, 6), vy: rnd(-11, -6), rot: rnd(0, 6.283), vr: rnd(-.12, .12),
+    bits.push({ x: ox, y: oy, vx: rnd(-6, 6) * power, vy: rnd(-11, -6) * power, rot: rnd(0, 6.283), vr: rnd(-.12, .12),
                 phase: rnd(0, 6.283), s: rnd(.6, 1.1), img: sprites[Math.floor(Math.random() * sprites.length)] });
   }
   if (raf) return;
@@ -133,6 +160,21 @@ export function burst({ x, y, count, from } = {}) {
     raf = 0;
   };
   raf = requestAnimationFrame(step);
+}
+
+// ── M28 a small puff of leaves from a pressed button ──────
+export function puff(el) {
+  if (reduced()) return;
+  const r = el.getBoundingClientRect();
+  burst({ x: r.left + r.width / 2, y: r.top + r.height / 2, count: 12, power: .45 });
+}
+
+// Share sheet where the phone has one; otherwise copy the link. Either way, say so.
+export async function share(data, copiedMsg) {
+  const fallback = () => toast(`Copy this link: <b>${esc(data.url)}</b>`);
+  const copy = () => (navigator.clipboard ? navigator.clipboard.writeText(data.url).then(() => toast(esc(copiedMsg)), fallback) : fallback());
+  if (!navigator.share) return copy();
+  try { await navigator.share(data); } catch (e) { if (e.name !== "AbortError") copy(); }
 }
 
 // ── M5 count-up ────────────────────────────────────────────
@@ -243,8 +285,8 @@ export function flip(list, applyNewOrder) {
   });
 }
 
-// ── M21 rake the leaves ────────────────────────────────────
-export function rake(pile, line, milestones) {
+// ── M21 rake the leaves + M29 jump in the pile ─────────────
+export function rake(pile, line, milestones, jumps = []) {
   if (!pile || !line) return;
   const rand = mulberry32(31);
   const shapes = ["leaf-maple", "leaf-oak", "leaf-birch"];
@@ -253,34 +295,73 @@ export function rake(pile, line, milestones) {
     `bottom:${Math.round(rand() * 16)}px;--r:${Math.round(rand() * 360)}deg;color:var(--leaf-${1 + (i % 4)})">` +
     `<use href="${SPRITE}#${shapes[i % 3]}"/></svg>`).join("");
   const leafEls = [...pile.children];
-  let count = 0, idle = 0;
+  let count = 0, idle = 0, frame = 0, last = null, quip = "";
   const update = () => {
     const hit = [...milestones].reverse().find(m => count >= m.at);
+    const note = quip || (hit && hit.at > 1 ? hit.note : "");
     line.innerHTML = `Leaves raked: <b class="num">${n(count)}</b> · Steps credited: 0 · The Judge checked.` +
-      (hit && hit.at > 1 ? ` <span class="rake-note">${rich(hit.note)}</span>` : "");
+      (note ? ` <span class="rake-note">${rich(note)}</span>` : "");
   };
   const settle = () => leafEls.forEach(l => {
     l.classList.remove("kicked");
     ["--kx", "--ky", "--kr"].forEach(p => l.style.removeProperty(p));
   });
+  const kick = (leaf, away, strength = 1) => {
+    const k = (10 + Math.random() * 16) * strength;
+    leaf.classList.add("kicked");
+    leaf.style.setProperty("--kx", `${(away < 0 ? -k : k).toFixed(0)}px`);
+    leaf.style.setProperty("--ky", `${(-(6 + Math.random() * 16) * strength).toFixed(0)}px`);
+    leaf.style.setProperty("--kr", `${((Math.random() * 80 - 40) * strength).toFixed(0)}deg`);
+  };
+  const later = ms => { clearTimeout(idle); idle = setTimeout(settle, ms); };
+  // One layout read per frame: measure every leaf first, then write.
+  const apply = () => {
+    frame = 0;
+    const hits = leafEls.filter(l => !l.classList.contains("kicked"))
+      .map(l => { const r = l.getBoundingClientRect(); return [l, r.left + r.width / 2 - last.clientX, r.top + r.height / 2 - last.clientY]; })
+      .filter(([, dx, dy]) => Math.hypot(dx, dy) <= 48);
+    hits.forEach(([leaf, dx]) => kick(leaf, dx));
+    if (hits.length) { count += hits.length; quip = ""; update(); }
+    later(1200);
+  };
   pile.addEventListener("pointermove", e => {
     if (reduced()) return;
-    let kicked = 0;
-    for (const leaf of leafEls) {
-      if (leaf.classList.contains("kicked")) continue;
-      const r = leaf.getBoundingClientRect();
-      const dx = r.left + r.width / 2 - e.clientX, dy = r.top + r.height / 2 - e.clientY;
-      if (Math.hypot(dx, dy) > 48) continue;
-      const k = 10 + Math.random() * 16;
-      leaf.classList.add("kicked");
-      leaf.style.setProperty("--kx", `${(dx < 0 ? -k : k).toFixed(0)}px`);
-      leaf.style.setProperty("--ky", `${(-6 - Math.random() * 16).toFixed(0)}px`);
-      leaf.style.setProperty("--kr", `${(Math.random() * 80 - 40).toFixed(0)}deg`);
-      kicked++;
-    }
-    if (kicked) { count += kicked; update(); }
-    clearTimeout(idle);
-    idle = setTimeout(settle, 1200);
+    last = e;
+    frame ||= requestAnimationFrame(apply);
   });
-  pile.addEventListener("click", () => { if (reduced()) { count++; update(); } });
+  pile.addEventListener("click", e => {
+    quip = jumps.length ? jumps[Math.floor(Math.random() * jumps.length)] : "";
+    if (!reduced()) {
+      const box = pile.getBoundingClientRect();
+      leafEls.forEach(l => kick(l, Math.random() - .5, 2.2));
+      burst({ x: e.clientX || box.left + box.width / 2, y: box.top + box.height / 2, count: 34, power: .75 });
+      later(1400);
+    } else {
+      count++;
+    }
+    update();
+  });
+}
+
+// ── M33 a squirrel crosses, once per session ───────────────
+export function squirrel(lines) {
+  if (reduced() || document.hidden) return;
+  try {
+    if (sessionStorage.getItem("stridetober:squirrel")) return;
+    sessionStorage.setItem("stridetober:squirrel", "1");
+  } catch { return; }
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "squirrel";
+  b.setAttribute("aria-label", "A squirrel is crossing. Tap to fine it.");
+  b.innerHTML = `<span class="sq-body" aria-hidden="true"><span class="sq-acorn">🌰</span>🐿️</span>`;
+  b.addEventListener("animationend", e => { if (e.target === b) b.remove(); });
+  b.addEventListener("click", () => {
+    const r = b.getBoundingClientRect();
+    burst({ x: r.left + r.width / 2, y: r.top, count: 14, power: .5 });
+    toast(esc(lines[Math.floor(Math.random() * lines.length)]));
+    b.classList.add("fled");
+    setTimeout(() => b.remove(), 320);
+  });
+  document.body.appendChild(b);
 }

@@ -7,7 +7,7 @@ import * as COPY from "../data/copy.js";
 import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, announcementLive } from "./lib/time.js";
 import { standings, honours, paidWalkers } from "./lib/stats.js";
 import { esc, rich } from "./lib/format.js";
-import { leaves, rake, reduced, reveal } from "./lib/fx.js";
+import { leaves, gusts, rake, reduced, reveal, puff, burst, toast } from "./lib/fx.js";
 import * as court from "./views/court.js";
 import * as ledger from "./views/ledger.js";
 import * as checkin from "./views/checkin.js";
@@ -61,8 +61,10 @@ function buildContext(now) {
   };
 }
 
+// crownedSeen comes from the last render, not a fresh localStorage read each second:
+// the coronation sets the flag as it plays, and re-reading it here re-rendered the page mid-ceremony.
 const signature = now =>
-  phaseSignature({ now, challenge: CHALLENGE, weeks: weeksAt(now), crownedSeen: crownedSeen(), announcement: ANNOUNCEMENT });
+  phaseSignature({ now, challenge: CHALLENGE, weeks: weeksAt(now), crownedSeen: !!ctx?.crownedSeen, announcement: ANNOUNCEMENT });
 
 // ── router ────────────────────────────────────────────────
 const ROUTES = [
@@ -150,8 +152,16 @@ function renderAnnouncement() {
   });
 }
 
+function celebrate(from, to) {
+  const key = from === "muster" && to === "walking" ? "kickoff" : from === "walking" && to === "counting" ? "bell" : null;
+  if (!key) return;
+  burst({});
+  toast(esc(COPY.MILESTONE_TOASTS[key]));
+}
+
 function render({ transition = false, focus = false } = {}) {
   const now = clock();
+  const before = ctx?.phase;
   ctx = buildContext(now);
   sig = signature(now);
   const found = currentRoute();
@@ -176,17 +186,21 @@ function render({ transition = false, focus = false } = {}) {
     }
   }
   if (focus) view.focus({ preventScroll: true });
+  if (before) celebrate(before, ctx.phase);
 }
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 addEventListener("hashchange", () => { closeSheet(); render({ transition: true, focus: true }); });
 
-setInterval(() => {
+function tick() {
+  if (document.hidden) return;                          // a pocketed phone does no work
   const now = clock();
   if (signature(now) !== sig) { render(); return; }
   root.dataset.daypart = daypart(now);
   route.mod.tick?.(view, { ...ctx, now });
-}, 1000);
+}
+setInterval(tick, 1000);
+document.addEventListener("visibilitychange", tick);
 
 // ── More sheet ────────────────────────────────────────────
 const sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim"), moreTab = document.getElementById("moreTab");
@@ -263,5 +277,18 @@ showTheme();
   console.log("%c⚖️ The Fairly Impartial Judge sees you reading the source. Go walk.", "font: 600 14px Georgia, serif; color: #A6420E");
 }
 
-rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES);
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".btn-primary");
+  if (btn) puff(btn);
+});
+document.addEventListener("pointerdown", e => {
+  const c = e.target.closest(".crest");
+  if (!c || reduced()) return;
+  c.classList.remove("wiggle");
+  void c.offsetWidth;
+  c.classList.add("wiggle");
+});
+
+gusts(document.querySelector(".leaves"));
+rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES, COPY.JUMP_LINES);
 render();

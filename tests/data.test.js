@@ -102,7 +102,7 @@ test("finds: every photo exists in public/finds (or img is null)", () => {
 test("copy: every pool from PLAN §7.1 is exported", () => {
   for (const key of ["PHASE_LINES", "COURT_WALKING", "COUNTDOWN_LABELS", "DOSSIER_LINES", "NO_STEPS_WEEK",
     "AS_COUNTED", "DERIVED_NOTE", "TOGETHER_LINES", "VERDICTS", "EXCUSES", "TOASTS", "DECOY_TOASTS",
-    "BOTTLE", "RAKE_LINES", "MARGIN_NOTES", "HONOURS"]) {
+    "BOTTLE", "RAKE_LINES", "MARGIN_NOTES", "HONOURS", "JUMP_LINES", "SQUIRREL_LINES", "MILESTONE_TOASTS"]) {
     assert.ok(COPY[key] != null, `copy.js is missing ${key}`);
   }
 });

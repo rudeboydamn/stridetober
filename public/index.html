@@ -26,12 +26,34 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,600..700,100,0;1,9..144,600..700,100,1&family=Inter:wght@400..700&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,72,600,100,0;1,72,600,100,1&family=Inter:wght@400..700&family=Caveat:wght@600&display=swap">
 <link rel="stylesheet" href="/styles/tokens.css">
 <link rel="stylesheet" href="/styles/base.css">
 <link rel="stylesheet" href="/styles/components.css">
 <link rel="stylesheet" href="/styles/views.css">
 <link rel="stylesheet" href="/styles/motion.css">
+<!-- Every module in main.js's static import graph, fetched in parallel instead of a 3-level waterfall.
+     tests/smoke.test.js fails if one is missing. -->
+<link rel="modulepreload" href="/src/main.js">
+<link rel="modulepreload" href="/data/challenge.js">
+<link rel="modulepreload" href="/data/walkers.js">
+<link rel="modulepreload" href="/data/weeks.js">
+<link rel="modulepreload" href="/data/finds.js">
+<link rel="modulepreload" href="/data/copy.js">
+<link rel="modulepreload" href="/src/lib/time.js">
+<link rel="modulepreload" href="/src/lib/format.js">
+<link rel="modulepreload" href="/src/lib/stats.js">
+<link rel="modulepreload" href="/src/lib/fx.js">
+<link rel="modulepreload" href="/src/lib/charts.js">
+<link rel="modulepreload" href="/src/views/court.js">
+<link rel="modulepreload" href="/src/views/ledger.js">
+<link rel="modulepreload" href="/src/views/checkin.js">
+<link rel="modulepreload" href="/src/views/decree.js">
+<link rel="modulepreload" href="/src/views/excuses.js">
+<link rel="modulepreload" href="/src/views/summons.js">
+<link rel="modulepreload" href="/src/views/dossier.js">
+<link rel="modulepreload" href="/src/views/compare.js">
+<link rel="modulepreload" href="/src/views/finds.js">
 <script>
   /* Before first paint: JS flag, saved theme, QA motion flag, sky band. */
   (function () {
@@ -75,7 +97,7 @@
 <footer class="site-foot">
   <div class="wrap">
     <div class="leaf-pile" id="leafPile" aria-hidden="true"></div>
-    <p class="rake-line" id="rakeLine">Rake the pile. It does nothing.</p>
+    <p class="rake-line" id="rakeLine">Rake the pile. Jump in it. Neither counts.</p>
     <p class="signoff">“Fairly impartial. Entirely unforgiving.” — The Judge</p>
     <p class="fine">Stridetober · Oct 4 – Nov 1 · unlisted, noindex, judge's rulings <em>fairly</em> final</p>
   </div>

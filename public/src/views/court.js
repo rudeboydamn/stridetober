@@ -2,7 +2,7 @@
 import { nextMilestone, countdownParts, parseLocal } from "../lib/time.js";
 import { n, esc, rich, fill, pick } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
-import { SPRITE, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced } from "../lib/fx.js";
+import { SPRITE, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
@@ -31,6 +31,10 @@ function hero(ctx) {
         </div>
       </div>
       <div class="hero-art">
+        <span class="hero-sky" aria-hidden="true">
+          <span class="sky-orb"><svg class="sky-moon" viewBox="0 0 24 24"><use href="${SPRITE}#moon"/></svg></span>
+          <i class="sky-star"></i><i class="sky-star"></i><i class="sky-star"></i>
+        </span>
         <svg class="hero-sneaker" viewBox="0 0 64 32" aria-hidden="true"><use href="${SPRITE}#sneaker"/></svg>
         <button class="bottle" type="button" aria-label="The water bottle has advice">
           <svg viewBox="0 0 36 72" aria-hidden="true"><use href="${SPRITE}#bottle"/></svg>
@@ -304,8 +308,14 @@ export function render(ctx) {
     + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + how();
 }
 
+let squirrelTimer = 0;
+
 export function mount(root, ctx) {
   reveal(root);
+  clearTimeout(squirrelTimer);
+  squirrelTimer = setTimeout(() => {
+    if ((location.hash.replace(/^#/, "") || "/") === "/") squirrel(ctx.copy.SQUIRREL_LINES);
+  }, 18_000);
   // Coronation burst fires once per device; later views just bob (M24).
   if (ctx.phase === "crowned" && !ctx.crownedSeen) {
     try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }

@@ -29,7 +29,7 @@ function weekCard(ctx, w, wk) {
     ${!postedHere || steps === null ? `
       <p class="week-zero">0 steps counted</p><span class="stamp week-stamp">No screenshot</span>` : `
       <p class="week-total"><b class="num" data-count="${steps}">${n(steps)}</b> steps</p>
-      ${days ? dailyChart(days, { color: w.color, derived }) : `<p class="caption">Dailies pending — the Judge accepted the total.</p>`}
+      ${days ? dailyChart(days, { color: w.color, derived, vw: document.documentElement.clientWidth }) : `<p class="caption">Dailies pending — the Judge accepted the total.</p>`}
       ${derived ? `<details class="chart-data derived-note"><summary>${esc(ctx.copy.DERIVED_NOTE.head)}</summary><p class="caption">${esc(ctx.copy.DERIVED_NOTE.body)}</p></details>` : ""}`}
   </article>`;
 }

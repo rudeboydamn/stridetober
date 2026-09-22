@@ -138,3 +138,23 @@ export const HONOURS = [ // computed by stats.honours(); label renders on the ch
   { key:"rest-day",    label:"Court-Appointed Rest Day",  desc:"a literal zero day, owned" },
   { key:"quiet",       label:"The Quiet Achiever",        desc:"most total steps without winning a week" },
 ];
+
+export const JUMP_LINES = [ // footer leaf pile, on a tap (M29)
+  "Jumped in the pile. Steps credited: 0. Joy credited: considerable.",
+  "The Judge saw that. The Judge has also done that.",
+  "Crunch confirmed. The Ledger remains unmoved.",
+  "A flawless landing. Regrettably, not cardio.",
+  "Leaf pile: 1. Step count: unchanged.",
+];
+
+export const SQUIRREL_LINES = [ // the once-a-session squirrel, when tapped (M33)
+  "The squirrel has been fined one acorn for jaywalking.",
+  "The squirrel paid no tribute. It is walking anyway.",
+  "Steps credited to the squirrel: 0. It has filed an appeal.",
+  "The Judge notes the squirrel is out-walking at least one of you.",
+];
+
+export const MILESTONE_TOASTS = { // fired when an open page crosses the moment (M32)
+  kickoff: "Kickoff. The couch is now the opposition.",
+  bell: "The clock has struck midnight. Pens down, sneakers off.",
+};

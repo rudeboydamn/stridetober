@@ -23,6 +23,7 @@ html.js [data-reveal]:not(.is-in) .harvest-cap { transform: translateX(0); }
 /* ── view: court ───────────────────────────────────────── */
 .hero {
   position: relative;
+  overflow-x: clip;                                   /* the sky's glow may run wide; the page may not */
   padding-block: var(--s-7) var(--s-5);
   background: linear-gradient(180deg, var(--sky) 0%, color-mix(in srgb, var(--sky) 40%, transparent) 55%, transparent 100%);
 }
@@ -44,6 +45,41 @@ html.js [data-reveal]:not(.is-in) .harvest-cap { transform: translateX(0); }
   .hero-art .bottle { width: 96px; height: 192px; }
   .hero-art .bottle-label { width: 124px; font-size: 20px; }
   .bubble-slot { bottom: auto; top: 0; translate: -50% 0; }
+}
+
+/* the harvest sky behind the sneaker and bottle (M31) */
+.hero-art { isolation: isolate; }
+.hero-sky { position: absolute; inset: -24px -56px 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.sky-orb {
+  --core: #FFE08A; --edge: #F5B544; --glow: rgb(245 181 68 / .42);
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: 104px;
+  height: 104px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 40%, var(--core) 0 44%, var(--edge) 74%);
+  box-shadow: 0 0 46px 14px var(--glow);
+}
+.sky-moon { display: none; width: 100%; height: 100%; color: #F4E6C4; filter: drop-shadow(0 0 16px rgb(244 230 196 / .65)); }
+.sky-star { position: absolute; display: none; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+.sky-star:nth-of-type(1) { left: 16%; top: 20%; }
+.sky-star:nth-of-type(2) { left: 34%; top: 8%; width: 3px; height: 3px; }
+.sky-star:nth-of-type(3) { left: 82%; top: 30%; }
+html[data-daypart="morning"] .sky-orb { --core: #FFF1C9; --edge: #F9D38A; --glow: rgb(249 211 138 / .5); left: 32%; bottom: 10px; }
+html[data-daypart="dusk"] .sky-orb { --core: #FFB27A; --edge: #E0661B; --glow: rgb(224 102 27 / .42); bottom: -38px; width: 132px; height: 132px; margin-left: -30px; }
+html[data-daypart="night"] .sky-orb { width: 76px; height: 76px; left: 58%; bottom: 72px; background: none; box-shadow: none; }
+html[data-daypart="night"] .sky-moon { display: block; }
+html[data-daypart="night"] .sky-star, html[data-eve] .sky-star { display: block; }
+html[data-eve] .sky-orb { --core: #FFC27A; --edge: #E0661B; --glow: rgb(224 102 27 / .5); width: 96px; height: 96px; left: 56%; bottom: 64px;
+  background: radial-gradient(circle at 42% 40%, var(--core) 0 44%, var(--edge) 74%); box-shadow: 0 0 46px 14px var(--glow); }
+html[data-eve] .sky-moon { display: none; }
+@media (min-width: 1024px) {
+  .sky-orb { width: 150px; height: 150px; bottom: 90px; margin-left: -40px; }
+  html[data-daypart="dusk"] .sky-orb { width: 190px; height: 190px; bottom: -50px; }
+  html[data-daypart="night"] .sky-orb { width: 110px; height: 110px; bottom: 150px; }
+  html[data-eve] .sky-orb { width: 140px; height: 140px; bottom: 130px; }
 }
 
 .countdown-card .kicker { color: var(--accent-ink); }
@@ -173,7 +209,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .decree-body .h2 { margin-bottom: 2px; }
 .decree-lead { color: var(--accent-ink); font: 600 var(--step-1)/1.2 var(--font-display); }
 .decree-quote { font: italic 600 var(--step-0)/1.45 var(--font-display); font-variation-settings: "SOFT" 100, "WONK" 1; }
-.champion-line { display: block; margin-top: 6px; color: var(--gold-ink); font: 700 var(--step-1)/1.15 var(--font-display); letter-spacing: .01em; }
+.champion-line { display: block; margin-top: 6px; color: var(--gold-ink); font: 600 var(--step-1)/1.15 var(--font-display); letter-spacing: .01em; }
 .season { width: 100%; border-collapse: collapse; }
 .season th, .season td { padding: 10px 8px 10px 0; border-bottom: 1px solid var(--line); text-align: left; }
 .season thead th { color: var(--ink-3); font: 600 12px/1 var(--font-ui); letter-spacing: .1em; text-transform: uppercase; }
@@ -221,7 +257,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
   text-align: center;
 }
 .summons-seal { position: absolute; top: -34px; }
-.summons-mark { font: 700 var(--step-4)/1 var(--font-display); letter-spacing: -.02em; }
+.summons-mark { font: 600 var(--step-4)/1 var(--font-display); letter-spacing: -.02em; }
 .summons-mark em { color: var(--accent-ink); font-variation-settings: "SOFT" 100, "WONK" 1; }
 .summons-dates { color: var(--accent-ink); font: 700 13px/1 var(--font-ui); letter-spacing: .14em; }
 .summons-tag { font: italic 600 var(--step-1)/1.2 var(--font-display); }
@@ -244,7 +280,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 /* ── charts (shared: ledger, dossier, compare) ─────────── */
 .chart svg { display: block; width: 100%; height: auto; }
 .chart-grid { stroke: var(--line); }
-.chart-axis { fill: var(--ink-3); font: 600 11px var(--font-ui); }
+.chart-axis { fill: var(--ink-3); font: 600 12px var(--font-ui); }
 .chart-val { fill: var(--ink-2); font-weight: 700; }
 .chart-line { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .chart-pt { stroke: var(--surface); stroke-width: 1.5; }
@@ -284,7 +320,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 }
 .podium-row.first { outline: 2px solid var(--gold); outline-offset: -2px; }
 .podium-medal { font-size: 26px; line-height: 1; text-align: center; }
-.podium-name { min-width: 0; color: var(--ink); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
+.podium-name { display: inline-flex; align-items: center; min-width: 0; min-height: 44px; color: var(--ink); font-weight: 600; text-decoration: none; overflow-wrap: anywhere; }
 @media (hover: hover) { .podium-name:hover { text-decoration: underline; } }
 .podium-total { font: 600 var(--step-1)/1 var(--font-display); text-align: right; }
 .podium-row .pay-chip { grid-column: 1 / -1; justify-self: start; }
@@ -323,7 +359,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .vs-name { font-weight: 600; overflow-wrap: anywhere; }
 .vs-total { font: 600 var(--step-2)/1 var(--font-display); }
 .vs-best { font-size: 14px; }
-.vs-mark { color: var(--accent-ink); font: 700 var(--step-2)/1 var(--font-display); transform: rotate(-8deg); }
+.vs-mark { color: var(--accent-ink); font: 600 var(--step-2)/1 var(--font-display); transform: rotate(-8deg); }
 .verdict-line { color: var(--ink-2); font: italic 600 var(--step-1)/1.3 var(--font-display); font-variation-settings: "SOFT" 100, "WONK" 1; text-align: center; }
 .h2h-score { color: var(--ink-2); text-align: center; }
 .vs .btn-row { justify-content: center; }

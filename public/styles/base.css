@@ -19,6 +19,7 @@ body {
   color: var(--ink);
   font: 400 var(--step-0)/1.55 var(--font-ui);
   -webkit-font-smoothing: antialiased;
+  font-synthesis: style;                  /* never fake a bold: Fraunces ships at 600 only */
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }

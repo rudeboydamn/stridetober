@@ -7,10 +7,13 @@ import { n, tick, esc } from "./format.js";
 
 let uid = 0;
 
+// On phones the viewBox is the card's real inner width (gutter + 16px padding +
+// 1px border each side), so a 12px label renders at 12px, not 7px on a 320px phone.
+export const phoneWidth = vw => Math.max(240, Math.min(396, vw - 2 * (vw < 480 ? 16 : 20) - 34));
+
 export function chartDims(vw = 1024) {
-  const narrow = vw < 768;
-  return narrow
-    ? { w: 396, h: 200, padL: 36, padR: 10, padT: 14, padB: 26, narrow: true }
+  return vw < 768
+    ? { w: phoneWidth(vw), h: 200, padL: 36, padR: 10, padT: 14, padB: 26, narrow: true }
     : { w: 620, h: 260, padL: 46, padR: 14, padT: 16, padB: 30, narrow: false };
 }
 
@@ -71,19 +74,22 @@ export function climbChart(standings, weeks, vw) {
 // Horizontal bars of cumulative totals.
 export function totalsChart(standings, vw) {
   const d = chartDims(vw);
-  const innerW = d.w - d.padL - d.padR;
-  const rows = standings.filter(r => r.total > 0 || true); // everyone, even 0 — the bar is honest
+  const rows = standings; // everyone, even 0 — the bar is honest
   const yMax = Math.max(1, ...rows.map(r => r.total));
+  // Room for the longest name on the left and the biggest total on the right (~7px a character at 12px).
+  const padL = Math.max(d.padL, 14 + Math.max(0, ...rows.map(r => r.walker.short.length)) * 7);
+  const padR = 12 + n(yMax).length * 7;
+  const innerW = d.w - padL - padR;
   const rowH = d.narrow ? 30 : 34;
   const h = d.padT + rows.length * rowH + d.padB;
-  const x = v => d.padL + innerW * (v / yMax);
+  const x = v => padL + innerW * (v / yMax);
 
   const bars = rows.map((r, i) => {
     const y = d.padT + i * rowH, bh = rowH - 10;
     return `<g>
-      <text class="chart-axis" x="${d.padL - 6}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(r.walker.short)}</text>
-      <rect class="chart-bar" x="${d.padL}" y="${y}" width="${Math.max(0, x(r.total) - d.padL).toFixed(1)}" height="${bh}" rx="4" style="--c:var(--walker-${r.walker.color})"/>
-      <text class="chart-axis chart-val" x="${Math.min(x(r.total) + 6, d.w - d.padR)}" y="${y + bh / 2 + 4}">${n(r.total)}</text>
+      <text class="chart-axis" x="${padL - 6}" y="${y + bh / 2 + 4}" text-anchor="end">${esc(r.walker.short)}</text>
+      <rect class="chart-bar" x="${padL}" y="${y}" width="${Math.max(0, x(r.total) - padL).toFixed(1)}" height="${bh}" rx="4" style="--c:var(--walker-${r.walker.color})"/>
+      <text class="chart-axis chart-val" x="${(x(r.total) + 6).toFixed(1)}" y="${y + bh / 2 + 4}">${n(r.total)}</text>
     </g>`;
   }).join("");
 
@@ -96,9 +102,9 @@ export function totalsChart(standings, vw) {
 // One walker's week: 7 bars, SUNDAY-first. Best day gets a gold outline + 🔥,
 // quietest gets a hatch overlay + 😴 — never a color that could be a walker's.
 const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-export function dailyChart(days, { color = "accent", derived = false } = {}) {
+export function dailyChart(days, { color = "accent", derived = false, vw = 1024 } = {}) {
   uid++;
-  const w = 396, h = 170, padL = 8, padR = 8, padT = 26, padB = 24;
+  const w = vw < 768 ? phoneWidth(vw) : 396, h = 170, padL = 8, padR = 8, padT = 26, padB = 24;
   const innerW = w - padL - padR, innerH = h - padT - padB;
   const max = Math.max(1, ...days);
   const bw = innerW / 7, bwIn = Math.min(34, bw - 14);

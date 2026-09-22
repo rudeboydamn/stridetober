@@ -79,6 +79,13 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
   `tests/css.test.js` fails if a stylesheet does.
 - Adding a module? Add its `<link rel="modulepreload">` to `index.html` too, or
   `tests/smoke.test.js` fails. Dynamic imports (`demo.js`) are the exception.
+- The background tree (`src/lib/tree.js`, PLAN §4.4.1) is drawn in page pixels and
+  redrawn on every page-height change. Its ground line **is** the leaf pile's bottom
+  edge, so anything that moves the pile moves the tree's roots.
+- Tree colours must keep `--ink`/`--ink-2` at 4.5:1 (`tests/css.test.js`) — page text
+  sits on top of them. Pick a paler tint rather than a stronger one.
+- Crown leaves use local `<symbol>`s, never `/assets/sprite.svg#…`: an external `<use>`
+  clone can keep painting its original colour after an animation finishes.
 - Conventional commits: `feat:` `fix:` `style:` `data(week-N):` `docs:` `test:`.
 
 ## 6. Verify (do not skip)

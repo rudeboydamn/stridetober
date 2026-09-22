@@ -431,6 +431,16 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 | M31 | **Harvest sky** | Court hero, behind the sneaker and bottle, keyed to `html[data-daypart]` | Morning: a pale sun low on the left. Afternoon: a gold sun high up, `breathe 7s`. Dusk: a big orange sun half set behind the horizon. Night: a crescent moon and three `twinkle 2.8s` stars. Hallowed Eve: an orange harvest moon. The orb rises into place once (`rise 1.8s`) | Static |
 | M32 | **Milestone** | An open page crosses kickoff or the Final Bell | Full leaf burst + toast from `MILESTONE_TOASTS` | Toast only |
 | M33 | **The squirrel** | The Court, 18s into a visit, once per session | 🐿️ carrying 🌰 scurries right→left along the top of the tab bar (`scurry 5.4s`, pausing mid-way to judge you) while it `hop`s. Tap: a 14-leaf burst and a toast from `SQUIRREL_LINES` | Never appears |
+| M34 | **The tree** | Every page, behind everything (`src/lib/tree.js`) | A tree as tall as the document: crown at the top, trunk down the page, roots under the ground line, the leaf pile heaped at its base. Leaves start green (`--tree-green`/`--tree-sage`) and each turns through gold to its own final colour on `turn var(--t) steps(4, jump-none) var(--d)`, the rim and the top first (delays 0.8–9s). Turned leaves then let go every 1.6–4.2s (cap: 8 in the air, 45% of the crown) and drift the whole way to the ground at 70–100px/s, resting there for 12s before fading. One leaf, the highest below the header, never turns and never falls. A gust (M26) shivers the crown and strips 3–5 more, blowing them right | Fully turned, nothing falls |
+| M35 | **The residents** | Every page, at home in the tree | 🐦 on the crown (🦇 upside down on the Eve), 🦉 in the trunk hollow (💤 by day, only wanders at dusk and night), 🐿️ head-down on the trunk, 🐛 (🕷️ on the Eve) on the low trunk, 🦔 in the leaf pile, 🐁 in a root burrow, and a second 🐦 on a gutter branch where the screen is wide enough. Every 7–18s one of them wanders off along its own path — the squirrel runs the whole trunk down to the pile and climbs back with an acorn — and returns 2–70s later, facing the other way (`scaleX(-1)`). At most two are away at once; none leave while the tab is hidden | All at home, none move |
+
+### 4.4.1 The tree (`src/lib/tree.js`, M34/M35)
+- `plan({W, H, ground, gutter, top, pile, cs, eve})` is pure: it returns the crown's leaves, the wood outlines, the grain, the holes, the residents' trips and `pileEdge`, all in page pixels. `tests/tree.test.js` proves it fits 320–1920px pages, short and tall. `tree()` owns the DOM and redraws on a `ResizeObserver`, which is what makes the tree follow the page's height through every route change.
+- The crown is seeded by width alone (`mulberry32(1031 + W)`), so a longer page grows a longer trunk, never a new crown. On redraw each leaf's `--d` is shifted by the tree's age, so turning never replays.
+- The trunk stands in the right gutter (`tx = W − max(16, gutter/2)`): on phones its outer half shows past the cards, on desktop it has the gutter to itself. Crown radius 150 (phone, or 40% of the width below 375) / 190 / 230 at ≥1600px.
+- Colours are their own tokens (`--tree-bark`, `-grain`, `-hollow`, `-green`, `-sage`, `-gold`, `-orange`, `-red`, `-rust`). `tests/css.test.js` holds every one of them to 4.5:1 against `--ink` and `--ink-2`, because page text sits on top of the tree.
+- The crown's leaves use **local** `<symbol>`s built from `fx.LEAF_PATHS`, not the external sprite: an external `<use>` clone can keep painting the colour it was cloned with when the animation finishes before the sprite has loaded.
+- The sky band (`.tree::before`, keyed to `html[data-daypart]`) moved here from `.hero`, so it sits behind the tree on every page instead of in front of it on the Court.
 
 ### 4.5 Leaf layer (`fx.leaves(container, { eve })`)
 - Markup per leaf: `<span class="leaf" style="--x:12%;--dur:17s;--delay:-6s;--sway:3.8s;--flip:2.2s;--size:22px;--tint:var(--leaf-2)"><span class="leaf-sway"><svg class="leaf-flip"><use href="/assets/sprite.svg#leaf-maple"/></svg></span></span>`
@@ -461,7 +471,7 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 4. Write the new week to `last-seen-week`. "Skip ▸" jumps straight to the final state.
 
 ### 4.8 Rake the leaves (footer)
-- **Pile.** `.leaf-pile` holds 14 static sprite leaves at fixed positions and has `touch-action: pan-y`, so the page still scrolls vertically.
+- **Pile.** `.leaf-pile` holds 22 static sprite leaves heaped in a mound (`sin(πu)` profile, highest mid-pile) and has `touch-action: pan-y`, so the page still scrolls vertically. It is `min(240px, 64%)` wide, right-aligned; `tree.js` sets its `margin-right` so the heap meets the trunk's base (M34).
 - **Kick.** On `pointermove`, every leaf within 48px of the pointer gets `--kx`/`--ky` (±10–26px away from the pointer) and `--kr` (±40deg). Transition 260ms `--ease-settle`. After 1200ms without movement, all leaves return over 900ms.
 - **Counter.** It counts kicked leaves: "Leaves raked: 37 · Steps credited: 0 · The Judge checked."
 
@@ -961,6 +971,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 > - Phone charts are drawn at the card's real width (`phoneWidth`) with 12px axis labels (`tests/charts.test.js`). Podium names are 44px tap targets.
 > - `fx.share()` replaces two copies of the share-or-copy code, and `rake()` reads layout once per frame.
 > - The new fall motion is M26–M33 in §4.4.
+> **The tree (2026-09-22):** M34/M35 in §4.4, built in `src/lib/tree.js` (§4.4.1). The Court hero's sky moved to `.tree::before` so the tree stands in front of it, the footer's pile became a mound at the tree's base, and `.site-foot` lost its border — the tree draws the ground line now.
 > Deviations from this plan, all deliberate:
 > - §5.5 Check-in copy follows the locked §1.2 rule: the week *ends* Saturday night and screenshots are due Sunday. The "accepts Sunday too" line was dropped, and the kicker reads "Due every Sunday".
 > - `stats.honours()` returns `{key, who, detail}`; views look up the label and description in `HONOURS`.

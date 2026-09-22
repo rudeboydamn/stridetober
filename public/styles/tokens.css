@@ -12,6 +12,10 @@
   --light-gold:#C9961A; --light-gold-ink:#8A5F07; --light-eve:#5B2B45; --light-seal-ring:transparent;
   --light-walker-cranberry:#A3303F; --light-walker-goldenrod:#A87A0B; --light-walker-moss:#5E7F32; --light-walker-spruce:#2E6E68;
   --light-walker-denim:#4B6FA0; --light-walker-fig:#6E3F73; --light-walker-cinnamon:#8F4B29; --light-walker-rosehip:#B34D6B;
+  /* the background tree (M34): pale enough that ink and ink-2 keep 4.5:1 on every one */
+  --light-tree-bark:#D4BC9F; --light-tree-green:#B4C592; --light-tree-sage:#C3C99A; --light-tree-gold:#E6BC5C;
+  --light-tree-orange:#EFB287; --light-tree-red:#EBB09C; --light-tree-rust:#DDB598;
+  --light-tree-grain:#BFA383; --light-tree-hollow:#8C6E52;
 
   /* raw — dark */
   --dark-bg:#17110D; --dark-surface:#221913; --dark-surface-2:#2C211A; --dark-line:#3A2C22; --dark-line-strong:#7A624C;
@@ -21,6 +25,9 @@
   --dark-gold:#F2C14E; --dark-gold-ink:#F2C14E; --dark-eve:#C99BC0; --dark-seal-ring:#A89280;
   --dark-walker-cranberry:#E0677A; --dark-walker-goldenrod:#EBC04F; --dark-walker-moss:#9DBF5E; --dark-walker-spruce:#5FB3A9;
   --dark-walker-denim:#86A8D8; --dark-walker-fig:#B98AC4; --dark-walker-cinnamon:#D08A5E; --dark-walker-rosehip:#E68AA6;
+  --dark-tree-bark:#5E4733; --dark-tree-green:#405426; --dark-tree-sage:#4E5329; --dark-tree-gold:#644B13;
+  --dark-tree-orange:#7E3C14; --dark-tree-red:#863421; --dark-tree-rust:#733D19;
+  --dark-tree-grain:#4A3727; --dark-tree-hollow:#120D0A;
 
   /* theme-independent */
   --seal:#A8321A; --on-seal:#FBF5EA;
@@ -38,6 +45,9 @@
   --walker-moss:var(--light-walker-moss); --walker-spruce:var(--light-walker-spruce);
   --walker-denim:var(--light-walker-denim); --walker-fig:var(--light-walker-fig);
   --walker-cinnamon:var(--light-walker-cinnamon); --walker-rosehip:var(--light-walker-rosehip);
+  --tree-bark:var(--light-tree-bark); --tree-green:var(--light-tree-green); --tree-sage:var(--light-tree-sage);
+  --tree-gold:var(--light-tree-gold); --tree-orange:var(--light-tree-orange); --tree-red:var(--light-tree-red);
+  --tree-rust:var(--light-tree-rust); --tree-grain:var(--light-tree-grain); --tree-hollow:var(--light-tree-hollow);
   --shadow-1: 0 1px 0 rgb(42 28 19 / .06), 0 10px 24px -14px rgb(42 28 19 / .28);
   --grain-opacity: .05;
   --leaf-opacity: .75;
@@ -83,6 +93,9 @@
     --walker-moss:var(--dark-walker-moss); --walker-spruce:var(--dark-walker-spruce);
     --walker-denim:var(--dark-walker-denim); --walker-fig:var(--dark-walker-fig);
     --walker-cinnamon:var(--dark-walker-cinnamon); --walker-rosehip:var(--dark-walker-rosehip);
+    --tree-bark:var(--dark-tree-bark); --tree-green:var(--dark-tree-green); --tree-sage:var(--dark-tree-sage);
+    --tree-gold:var(--dark-tree-gold); --tree-orange:var(--dark-tree-orange); --tree-red:var(--dark-tree-red);
+    --tree-rust:var(--dark-tree-rust); --tree-grain:var(--dark-tree-grain); --tree-hollow:var(--dark-tree-hollow);
     --shadow-1: 0 1px 0 rgb(0 0 0 / .4), 0 12px 28px -14px rgb(0 0 0 / .7);
     --grain-opacity: .04;
     --leaf-opacity: .55;
@@ -101,6 +114,9 @@
   --walker-moss:var(--dark-walker-moss); --walker-spruce:var(--dark-walker-spruce);
   --walker-denim:var(--dark-walker-denim); --walker-fig:var(--dark-walker-fig);
   --walker-cinnamon:var(--dark-walker-cinnamon); --walker-rosehip:var(--dark-walker-rosehip);
+  --tree-bark:var(--dark-tree-bark); --tree-green:var(--dark-tree-green); --tree-sage:var(--dark-tree-sage);
+  --tree-gold:var(--dark-tree-gold); --tree-orange:var(--dark-tree-orange); --tree-red:var(--dark-tree-red);
+  --tree-rust:var(--dark-tree-rust); --tree-grain:var(--dark-tree-grain); --tree-hollow:var(--dark-tree-hollow);
   --shadow-1: 0 1px 0 rgb(0 0 0 / .4), 0 12px 28px -14px rgb(0 0 0 / .7);
   --grain-opacity: .04;
   --leaf-opacity: .55;

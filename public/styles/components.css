@@ -196,15 +196,15 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
 .sheet-link small { display: block; margin-top: 2px; color: var(--ink-3); font-weight: 400; font-size: 13px; }
 .sheet-link b { margin-left: auto; color: var(--ink-2); font-weight: 600; font-size: 14px; }
 
-/* ── footer & leaf pile ─────────────────────────────────── */
+/* ── footer & leaf pile (the tree draws the ground line under it) ── */
 .site-foot {
   position: relative;
   z-index: 1;
   margin-top: var(--s-9);
   padding: var(--s-5) 0 calc(var(--tab-h) + var(--s-6) + env(safe-area-inset-bottom));
-  border-top: 1px solid var(--line);
 }
-.leaf-pile { position: relative; height: 48px; touch-action: pan-y; cursor: pointer; }
+/* A heap at the foot of the tree; tree.js sets margin-right to meet the trunk. */
+.leaf-pile { position: relative; width: min(240px, 64%); height: 48px; margin: 0 24px 0 auto; touch-action: pan-y; cursor: pointer; }
 .pile-leaf {
   position: absolute;
   bottom: 0;
@@ -219,6 +219,27 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
 .rake-note { color: var(--accent-ink); font: 600 20px/1.2 var(--font-hand); }
 .signoff { margin-top: var(--s-4); color: var(--ink-2); font: 600 22px/1.2 var(--font-hand); }
 .fine { margin-top: 6px; color: var(--ink-3); font-size: 12px; }
+
+/* ── M34 the tree + M35 its residents (tree.js) ─────────── */
+.tree { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.tree::before {                                     /* the sky it stands against, following html[data-daypart] */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 760px;
+  background: linear-gradient(180deg, var(--sky) 0%, color-mix(in srgb, var(--sky) 40%, transparent) 55%, transparent 100%);
+}
+.tree-svg { position: absolute; top: 0; left: 0; overflow: visible; }
+.tree-wood { fill: var(--tree-bark); }
+.tree-grain { fill: none; stroke: var(--tree-grain); stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 38 22 14 30; }
+.tree-knot { fill: var(--tree-grain); }
+.tree-hole { fill: var(--tree-hollow); }
+.tree-ground { stroke: var(--line-strong); stroke-opacity: .5; }
+.tree-drop { position: absolute; }
+.drop-rot, .tree-drop .leaf-flip { display: block; width: 100%; height: 100%; }
+.critter { position: absolute; width: 1em; height: 1em; line-height: 1; text-align: center; }
+.critter-body { display: block; }
+.critter.has-acorn::after { content: "🌰"; position: absolute; left: -30%; top: 45%; font-size: 55%; }
 
 /* ── cards, sections ────────────────────────────────────── */
 .card {

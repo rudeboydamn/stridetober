@@ -1,6 +1,7 @@
 /* ═══════════ STRIDETOBER — MOTION ═══════════
    "Leaves, not lasers." Spec: PLAN §4. transform/opacity only (stroke draw-ons
-   on small SVGs are the one exception). Every loop has a reduced-motion exit. */
+   on small SVGs and M34's leaf colour turn are the exceptions). Every loop has a
+   reduced-motion exit. */
 
 /* ── keyframes (PLAN §4.3, verbatim) ────────────────────── */
 @keyframes leaf-fall   {from{transform:translate3d(0,-12vh,0)}to{transform:translate3d(0,112vh,0)}}
@@ -178,6 +179,31 @@ html[data-daypart="afternoon"] .sky-orb { animation: rise 1.8s var(--ease-settle
 .squirrel { animation: scurry 5.4s linear forwards; }
 .sq-body { animation: hop 240ms ease-in-out infinite alternate; }
 .squirrel.fled { opacity: 0; transition: opacity 300ms; }
+
+/* ── M34 the tree: every leaf turns once, then some let go ─ */
+@keyframes turn   { 0% { color: var(--from); } 45% { color: var(--tree-gold); } 100% { color: var(--to); } }
+@keyframes shiver { 0%, 100% { transform: none; } 30% { transform: rotate(1.4deg); } 65% { transform: rotate(-.8deg); } }
+/* steps(), not a smooth fade: four repaints per leaf instead of sixty a second. */
+.tl { color: var(--from); animation: turn var(--t) steps(4, jump-none) var(--d) both; }
+.tl.holdout { animation: none; }
+.tree-crown.shiver { animation: shiver 1.6s var(--ease-swing); }
+.tree-drop.is-landed .leaf-sway, .tree-drop.is-landed .leaf-flip { animation: none; }
+.tree-drop.is-landed { opacity: 0; transition: opacity 1.2s ease 12s; }
+
+/* ── M35 residents: flap in flight, hop on foot, the owl sleeps by day ─ */
+@keyframes doze { 0% { opacity: 0; transform: translate(0, 0) scale(.6); } 30% { opacity: 1; } 100% { opacity: 0; transform: translate(-10px, -18px) scale(1); } }
+@keyframes dig  { 0%, 100% { transform: none; } 50% { transform: translateY(3px) rotate(-8deg); } }
+.critter.is-flying .critter-body { animation: flap 220ms ease-in-out infinite; }
+.critter.is-walking .critter-body { animation: hop 240ms ease-in-out infinite alternate; }
+.critter.is-digging .critter-body { animation: dig 260ms ease-in-out infinite; }
+html:is([data-daypart="morning"], [data-daypart="afternoon"]):not([data-eve]) .critter-owl::after {
+  content: "💤";
+  position: absolute;
+  left: -48%;
+  top: -46%;
+  font-size: 55%;
+  animation: doze 3s ease-out infinite;
+}
 
 /* ── reduced motion (PLAN §4.2): near-zero, never animation:none ── */
 @media (prefers-reduced-motion: reduce) {

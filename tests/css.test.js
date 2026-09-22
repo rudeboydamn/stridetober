@@ -56,6 +56,16 @@ for (const theme of ["light", "dark"]) {
     }
   });
 
+  // The tree (M34) stands behind page text, so every colour it is drawn in keeps body text readable.
+  test(`${theme}: ink and ink-2 keep 4.5:1 on every tree colour`, () => {
+    for (const part of ["bark", "green", "sage", "gold", "orange", "red", "rust"]) {
+      for (const text of ["ink", "ink-2"]) {
+        const c = contrast(t(text), t(`tree-${part}`));
+        assert.ok(c >= 4.5, `${theme} --${text} on --tree-${part} is ${c.toFixed(2)}:1`);
+      }
+    }
+  });
+
   test(`${theme}: graphics (walker fills, control borders) reach 3:1 against the page`, () => {
     for (const name of ["line-strong", ...WALKERS.map(w => `walker-${w}`)]) {
       const c = contrast(t(name), t("bg"));

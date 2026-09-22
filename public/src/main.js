@@ -8,6 +8,7 @@ import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, annou
 import { standings, honours, paidWalkers } from "./lib/stats.js";
 import { esc, rich } from "./lib/format.js";
 import { leaves, gusts, rake, reduced, reveal, puff, burst, toast } from "./lib/fx.js";
+import { tree } from "./lib/tree.js";
 import * as court from "./views/court.js";
 import * as ledger from "./views/ledger.js";
 import * as checkin from "./views/checkin.js";
@@ -289,6 +290,8 @@ document.addEventListener("pointerdown", e => {
   c.classList.add("wiggle");
 });
 
-gusts(document.querySelector(".leaves"));
 rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES, COPY.JUMP_LINES);
 render();
+// After the first render, so the pile (the tree's ground line) is where it will stay.
+const grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"));
+gusts(document.querySelector(".leaves"), grove.gust);

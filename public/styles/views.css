@@ -24,8 +24,7 @@ html.js [data-reveal]:not(.is-in) .harvest-cap { transform: translateX(0); }
 .hero {
   position: relative;
   overflow-x: clip;                                   /* the sky's glow may run wide; the page may not */
-  padding-block: var(--s-7) var(--s-5);
-  background: linear-gradient(180deg, var(--sky) 0%, color-mix(in srgb, var(--sky) 40%, transparent) 55%, transparent 100%);
+  padding-block: var(--s-7) var(--s-5);                /* its sky now lives behind the tree (.tree::before) */
 }
 .hero-grid { display: grid; gap: var(--s-5); }
 .hero-copy { display: grid; justify-items: start; gap: var(--s-4); }

@@ -87,13 +87,14 @@ export function blowGust(container) {
   container.classList.add("gusting");
 }
 
-export function gusts(container) {
-  const next = ms => setTimeout(() => { blowGust(container); next(35_000 + Math.random() * 35_000); }, ms);
+export function gusts(container, onGust = () => {}) {
+  const next = ms => setTimeout(() => { blowGust(container); onGust(); next(35_000 + Math.random() * 35_000); }, ms);
   next(12_000 + Math.random() * 8_000);
 }
 
 // ── M2 leaf burst ──────────────────────────────────────────
-const LEAF_PATHS = [
+export const LEAF_PATHS = [   // maple, oak, birch — the sprite's leaf outlines
+
   "M12 1.2l1.7 3.6 2.4-1.2-.5 4.9 3.4-2.6.8 2.2 3-.5-1.5 3.5 1.5 1.2-4.9 4 .8 2.2-5-.9-.8 4.4H11l-.8-4.4-5 .9.8-2.2-4.9-4 1.5-1.2L1.1 8.1l3 .5.8-2.2 3.4 2.6-.5-4.9 2.4 1.2z",
   "M12 1.5c1.7 1 1.2 2.7 2.5 3.3 1.3.6 2.7-.4 3.2 1 .5 1.3-1.1 2.1-.4 3.2.6 1 2.3.9 2.3 2.3s-1.9 1.4-2 2.7c-.1 1.2 1.4 2 .7 3.2-.7 1.1-2.3.3-3.2 1.1-.8.7-.4 2.2-1.6 2.8V23h-3v-1.9c-1.2-.6-.8-2.1-1.6-2.8-.9-.8-2.5 0-3.2-1.1-.7-1.2.8-2 .7-3.2-.1-1.3-2-1.3-2-2.7s1.7-1.3 2.3-2.3c.7-1.1-.9-1.9-.4-3.2.5-1.4 1.9-.4 3.2-1C10.8 4.2 10.3 2.5 12 1.5z",
   "M12 1.5C6.3 6.2 4.8 11.4 6.3 16c1 3.1 3.4 5 5.7 6.5 2.3-1.5 4.7-3.4 5.7-6.5C19.2 11.4 17.7 6.2 12 1.5z",
@@ -290,10 +291,13 @@ export function rake(pile, line, milestones, jumps = []) {
   if (!pile || !line) return;
   const rand = mulberry32(31);
   const shapes = ["leaf-maple", "leaf-oak", "leaf-birch"];
-  pile.innerHTML = Array.from({ length: 14 }, (_, i) =>
-    `<svg class="pile-leaf" viewBox="0 0 24 24" style="left:${(2 + i * 6.8 + rand() * 2).toFixed(1)}%;` +
-    `bottom:${Math.round(rand() * 16)}px;--r:${Math.round(rand() * 360)}deg;color:var(--leaf-${1 + (i % 4)})">` +
-    `<use href="${SPRITE}#${shapes[i % 3]}"/></svg>`).join("");
+  // A heap, not a row: leaves stack highest mid-pile (M34 puts it at the tree's foot).
+  pile.innerHTML = Array.from({ length: 22 }, (_, i) => {
+    const u = (i + rand()) / 22;
+    return `<svg class="pile-leaf" viewBox="0 0 24 24" style="left:${(u * 90).toFixed(1)}%;` +
+      `bottom:${Math.round(Math.sin(Math.PI * u) * 26 * (.45 + rand() * .55))}px;--r:${Math.round(rand() * 360)}deg;color:var(--leaf-${1 + (i % 4)})">` +
+      `<use href="${SPRITE}#${shapes[i % 3]}"/></svg>`;
+  }).join("");
   const leafEls = [...pile.children];
   let count = 0, idle = 0, frame = 0, last = null, quip = "";
   const update = () => {

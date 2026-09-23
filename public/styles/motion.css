@@ -205,6 +205,53 @@ html:is([data-daypart="morning"], [data-daypart="afternoon"]):not([data-eve]) .c
   animation: doze 3s ease-out infinite;
 }
 
+/* ── M36 the wildlife: silhouettes cross the page on their own schedule ──
+   .roamer carries the one-shot crossing (linear, so the held keyframes read as
+   real stops); .roamer-gait carries the loop — a weight-shift, a dart-hop or a
+   wingbeat. .rev plays the crossing backward and mirrors the silhouette. */
+@keyframes roam-amble {
+  0%   { transform: translate3d(-16vw, 0, 0); }
+  26%  { transform: translate3d(18vw, 0, 0); }
+  34%  { transform: translate3d(18vw, 0, 0); }   /* stops to graze */
+  68%  { transform: translate3d(62vw, 0, 0); }
+  74%  { transform: translate3d(62vw, 0, 0); }   /* looks around */
+  100% { transform: translate3d(116vw, 0, 0); }
+}
+@keyframes roam-scurry {
+  0%   { transform: translate3d(-10vw, 0, 0); }
+  9%   { transform: translate3d(9vw, 0, 0); }  15% { transform: translate3d(9vw, 0, 0); }
+  27%  { transform: translate3d(28vw, 0, 0); } 32% { transform: translate3d(28vw, 0, 0); }
+  48%  { transform: translate3d(51vw, 0, 0); } 54% { transform: translate3d(51vw, 0, 0); }
+  70%  { transform: translate3d(74vw, 0, 0); } 75% { transform: translate3d(74vw, 0, 0); }
+  100% { transform: translate3d(112vw, 0, 0); }
+}
+@keyframes roam-soar {
+  0%   { transform: translate3d(-14vw, 0, 0); }
+  35%  { transform: translate3d(34vw, -3vh, 0); }
+  70%  { transform: translate3d(72vw, 2vh, 0); }
+  100% { transform: translate3d(114vw, -1vh, 0); }
+}
+@keyframes gait-shift { 0%, 100% { transform: none; } 50% { transform: translateY(-2px); } }
+@keyframes gait-hop   { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-3px) rotate(5deg); } }
+
+.wild { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; contain: strict; }
+.roamer {
+  position: absolute;
+  left: 0;
+  color: var(--ink-3);
+  opacity: var(--o, .45);
+  will-change: transform;
+}
+.roamer svg { display: block; fill: currentColor; }
+.roamer.rev svg { transform: scaleX(-1); }
+.gait-amble { animation: roam-amble var(--dur) linear both; }
+.gait-scurry { animation: roam-scurry var(--dur) linear both; }
+.gait-soar { animation: roam-soar var(--dur) linear both; }
+.roamer.rev { animation-direction: reverse; }
+.gait-amble .roamer-gait { animation: gait-shift 1.6s ease-in-out infinite; }
+.gait-scurry .roamer-gait { animation: gait-hop 260ms ease-in-out infinite alternate; }
+.gait-soar .roamer-gait { animation: flap 950ms ease-in-out infinite; transform-origin: 50% 40%; }
+
 /* ── reduced motion (PLAN §4.2): near-zero, never animation:none ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -213,7 +260,7 @@ html:is([data-daypart="morning"], [data-daypart="afternoon"]):not([data-eve]) .c
     animation-delay: 0ms !important;
     transition-duration: .01ms !important;
   }
-  .leaves { display: none; }
+  .leaves, .wild { display: none; }
   .tally.counting path { animation-name: none !important; stroke-dasharray: none; }
 }
 html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-motion="reduce"] *::after {
@@ -222,5 +269,5 @@ html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-mo
   animation-delay: 0ms !important;
   transition-duration: .01ms !important;
 }
-html[data-motion="reduce"] .leaves { display: none; }
+html[data-motion="reduce"] .leaves, html[data-motion="reduce"] .wild { display: none; }
 html[data-motion="reduce"] .tally.counting path { animation-name: none !important; stroke-dasharray: none; }

@@ -7,7 +7,7 @@ import * as COPY from "../data/copy.js";
 import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, announcementLive } from "./lib/time.js";
 import { standings, honours, paidWalkers } from "./lib/stats.js";
 import { esc, rich } from "./lib/format.js";
-import { leaves, gusts, rake, reduced, reveal, puff, burst, toast } from "./lib/fx.js";
+import { leaves, gusts, rake, reduced, reveal, puff, burst, toast, wildlife } from "./lib/fx.js";
 import { tree } from "./lib/tree.js";
 import * as court from "./views/court.js";
 import * as ledger from "./views/ledger.js";
@@ -295,3 +295,4 @@ render();
 // After the first render, so the pile (the tree's ground line) is where it will stay.
 const grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"));
 gusts(document.querySelector(".leaves"), grove.gust);
+wildlife(document.getElementById("wild"));

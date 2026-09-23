@@ -369,3 +369,41 @@ export function squirrel(lines) {
   });
   document.body.appendChild(b);
 }
+
+// ── M36 the wildlife: silhouettes wander through whenever they please ──
+// Deer, elk, moose and bear amble across the low ground; squirrels and
+// chipmunks dart-pause-dart; birds cross the sky on their own schedule.
+// One crossing per spawn, at most two abroad at once. Silence when reduced.
+const WILD = [
+  { shape: "squirrel",  gait: "scurry", wt: 24, h: [20, 30], dur: [22, 36], sky: false },
+  { shape: "chipmunk",  gait: "scurry", wt: 18, h: [15, 22], dur: [26, 42], sky: false },
+  { shape: "deer",      gait: "amble",  wt: 14, h: [54, 70], dur: [36, 58], sky: false },
+  { shape: "bear",      gait: "amble",  wt: 8,  h: [56, 74], dur: [44, 66], sky: false },
+  { shape: "elk",       gait: "amble",  wt: 6,  h: [62, 80], dur: [40, 60], sky: false },
+  { shape: "moose",     gait: "amble",  wt: 4,  h: [68, 86], dur: [46, 70], sky: false },
+  { shape: "bird",      gait: "soar",   wt: 26, h: [18, 28], dur: [15, 28], sky: true },
+];
+
+export function wildlife(layer) {
+  if (!layer || reduced()) return;
+  const r = (a, b) => a + Math.random() * (b - a);
+  const draw = () => {
+    let x = Math.random() * WILD.reduce((s, k) => s + k.wt, 0);
+    return WILD.find(k => (x -= k.wt) < 0);
+  };
+  const spawn = () => {
+    if (layer.childElementCount >= 2 || document.hidden || reduced()) return;
+    const k = draw(), h = Math.round(r(...k.h)), w = Math.round(h * (k.sky ? 2 : 1.6));
+    const el = Object.assign(document.createElement("span"), {
+      className: `roamer gait-${k.gait}${Math.random() < .5 ? " rev" : ""}`,
+    });
+    el.style.cssText = `--dur:${r(...k.dur).toFixed(1)}s;--o:${r(.32, .56).toFixed(2)};` +
+      (k.sky ? `top:${r(4, 26).toFixed(0)}%` : `bottom:calc(var(--tab-h) + ${r(4, 48).toFixed(0)}px)`);
+    el.innerHTML = `<span class="roamer-gait"><svg viewBox="${k.sky ? "0 0 40 20" : "0 0 64 40"}" ` +
+      `width="${w}" height="${h}" aria-hidden="true"><use href="${SPRITE}#${k.shape}"/></svg></span>`;
+    el.addEventListener("animationend", e => { if (e.target === el) el.remove(); });
+    layer.append(el);
+  };
+  const tick = () => { spawn(); setTimeout(tick, r(24_000, 75_000)); };
+  setTimeout(tick, r(7_000, 16_000));
+}

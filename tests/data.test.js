@@ -69,10 +69,22 @@ test("challenge: kickoff is a Sunday and the four weeks are contiguous Sun→Sat
   assert.equal(CHALLENGE.weeks[0].start, CHALLENGE.kickoff.slice(0, 10));
 });
 
+// Some Stridetober walkers also walked Big Steppas, so names are no longer the test.
+// What must never appear is the old challenge itself: its name, its houses, its jokes.
 test("walkers: slugs, unique crests, palette colors, no Big Steppas callbacks", () => {
   checkRoster(WALKERS, "walkers.js");
-  const banned = /alicia|andrew|helen|mackenzie|sarah|lizzie|jekel|ramos|belling|hofferica/i;
-  assert.doesNotMatch(readFileSync("public/data/walkers.js", "utf8"), banned, "walkers.js mentions a Big Steppas name");
+  const banned = /big ?steppas?|steppas|house of/i;
+  for (const f of ["walkers.js", "copy.js", "weeks.js"]) {
+    assert.doesNotMatch(readFileSync(`public/data/${f}`, "utf8"), banned, `${f} calls back to Big Steppas`);
+  }
+});
+
+test("copy: every critter the page can show has something for the Judge to say", async () => {
+  const { WILD } = await import("../public/src/lib/fx.js");
+  const residents = ["bird", "owl", "squirrel", "caterpillar", "hedgehog", "mouse", "bat", "spider"];
+  for (const id of [...residents, ...WILD.map(w => w.id)]) {
+    assert.ok(COPY.CRITTER_LINES[id]?.length, `copy.js: CRITTER_LINES has no lines for "${id}"`);
+  }
 });
 
 test("weeks: posted entries are paid, whole, Sunday-first and add up", () => {
@@ -102,7 +114,8 @@ test("finds: every photo exists in public/finds (or img is null)", () => {
 test("copy: every pool from PLAN §7.1 is exported", () => {
   for (const key of ["PHASE_LINES", "COURT_WALKING", "COUNTDOWN_LABELS", "DOSSIER_LINES", "NO_STEPS_WEEK",
     "AS_COUNTED", "DERIVED_NOTE", "TOGETHER_LINES", "VERDICTS", "EXCUSES", "TOASTS", "DECOY_TOASTS",
-    "BOTTLE", "RAKE_LINES", "MARGIN_NOTES", "HONOURS", "JUMP_LINES", "SQUIRREL_LINES", "MILESTONE_TOASTS"]) {
+    "BOTTLE", "RAKE_LINES", "MARGIN_NOTES", "HONOURS", "JUMP_LINES", "SQUIRREL_LINES", "MILESTONE_TOASTS",
+    "CRITTER_LINES"]) {
     assert.ok(COPY[key] != null, `copy.js is missing ${key}`);
   }
 });

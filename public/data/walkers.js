@@ -12,8 +12,9 @@ export const WALKERS = [
   { id: "evan",   name: "Evan Ramos",    short: "Evan",   crest: "🦊", color: "denim",     paid: false, birthday: null },
   { id: "tedi",   name: "Tedi Revenew",  short: "Tedi",   crest: "🧣", color: "fig",       paid: true,  paidOn: "2026-09-26", birthday: null },
   // Christina and Cristina are two different people. Check the spelling before posting a week.
-  // Surnames pending for these three; add them to `name` and leave `short` as is.
-  { id: "christina", name: "Christina", short: "Christina", crest: "🍄", color: "cinnamon",  paid: false, birthday: null },
+  // Surnames pending for Cristina and Jess. When Cristina's lands, make her short an
+  // initial too, so the Ledger never shows two walkers called Cri/hristina.
+  { id: "christina", name: "Christina Ballard", short: "Christina B.", crest: "🍄", color: "cinnamon",  paid: true,  paidOn: "2026-09-26", birthday: null },
   { id: "cristina",  name: "Cristina",  short: "Cristina",  crest: "🌽", color: "rosehip",   paid: false, birthday: null },
   { id: "jess",      name: "Jess",      short: "Jess",      crest: "🍎", color: "cranberry", paid: false, birthday: null },  // 9th: colour reused, chart line dashed (PLAN §3.2)
 ];

@@ -146,7 +146,7 @@ function kit() {
 
 function how() {
   const steps = [
-    ["Walk", "Oct 4 – Nov 1. Every step counts."],
+    ["Walk", "Oct 4 – Oct 31. Every step counts."],
     ["Report", "Screenshot your week. Send it DIRECTLY TO DAMMY — NOT THE GROUP CHAT!"],
     ["Win", "Top three split the pot — 50/30/20. Crowned November 1."],
   ];

@@ -15,7 +15,7 @@ export function render(ctx) {
       ${seal("S", { size: "seal-96", cls: "summons-seal" })}
       <p class="kicker">October Steps Challenge</p>
       <p class="summons-mark">Stride<em>tober</em></p>
-      <p class="summons-dates">OCTOBER 4TH – NOVEMBER 1ST</p>
+      <p class="summons-dates">OCTOBER 4TH – 31ST</p>
       <p class="summons-tag">Walk it. Track it. Win it!</p>
       <ul class="summons-terms">
         <li><b>$20 buy-in</b> — Venmo @${esc(c.venmoHandle)} before Oct 4</li>

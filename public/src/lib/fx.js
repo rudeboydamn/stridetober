@@ -433,7 +433,7 @@ export function wildlife(layer, lines) {
       (k.sky ? `top:${r(11, 30).toFixed(0)}%` : `bottom:calc(var(--tab-h) + ${r(6, 54).toFixed(0)}px)`);
     el.innerHTML = `<span class="roamer-turn"><span class="roamer-gait">${k.glyph}</span></span>`;
     el.addEventListener("animationend", e => { if (e.target === el) el.remove(); });
-    el.addEventListener("click", () => {
+    el.addEventListener("pointerdown", () => {     // pointerdown, not click: the target is moving
       if (el.classList.contains("spooked") || el.classList.contains("bolting")) return;
       spook(el, lines, k.id);
       setTimeout(() => bolt(el), 360);

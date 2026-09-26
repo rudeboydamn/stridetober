@@ -290,6 +290,28 @@ document.addEventListener("pointerdown", e => {
   c.classList.add("wiggle");
 });
 
+// ── stale page guard ──────────────────────────────────────
+// A phone keeps this page for days, so a walker who paid — or a week that was
+// posted — can sit behind a cached copy. Whenever the tab comes back, re-fetch
+// the two data files past every cache; reload only if they really changed.
+{
+  const mine = JSON.stringify([WALKERS, WEEKS]);
+  let checked = 0;
+  const catchUp = async () => {
+    if (DEMO || document.hidden || Date.now() - checked < 600_000) return;
+    checked = Date.now();
+    try {
+      const [w, k] = await Promise.all([
+        import(`../data/walkers.js?t=${checked}`),
+        import(`../data/weeks.js?t=${checked}`),
+      ]);
+      if (JSON.stringify([w.WALKERS, k.WEEKS]) !== mine) location.reload();
+    } catch { /* offline — try again next time */ }
+  };
+  document.addEventListener("visibilitychange", catchUp);
+  setInterval(catchUp, 900_000);
+}
+
 rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES, COPY.JUMP_LINES);
 render();
 // After the first render, so the pile (the tree's ground line) is where it will stay.

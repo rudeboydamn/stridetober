@@ -10,5 +10,5 @@ export const WALKERS = [
   { id: "alicia", name: "Alicia Ramos",  short: "Alicia", crest: "🍁", color: "moss",      paid: true,  birthday: null },
   { id: "lizzie", name: "Lizzie Henry",  short: "Lizzie", crest: "🎃", color: "spruce",    paid: true,  birthday: null },
   { id: "evan",   name: "Evan Ramos",    short: "Evan",   crest: "🦊", color: "denim",     paid: false, birthday: null },
-  { id: "tedi",   name: "Tedi Revenew",  short: "Tedi",   crest: "🧣", color: "fig",       paid: false, birthday: null },
+  { id: "tedi",   name: "Tedi Revenew",  short: "Tedi",   crest: "🧣", color: "fig",       paid: true,  paidOn: "2026-09-26", birthday: null },
 ];

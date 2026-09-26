@@ -29,8 +29,9 @@ not compete by default.
   (`84,210` always; only chart ticks may say `84k`).
 - Flyer phrases are verbatim canon (PLAN §6.2). Joke pools live in
   `public/data/copy.js` — extend them there, not in views.
-- No Big Steppas names, houses or callbacks anywhere (`tests/data.test.js`
-  enforces this).
+- No Big Steppas branding, houses, jokes or callbacks anywhere — the guard is on
+  the old challenge's name, not on people, since several walkers walked both
+  (`tests/data.test.js`).
 
 ## 3. The weekly job (Sundays: Oct 11, 18, 25, Nov 1)
 
@@ -86,6 +87,11 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
   sits on top of them. Pick a paler tint rather than a stronger one.
 - Crown leaves use local `<symbol>`s, never `/assets/sprite.svg#…`: an external `<use>`
   clone can keep painting its original colour after an animation finishes.
+- Animals are emoji, and Apple draws them **facing left** — except 🐢 and 🐛. Check a
+  new one before you ship it walking backwards (PLAN §4.4.2).
+- The wildlife layer (`.wild`) sits *in front of* the page so it can be tapped; the
+  tree's residents sit behind it, so `tree.js` matches their taps by hand and ignores
+  any tap on a card.
 - Conventional commits: `feat:` `fix:` `style:` `data(week-N):` `docs:` `test:`.
 
 ## 6. Verify (do not skip)

@@ -237,9 +237,48 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
 .tree-ground { stroke: var(--line-strong); stroke-opacity: .5; }
 .tree-drop { position: absolute; }
 .drop-rot, .tree-drop .leaf-flip { display: block; width: 100%; height: 100%; }
-.critter { position: absolute; width: 1em; height: 1em; line-height: 1; text-align: center; }
+.critter {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-align: center;
+}
 .critter-body { display: block; }
 .critter.has-acorn::after { content: "🌰"; position: absolute; left: -30%; top: 45%; font-size: 55%; }
+
+/* ── M36 the wildlife: passers-by, in front of the page and touchable ── */
+.wild { position: fixed; inset: 0; z-index: 35; pointer-events: none; overflow: hidden; contain: strict; }
+.roamer {
+  position: absolute;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  font-size: var(--size, 32px);
+  line-height: 1;
+  text-align: center;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+  will-change: transform;
+}
+.roamer::before { content: ""; position: absolute; inset: -12px; }
+.roamer::after {                                    /* the shadow it casts on the ground */
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -.03em;
+  height: .15em;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / .24), transparent);
+}
+.roamer.sky::after { display: none; }
+.roamer-turn, .roamer-gait { display: block; width: 100%; height: 100%; }
+.roamer-turn { transform: scaleX(-1); }             /* emoji face left; the default crossing heads right */
+.roamer.rev .roamer-turn { transform: none; }
+.roamer.flip .roamer-turn { transform: none; }                /* 🐢 is drawn facing right */
+.roamer.flip.rev .roamer-turn { transform: scaleX(-1); }
 
 /* ── cards, sections ────────────────────────────────────── */
 .card {

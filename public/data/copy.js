@@ -154,6 +154,87 @@ export const SQUIRREL_LINES = [ // the once-a-session squirrel, when tapped (M33
   "The Judge notes the squirrel is out-walking at least one of you.",
 ];
 
+export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-by (M36)
+  bird: [
+    "The bird has crossed four states this month. None of it counts. The bird knows.",
+    "Startled. The Judge apologises to no one.",
+    "It files no screenshots and it fears no Judge.",
+  ],
+  owl: [
+    "Whooo walked today? The owl knows. The owl is not telling.",
+    "Woken before dusk. The owl will remember this.",
+    "The owl works nights and never misses a Sunday. Take notes.",
+  ],
+  squirrel: [
+    "Fined one acorn for loitering in a court of law.",
+    "Eleven thousand steps and no tribute. The Judge is *fairly* annoyed.",
+    "It has buried something. The Judge has decided not to investigate.",
+  ],
+  caterpillar: [
+    "Eleven steps. Eleven legs. The Judge accepts the arithmetic.",
+    "Slow, consistent, uphill. Frankly a better week than some.",
+  ],
+  hedgehog: [
+    "Disturbed in its own pile. The pile was here first.",
+    "It has not moved since Tuesday and is still beating somebody.",
+  ],
+  mouse: [
+    "Four thousand steps a night, all of it inside one wall.",
+    "Tiny steps, faithfully logged. Take notes.",
+  ],
+  bat: [
+    "The bat walks nothing and is somehow still ahead of the couch.",
+    "Hung up on. The Judge will allow it, this once.",
+  ],
+  spider: [
+    "It has spun more this week than most have walked.",
+    "The spider declines to comment and declines to descend.",
+  ],
+  deer: [
+    "The deer crossed three counties this week. It sent no screenshot either.",
+    "Spooked. It will be back once the Judge stops watching.",
+  ],
+  dog: [
+    "That dog has out-walked every one of you, and it never once mentions it.",
+    "Off the lead and off the record.",
+  ],
+  beaver: [
+    "The beaver has logged more than anybody. A different kind of logging.",
+    "Steps: 900. Infrastructure: considerable.",
+  ],
+  skunk: [
+    "Give it room. The Judge will not be adjudicating that.",
+    "It has right of way. It has always had right of way.",
+  ],
+  boar: [
+    "A boar. The Judge suggests walking briskly — in the other direction.",
+    "It does not stride. It charges. Not the same thing.",
+  ],
+  turtle: [
+    "The tortoise has read the fable and likes its chances.",
+    "Slow, steady, and still ahead of whoever skipped Tuesday.",
+  ],
+  duck: [
+    "Migrating. The Judge notes that flying south is not a step count.",
+    "It has filed no screenshot and left the county anyway.",
+  ],
+  turkey: [
+    "November is coming. It is walking that off.",
+    "The turkey has a strong case for skipping the final week.",
+  ],
+  rabbit: [
+    "Hopped it. Steps credited: several, none of them yours.",
+    "Quick off the mark, poor at pacing. The Judge has notes.",
+  ],
+  raccoon: [
+    "It was in the bins. The Judge saw nothing.",
+    "Steps logged: 9,000. Route: one dumpster, repeatedly.",
+  ],
+  default: [
+    "Wildlife. Not a walker, and not paying tribute either.",
+  ],
+};
+
 export const MILESTONE_TOASTS = { // fired when an open page crosses the moment (M32)
   kickoff: "Kickoff. The couch is now the opposition.",
   bell: "The clock has struck midnight. Pens down, sneakers off.",

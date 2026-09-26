@@ -33,7 +33,7 @@
    | 4 (final; its last day is Halloween) | Sun Oct 25 – Sat Oct 31 | Sun Nov 1 |
 
    Oct 4, which the flyer calls "Check-in #1", is **Kickoff** and the buy-in deadline. At 12:00 AM on Nov 1 the clock strikes midnight and walking stops.
-2. **Walkers.** A brand-new group. No Big Steppas names, houses, callbacks or references appear anywhere on the site. The roster fills in as people pay.
+2. **Walkers.** Its own group and its own story: no Big Steppas branding, houses, jokes or callbacks appear anywhere on the site. Some of the same people walk both, so the guard is on the old challenge's *name*, not on theirs (§9.2). The roster fills in as people pay.
 3. **Voice.** "The *Fairly* Impartial Judge" returns: mock-royal, third person, dry and affectionate, now dressed for fall. The word "Fairly" is the running gag.
 4. **Pipeline.** Dammy collects screenshots. An agent reads them, edits `public/data/weeks.js`, writes the Judge's note and pushes, and Vercel deploys. No database, no logins, no API.
 
@@ -432,7 +432,9 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 | M32 | **Milestone** | An open page crosses kickoff or the Final Bell | Full leaf burst + toast from `MILESTONE_TOASTS` | Toast only |
 | M33 | **The squirrel** | The Court, 18s into a visit, once per session | 🐿️ carrying 🌰 scurries right→left along the top of the tab bar (`scurry 5.4s`, pausing mid-way to judge you) while it `hop`s. Tap: a 14-leaf burst and a toast from `SQUIRREL_LINES` | Never appears |
 | M34 | **The tree** | Every page, behind everything (`src/lib/tree.js`) | A tree as tall as the document: crown at the top, trunk down the page, roots under the ground line, the leaf pile heaped at its base. Leaves start green (`--tree-green`/`--tree-sage`) and each turns through gold to its own final colour on `turn var(--t) steps(4, jump-none) var(--d)`, the rim and the top first (delays 0.8–9s). Turned leaves then let go every 1.6–4.2s (cap: 8 in the air, 45% of the crown) and drift the whole way to the ground at 70–100px/s, resting there for 12s before fading. One leaf, the highest below the header, never turns and never falls. A gust (M26) shivers the crown and strips 3–5 more, blowing them right | Fully turned, nothing falls |
-| M35 | **The residents** | Every page, at home in the tree | 🐦 on the crown (🦇 upside down on the Eve), 🦉 in the trunk hollow (💤 by day, only wanders at dusk and night), 🐿️ head-down on the trunk, 🐛 (🕷️ on the Eve) on the low trunk, 🦔 in the leaf pile, 🐁 in a root burrow, and a second 🐦 on a gutter branch where the screen is wide enough. Every 7–18s one of them wanders off along its own path — the squirrel runs the whole trunk down to the pile and climbs back with an acorn — and returns 2–70s later, facing the other way (`scaleX(-1)`). At most two are away at once; none leave while the tab is hidden | All at home, none move |
+| M35 | **The residents** | Every page, at home in the tree | 🐦 on the crown (🦇 upside down on the Eve), 🦉 in the trunk hollow (💤 by day, only wanders at dusk and night), 🐿️ head-down on the trunk, 🐛 (🕷️ on the Eve) on the low trunk, 🦔 in the leaf pile, 🐁 in a root burrow, and a second 🐦 on a gutter branch where the screen is wide enough. Every 7–18s one of them wanders off along its own path — the squirrel runs the whole trunk down to the pile and climbs back with an acorn — and returns 2–70s later, facing the other way (`scaleX(-1)`). At most two are away at once; none leave while the tab is hidden. At home each one breathes (`breathe var(--breath)`) and looks around every 5–12s (`peek`) | All at home, none move |
+| M36 | **The wildlife** | Every page, one crossing every 24–75s (first 7–16s in), two abroad at most | Fourteen species of emoji cross the page in front of the content: 🐿️ 🐇 🦌 🐕 🦃 🦝 🦫 🦨 🐗 🐢 on the ground lane above the tab bar, 🐦 🦆 🦉 through the sky band. Each one casts a shadow, carries its own gait (`gait-shift`/`gait-trot`/`gait-bound`/`gait-dart`/`flap`) and stops mid-crossing to graze or look around. Nocturnal species (🦝 🦨 🦉) only appear at dusk or after dark; 🦇 only on the Eve; 🐢 is rare and takes 90–130s to cross. `fx.wildlife()`; species table in `fx.WILD` | Nothing crosses |
+| M37 | **Touch an animal** | Tap any resident (M35) or passer-by (M36) | `fx.spook()`: a 14-leaf burst at the animal, a line from `CRITTER_LINES[species]` as a toast, and a `startle` hop. A passer-by then bolts off the way it was heading; a resident wanders off and comes home in its own time. Residents live behind the page, so `tree.js` matches the tap by hand and ignores any tap that lands on a card — where the animal cannot be seen | Toast only, no burst |
 
 ### 4.4.1 The tree (`src/lib/tree.js`, M34/M35)
 - `plan({W, H, ground, gutter, top, pile, cs, eve})` is pure: it returns the crown's leaves, the wood outlines, the grain, the holes, the residents' trips and `pileEdge`, all in page pixels. `tests/tree.test.js` proves it fits 320–1920px pages, short and tall. `tree()` owns the DOM and redraws on a `ResizeObserver`, which is what makes the tree follow the page's height through every route change.
@@ -441,6 +443,12 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 - Colours are their own tokens (`--tree-bark`, `-grain`, `-hollow`, `-green`, `-sage`, `-gold`, `-orange`, `-red`, `-rust`). `tests/css.test.js` holds every one of them to 4.5:1 against `--ink` and `--ink-2`, because page text sits on top of the tree.
 - The crown's leaves use **local** `<symbol>`s built from `fx.LEAF_PATHS`, not the external sprite: an external `<use>` clone can keep painting the colour it was cloned with when the animation finishes before the sprite has loaded.
 - The sky band (`.tree::before`, keyed to `html[data-daypart]`) moved here from `.hero`, so it sits behind the tree on every page instead of in front of it on the Court.
+
+### 4.4.2 The wildlife (`fx.wildlife(layer, lines)`, M36/M37)
+- `.wild` is a fixed layer at `z-index: 35` — **in front of** the page content but under the header, tab bar and sheet — with `pointer-events: none`; each `.roamer` re-enables pointer events for itself, so a tap lands on the animal and nowhere else.
+- Three nested spans: `.roamer` carries the crossing (`roam-amble`/`roam-scurry`/`roam-soar`, linear, `both`), `.roamer-turn` carries the facing, `.roamer-gait` carries the loop. Emoji are drawn facing left, so the default (left→right) crossing mirrors the animal and `.rev` does not; 🐢 and 🐛 are the two glyphs Apple draws facing right, and they carry the `flip` flag instead.
+- `.roamer::after` is the shadow on the ground (sky species drop it); `.roamer::before` is a 12px hit pad, so a 26px animal is still a finger-sized target.
+- Spooked: the crossing is frozen at its current matrix, `.bolting` shortens the gait, and a WAAPI dash carries it off the near edge before the element removes itself.
 
 ### 4.5 Leaf layer (`fx.leaves(container, { eve })`)
 - Markup per leaf: `<span class="leaf" style="--x:12%;--dur:17s;--delay:-6s;--sway:3.8s;--flip:2.2s;--size:22px;--tint:var(--leaf-2)"><span class="leaf-sway"><svg class="leaf-flip"><use href="/assets/sprite.svg#leaf-maple"/></svg></span></span>`
@@ -951,7 +959,7 @@ These run in Vercel's build; a violation blocks deploy:
 - `CHALLENGE.champion`, when set, equals the week-4 `steps` leader.
 - `FALL_FINDS` entries reference existing `public/finds/` files or `img:null`.
 - `copy.js` exports every key listed in §7.1.
-- `walkers.js` contains no Big Steppas names (`alicia|andrew|helen|mackenzie|sarah|lizzie|jekel|ramos|belling|hofferica`) — guard the "no callbacks" rule.
+- `walkers.js`, `copy.js` and `weeks.js` contain no Big Steppas branding (`big steppas|steppas|house of`) — guard the "no callbacks" rule. Walker *names* are not banned: several Stridetober walkers walked Big Steppas too.
 
 ### 7.7 The tick
 
@@ -971,6 +979,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 > - Phone charts are drawn at the card's real width (`phoneWidth`) with 12px axis labels (`tests/charts.test.js`). Podium names are 44px tap targets.
 > - `fx.share()` replaces two copies of the share-or-copy code, and `rake()` reads layout once per frame.
 > - The new fall motion is M26–M33 in §4.4.
+> **The wildlife and the roster (2026-09-26):** M36/M37 in §4.4 and §4.4.2. The silhouette sprites were dropped for full-bodied emoji with shadows, gaits and a startle; every animal on the site can now be touched. `walkers.js` holds the first six of eight Striders. **The "no Big Steppas names" guard now bans the old challenge's branding, not its people** — some Stridetober walkers walked that one too, so `tests/data.test.js` checks `walkers.js`, `copy.js` and `weeks.js` for `big steppas|steppas|house of` instead of a name list.
 > **The tree (2026-09-22):** M34/M35 in §4.4, built in `src/lib/tree.js` (§4.4.1). The Court hero's sky moved to `.tree::before` so the tree stands in front of it, the footer's pile became a mound at the tree's base, and `.site-foot` lost its border — the tree draws the ground line now.
 > Deviations from this plan, all deliberate:
 > - §5.5 Check-in copy follows the locked §1.2 rule: the week *ends* Saturday night and screenshots are due Sunday. The "accepts Sunday too" line was dropped, and the kicker reads "Due every Sunday".

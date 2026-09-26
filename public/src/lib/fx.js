@@ -370,40 +370,77 @@ export function squirrel(lines) {
   document.body.appendChild(b);
 }
 
-// ── M36 the wildlife: silhouettes wander through whenever they please ──
-// Deer, elk, moose and bear amble across the low ground; squirrels and
-// chipmunks dart-pause-dart; birds cross the sky on their own schedule.
-// One crossing per spawn, at most two abroad at once. Silence when reduced.
-const WILD = [
-  { shape: "squirrel",  gait: "scurry", wt: 24, h: [20, 30], dur: [22, 36], sky: false },
-  { shape: "chipmunk",  gait: "scurry", wt: 18, h: [15, 22], dur: [26, 42], sky: false },
-  { shape: "deer",      gait: "amble",  wt: 14, h: [54, 70], dur: [36, 58], sky: false },
-  { shape: "bear",      gait: "amble",  wt: 8,  h: [56, 74], dur: [44, 66], sky: false },
-  { shape: "elk",       gait: "amble",  wt: 6,  h: [62, 80], dur: [40, 60], sky: false },
-  { shape: "moose",     gait: "amble",  wt: 4,  h: [68, 86], dur: [46, 70], sky: false },
-  { shape: "bird",      gait: "soar",   wt: 26, h: [18, 28], dur: [15, 28], sky: true },
+// ── M36 the wildlife: the woods wander through, and can be poked ──
+// Emoji, not silhouettes — each one gets a shadow on the ground, a gait of its
+// own and a startle when tapped. One crossing per spawn, two abroad at most,
+// nothing at all when motion is reduced.
+export const WILD = [
+  { id: "squirrel", glyph: "🐿️", wt: 15, size: [26, 34], dur: [22, 34], gait: "dart" },
+  { id: "rabbit",   glyph: "🐇", wt: 12, size: [28, 36], dur: [20, 32], gait: "hop" },
+  { id: "deer",     glyph: "🦌", wt: 12, size: [42, 56], dur: [34, 52], gait: "amble" },
+  { id: "dog",      glyph: "🐕", wt: 10, size: [34, 44], dur: [22, 34], gait: "trot" },
+  { id: "turkey",   glyph: "🦃", wt: 8,  size: [34, 44], dur: [30, 46], gait: "trot" },
+  { id: "raccoon",  glyph: "🦝", wt: 8,  size: [32, 42], dur: [30, 44], gait: "amble", night: true },
+  { id: "beaver",   glyph: "🦫", wt: 5,  size: [30, 40], dur: [34, 50], gait: "amble" },
+  { id: "skunk",    glyph: "🦨", wt: 5,  size: [30, 38], dur: [32, 46], gait: "amble", night: true },
+  { id: "boar",     glyph: "🐗", wt: 4,  size: [38, 48], dur: [30, 44], gait: "trot" },
+  { id: "turtle",   glyph: "🐢", wt: 2,  size: [28, 36], dur: [90, 130], gait: "amble", flip: true },
+  { id: "bird",     glyph: "🐦", wt: 15, size: [22, 30], dur: [16, 26], gait: "soar", sky: true },
+  { id: "duck",     glyph: "🦆", wt: 6,  size: [26, 34], dur: [20, 30], gait: "soar", sky: true },
+  { id: "owl",      glyph: "🦉", wt: 5,  size: [26, 34], dur: [20, 30], gait: "soar", sky: true, night: true },
+  { id: "bat",      glyph: "🦇", wt: 9,  size: [22, 30], dur: [14, 22], gait: "soar", sky: true, eve: true },
 ];
+// A tap on any living thing: a small burst, a startle, and the Judge weighs in.
+export function spook(el, lines, id) {
+  const box = el.getBoundingClientRect();
+  burst({ x: box.left + box.width / 2, y: box.top + box.height / 2, count: 14, power: .5 });
+  const pool = lines?.[id] || lines?.default;
+  if (pool?.length) toast(rich(pool[Math.floor(Math.random() * pool.length)]));
+  el.classList.add("spooked");
+}
 
-export function wildlife(layer) {
-  if (!layer || reduced()) return;
+export function wildlife(layer, lines) {
+  if (!layer) return;
+  const html = document.documentElement;
   const r = (a, b) => a + Math.random() * (b - a);
-  const draw = () => {
-    let x = Math.random() * WILD.reduce((s, k) => s + k.wt, 0);
-    return WILD.find(k => (x -= k.wt) < 0);
+
+  // Startled mid-crossing: freeze where it stands, then bolt off the way it was headed.
+  const bolt = el => {
+    const back = el.classList.contains("rev");
+    const m = new DOMMatrix(getComputedStyle(el).transform);
+    const from = `translate3d(${m.m41.toFixed(1)}px,${m.m42.toFixed(1)}px,0)`;
+    el.style.animation = "none";
+    el.style.transform = from;
+    el.classList.replace("spooked", "bolting");
+    const box = el.getBoundingClientRect();
+    const dx = back ? -(box.right + 80) : innerWidth + 80 - box.left;
+    el.animate([{ transform: from }, { transform: `translate3d(${(m.m41 + dx).toFixed(0)}px,${(m.m42 - 8).toFixed(0)}px,0)` }],
+      { duration: Math.max(500, Math.abs(dx) / .9), easing: "cubic-bezier(.3,0,.6,1)", fill: "forwards" })
+      .onfinish = () => el.remove();
   };
+
   const spawn = () => {
     if (layer.childElementCount >= 2 || document.hidden || reduced()) return;
-    const k = draw(), h = Math.round(r(...k.h)), w = Math.round(h * (k.sky ? 2 : 1.6));
+    const eve = html.hasAttribute("data-eve");
+    const night = eve || /dusk|night/.test(html.dataset.daypart || "");
+    const cast = WILD.filter(k => (!k.eve || eve) && (!k.night || night));
+    let roll = Math.random() * cast.reduce((sum, k) => sum + k.wt, 0);
+    const k = cast.find(c => (roll -= c.wt) < 0) || cast[0];
     const el = Object.assign(document.createElement("span"), {
-      className: `roamer gait-${k.gait}${Math.random() < .5 ? " rev" : ""}`,
+      className: `roamer gait-${k.gait}${k.sky ? " sky" : ""}${k.flip ? " flip" : ""}${Math.random() < .5 ? " rev" : ""}`,
     });
-    el.style.cssText = `--dur:${r(...k.dur).toFixed(1)}s;--o:${r(.32, .56).toFixed(2)};` +
-      (k.sky ? `top:${r(4, 26).toFixed(0)}%` : `bottom:calc(var(--tab-h) + ${r(4, 48).toFixed(0)}px)`);
-    el.innerHTML = `<span class="roamer-gait"><svg viewBox="${k.sky ? "0 0 40 20" : "0 0 64 40"}" ` +
-      `width="${w}" height="${h}" aria-hidden="true"><use href="${SPRITE}#${k.shape}"/></svg></span>`;
+    el.style.cssText = `--dur:${r(...k.dur).toFixed(1)}s;--size:${Math.round(r(...k.size))}px;` +
+      (k.sky ? `top:${r(11, 30).toFixed(0)}%` : `bottom:calc(var(--tab-h) + ${r(6, 54).toFixed(0)}px)`);
+    el.innerHTML = `<span class="roamer-turn"><span class="roamer-gait">${k.glyph}</span></span>`;
     el.addEventListener("animationend", e => { if (e.target === el) el.remove(); });
+    el.addEventListener("click", () => {
+      if (el.classList.contains("spooked") || el.classList.contains("bolting")) return;
+      spook(el, lines, k.id);
+      setTimeout(() => bolt(el), 360);
+    });
     layer.append(el);
   };
+
   const tick = () => { spawn(); setTimeout(tick, r(24_000, 75_000)); };
   setTimeout(tick, r(7_000, 16_000));
 }

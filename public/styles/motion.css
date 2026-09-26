@@ -205,10 +205,10 @@ html:is([data-daypart="morning"], [data-daypart="afternoon"]):not([data-eve]) .c
   animation: doze 3s ease-out infinite;
 }
 
-/* ── M36 the wildlife: silhouettes cross the page on their own schedule ──
+/* ── M36 the wildlife: creatures cross the page on their own schedule ──
    .roamer carries the one-shot crossing (linear, so the held keyframes read as
-   real stops); .roamer-gait carries the loop — a weight-shift, a dart-hop or a
-   wingbeat. .rev plays the crossing backward and mirrors the silhouette. */
+   real stops); .roamer-gait carries the loop — a weight-shift, a dart, a hop or
+   a wingbeat. .rev plays the crossing backward and turns the animal around. */
 @keyframes roam-amble {
   0%   { transform: translate3d(-16vw, 0, 0); }
   26%  { transform: translate3d(18vw, 0, 0); }
@@ -231,26 +231,32 @@ html:is([data-daypart="morning"], [data-daypart="afternoon"]):not([data-eve]) .c
   70%  { transform: translate3d(72vw, 2vh, 0); }
   100% { transform: translate3d(114vw, -1vh, 0); }
 }
-@keyframes gait-shift { 0%, 100% { transform: none; } 50% { transform: translateY(-2px); } }
-@keyframes gait-hop   { from { transform: translateY(0) rotate(-4deg); } to { transform: translateY(-3px) rotate(5deg); } }
+@keyframes gait-shift { 0%, 100% { transform: none; } 50% { transform: translateY(-5%) rotate(-1.5deg); } }
+@keyframes gait-trot  { from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-9%) rotate(2deg); } }
+@keyframes gait-bound { from { transform: translateY(0) rotate(-5deg); } to { transform: translateY(-24%) rotate(6deg); } }
+@keyframes gait-dart  { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-13%) rotate(4deg); } }
+/* Touched: a startle, then a look the other way. Shared by M35 and M36. */
+@keyframes startle { 0% { transform: none; } 25% { transform: translateY(-34%) scale(1.14) rotate(-7deg); }
+                     60% { transform: translateY(0) scale(.96); } 100% { transform: none; } }
+@keyframes peek    { 0%, 100% { transform: scaleX(1); } 18%, 78% { transform: scaleX(-1); } }
 
-.wild { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; contain: strict; }
-.roamer {
-  position: absolute;
-  left: 0;
-  color: var(--ink-3);
-  opacity: var(--o, .45);
-  will-change: transform;
-}
-.roamer svg { display: block; fill: currentColor; }
-.roamer.rev svg { transform: scaleX(-1); }
 .gait-amble { animation: roam-amble var(--dur) linear both; }
-.gait-scurry { animation: roam-scurry var(--dur) linear both; }
+.gait-trot, .gait-hop { animation: roam-amble var(--dur) linear both; }
+.gait-dart { animation: roam-scurry var(--dur) linear both; }
 .gait-soar { animation: roam-soar var(--dur) linear both; }
 .roamer.rev { animation-direction: reverse; }
-.gait-amble .roamer-gait { animation: gait-shift 1.6s ease-in-out infinite; }
-.gait-scurry .roamer-gait { animation: gait-hop 260ms ease-in-out infinite alternate; }
+.gait-amble .roamer-gait { animation: gait-shift 1.5s ease-in-out infinite; }
+.gait-trot .roamer-gait { animation: gait-trot 420ms ease-in-out infinite alternate; }
+.gait-hop .roamer-gait { animation: gait-bound 440ms cubic-bezier(.3, 0, .5, 1) infinite alternate; }
+.gait-dart .roamer-gait { animation: gait-dart 240ms ease-in-out infinite alternate; }
 .gait-soar .roamer-gait { animation: flap 950ms ease-in-out infinite; transform-origin: 50% 40%; }
+.roamer.spooked .roamer-gait { animation: startle 420ms var(--ease-stamp); }
+.roamer.bolting .roamer-gait { animation-duration: 160ms; }
+
+/* ── M35 residents: breathing at home, a look around, a startle when touched ─ */
+.critter-body { animation: breathe var(--breath, 4s) ease-in-out infinite; }
+.critter.peeking .critter-body { animation: peek 1.4s ease-in-out; }
+.critter.spooked .critter-body { animation: startle 420ms var(--ease-stamp); }
 
 /* ── reduced motion (PLAN §4.2): near-zero, never animation:none ── */
 @media (prefers-reduced-motion: reduce) {

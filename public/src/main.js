@@ -293,6 +293,6 @@ document.addEventListener("pointerdown", e => {
 rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES, COPY.JUMP_LINES);
 render();
 // After the first render, so the pile (the tree's ground line) is where it will stay.
-const grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"));
+const grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"), COPY.CRITTER_LINES);
 gusts(document.querySelector(".leaves"), grove.gust);
-wildlife(document.getElementById("wild"));
+wildlife(document.getElementById("wild"), COPY.CRITTER_LINES);

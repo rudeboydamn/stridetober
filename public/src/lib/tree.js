@@ -4,7 +4,7 @@
 // Every visit the leaves start green, turn, then fall the whole way to the ground, and
 // the residents wander off now and then. plan() is pure geometry (tests/tree.test.js);
 // tree() owns the DOM.
-import { SPRITE, LEAF_PATHS, mulberry32, reduced } from "./fx.js";
+import { SPRITE, LEAF_PATHS, mulberry32, reduced, spook } from "./fx.js";
 
 const SHAPES = ["leaf-maple", "leaf-oak", "leaf-birch"];
 const TURNS = ["gold", "gold", "orange", "orange", "red", "red", "rust"];
@@ -114,7 +114,7 @@ export function plan({ W, H, ground, gutter, top, pile, cs, eve = false }) {
   for (let y = ys; y < ground - cs * 2; y += 80) down.push(at(trunkX(y), y, -90));
   trips.squirrel = [...down, at(tx, ground - cs, -90), at(tx - cs, ground - h), at(Math.max(pile.left + cs, pile.right - cs * 1.5), ground - h)];
   const yc = ground - cs * 5;
-  trips.caterpillar = [at(trunkX(yc), yc, 90), at(trunkX(yc - 70), yc - 70, 90)];
+  trips.caterpillar = [at(trunkX(yc), yc, 90, -1), at(trunkX(yc - 70), yc - 70, 90, -1)];   // 🐛 is drawn facing right
   trips.hedgehog = [at(pile.left + (pile.right - pile.left) * .32, ground - h * .8), at(-cs * 2, ground - h * .8)];
   trips.mouse = [at(burrow[0], burrow[1] - 2, 90), at(burrow[0], ground - h, 90), at(burrow[0] - 4, ground - h),
     at(Math.max(cs, pile.left - cs * 2), ground - h)];
@@ -126,7 +126,7 @@ const pose = p => `rotate(${p.r}deg) scaleX(${p.f})`;
 const pick = list => list[Math.floor(Math.random() * list.length)];
 const rr = (a, b) => a + Math.random() * (b - a);
 
-export function tree(layer, pile, head) {
+export function tree(layer, pile, head, lines) {
   if (!layer || !pile) return { gust() {} };
   const html = document.documentElement;
   const born = performance.now(), since = () => (performance.now() - born) / 1000;
@@ -172,14 +172,20 @@ export function tree(layer, pile, head) {
 
   // ── M35 residents: at home until they wander off, then back the way they came ──
   const cast = eve => ({
-    bird: { glyph: eve ? "🦇" : "🐦", fly: true, speed: 260, rest: [18, 45] },
-    bird2: { glyph: "🐦", fly: true, speed: 240, rest: [25, 60] },
-    owl: { glyph: "🦉", fly: true, speed: 200, rest: [30, 70], night: true },
-    squirrel: { glyph: "🐿️", speed: 240, rest: [1.6, 2.4], acorn: true },
-    caterpillar: { glyph: eve ? "🕷️" : "🐛", speed: 8, rest: [3, 8], small: true },
-    hedgehog: { glyph: "🦔", speed: 42, rest: [15, 40] },
-    mouse: { glyph: "🐁", speed: 160, rest: [2, 6], small: true },
+    bird: { glyph: eve ? "🦇" : "🐦", voice: eve ? "bat" : "bird", fly: true, speed: 260, rest: [18, 45] },
+    bird2: { glyph: "🐦", voice: "bird", fly: true, speed: 240, rest: [25, 60] },
+    owl: { glyph: "🦉", voice: "owl", fly: true, speed: 200, rest: [30, 70], night: true },
+    squirrel: { glyph: "🐿️", voice: "squirrel", speed: 240, rest: [1.6, 2.4], acorn: true },
+    caterpillar: { glyph: eve ? "🕷️" : "🐛", voice: eve ? "spider" : "caterpillar", speed: 8, rest: [3, 8], small: true },
+    hedgehog: { glyph: "🦔", voice: "hedgehog", speed: 42, rest: [15, 40] },
+    mouse: { glyph: "🐁", voice: "mouse", speed: 160, rest: [2, 6], small: true },
   });
+
+  const el_glyph = (c, role) => {
+    if (c.glyph === role.glyph) return;
+    Object.assign(c, role);
+    c.el.querySelector(".critter-body").textContent = role.glyph;
+  };
 
   function settle() {
     const roles = cast(html.hasAttribute("data-eve"));
@@ -189,18 +195,37 @@ export function tree(layer, pile, head) {
       if (!c) {
         const el = Object.assign(document.createElement("span"), { className: `critter critter-${id}` });
         el.innerHTML = `<span class="critter-body">${roles[id].glyph}</span>`;
+        el.style.setProperty("--breath", `${(3.4 + Math.random() * 2.4).toFixed(1)}s`);
         life.append(el);
         critters.set(id, c = { id, el, ...roles[id] });
+      } else {
+        el_glyph(c, roles[id]);
       }
       c.anim?.cancel();
       clearTimeout(c.timer);
       c.away = false;
-      c.el.classList.remove("is-flying", "is-walking", "is-digging", "has-acorn");
+      c.el.classList.remove("is-flying", "is-walking", "is-digging", "has-acorn", "spooked", "peeking");
       c.pts = pts;
       const s = c.small ? Math.round(cs * .8) : cs;
       Object.assign(c.el.style, { left: `${pts[0].x - s / 2}px`, top: `${pts[0].y - s / 2}px`, fontSize: `${s}px`, transform: pose(pts[0]) });
     }
   }
+
+  // Touch one and it startles, then leaves — it comes home in its own time.
+  // The residents live *behind* the page, so the tap is matched by hand here; a tap
+  // that lands on a card never counts, because the resident cannot be seen through it.
+  const BLOCKS = "a, button, input, label, summary, .card, .lb-table-wrap, .sheet, .tabbar, .site-head, .toast";
+  document.addEventListener("click", e => {
+    if (calm() || e.target.closest(BLOCKS)) return;
+    const hit = [...critters.values()].find(c => {
+      if (c.away || c.el.classList.contains("spooked")) return false;
+      const r = c.el.getBoundingClientRect();
+      return e.clientX > r.left - 16 && e.clientX < r.right + 16 && e.clientY > r.top - 16 && e.clientY < r.bottom + 16;
+    });
+    if (!hit) return;
+    spook(hit.el, lines, hit.voice);
+    setTimeout(() => { hit.el.classList.remove("spooked"); if (!hit.away) wanderOff(hit); }, 420);
+  });
 
   function leg(c, pts, done) {
     const home = c.pts[0];
@@ -258,6 +283,17 @@ export function tree(layer, pile, head) {
     }
     shed();
   }, rr(1600, 4200));
+  const peek = () => setTimeout(() => {
+    if (!calm()) {
+      const home = [...critters.values()].filter(c => !c.away);
+      const c = pick(home);
+      if (c) {
+        c.el.classList.add("peeking");
+        setTimeout(() => c.el.classList.remove("peeking"), 1400);
+      }
+    }
+    peek();
+  }, rr(5000, 12_000));
   const wander = () => setTimeout(() => {
     if (!calm()) {
       const night = /dusk|night/.test(html.dataset.daypart || "") || html.hasAttribute("data-eve");
@@ -274,6 +310,7 @@ export function tree(layer, pile, head) {
   }).observe(document.body);
   shed();
   wander();
+  peek();
 
   return {
     // M26 hook: a gust shakes the crown and strips a few turned leaves, blowing them right.

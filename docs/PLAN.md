@@ -139,7 +139,7 @@ Agents working in parallel collide in shared files. One view per file, one data 
 |---|---|---|
 | **R1 Muster** | Sat Sep 19 | Scaffold and deploy gate, tokens and chrome, leaf layer, Court (muster phase), The Decree, Check-in page, The Summons, OG image and icons |
 | **R2 Walking** | Sat Oct 3 (before kickoff) | Stats lib, Court (walking phase), The Ledger with charts, Dossier, the Judge's Report, timeline states, demo data, fresh-results nudge, Court of Excuses, dry run of the weekly runbook |
-| **R3 Finale** | Fri Oct 30 | Hallowed Eve, counting and crowned phases, coronation, the Reading of the Ledger, Settle It (compare), Fall Finds (built when the first photo arrives), birthday line (only if someone has a birthday Oct 4–Nov 1) |
+| **R3 Finale** | Fri Oct 30 | Hallowed Eve, counting and crowned phases, coronation, the Reading of the Ledger, Settle It (compare), Fall Finds (built when the first photo arrives), birthday line (only if someone has a birthday Oct 4–Oct 31) |
 
 **Parallel lanes:** Tasks 1–3 run in sequence. After Task 3, Tasks 4, 5, 6, 7 and 8 can run in parallel. After Task 9, Tasks 10–14 can run in parallel. R3 tasks are independent of each other.
 
@@ -578,7 +578,7 @@ The flyer's Saturday-night ritual, as a page.
 
 The rules, read aloud. Heading `The Decree`, kicker `SO ORDERED`. Sections as numbered cards with wax-seal numerals:
 
-1. **The Season** — the week table (§1.2, verbatim): four weeks, Sun→Sat, screenshots due each Sunday; `Kickoff October 4 · The clock strikes 12:00 AM on November 1st`.
+1. **The Season** — the week table (§1.2, verbatim): four weeks, Sun→Sat, screenshots due each Sunday; `Kickoff October 4 · The clock strikes 12:00 AM on November 1st`, followed by the Judge's clarification that this is midnight at the end of Halloween — the last steps that count are Saturday, October 31st, and the champion is named on Sunday, November 1st.
 2. **The Tribute** — `$20 to Dammy by Venmo before October 4th.` + `NO $20 = NO COMPETING!` stamp. Venmo button (text + 🪙).
 3. **The Evidence** — `Send your screenshot DIRECTLY TO DAMMY — NOT THE GROUP CHAT!` + `No screenshot = No steps!` stamp.
 4. **The Reckoning** — `The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… THE OCTOBER STEP CHAMPION!` + `The pot pays three places: 50% to the Champion, 30% to second, 20% to third. Dammy will send the funds through Venmo on November 1st.`
@@ -641,7 +641,7 @@ Every user-facing string lives in `public/data/copy.js` (or in the view markup w
 ### 6.2 Verbatim flyer phrases (must appear word-for-word, punctuation intact)
 
 - `Walk it. Track it. Win it!`
-- `OCTOBER 4TH – NOVEMBER 1ST` / `The challenge officially ends when the clock strikes 12:00 AM on November 1st!`
+- `OCTOBER 4TH – 31ST` (the walking) / `The challenge officially ends when the clock strikes 12:00 AM on November 1st!` (flyer, verbatim)
 - `Send your $20 to Dammy BEFORE October 4th!` · `NO $20 = NO COMPETING!`
 - `A step tracker` · `Two functioning feet` · `NO EXCUSES`
 - `DIRECTLY TO DAMMY — NOT THE GROUP CHAT!` · `No screenshot = No steps!`
@@ -843,12 +843,12 @@ export const CHALLENGE = {
 ```js
 export const WALKERS = [
   // { id:"sam", name:"Sam Reyes", short:"Sam", crest:"🦊", color:"spruce",
-  //   paid:true, paidOn:"2026-09-30", birthday:null },   // "MM-DD", only if Oct 4–Nov 1
+  //   paid:true, paidOn:"2026-09-30", birthday:null },   // "MM-DD", only if Oct 4–Oct 31
 ]
 ```
 
 - `id` = lowercase slug, used in `#/walker/:id`. `crest` = unique emoji from §3.6's list. `color` = a §3.2 palette key, assigned in roster order. `paid:false` entries show `tribute pending` on the Roll and are **excluded from all standings/honours** — the Ledger only ever contains paid walkers.
-- `birthday`: set only if a walker volunteers it and it falls Oct 4–Nov 1 (R3 banner).
+- `birthday`: set only if a walker volunteers it and it falls Oct 4–Oct 31 (R3 banner).
 
 **`weeks.js`** — the weekly edit:
 
@@ -1116,6 +1116,6 @@ Target: empty array.
 3. **Roster** — `walkers.js` starts empty; ids/crests/colors get assigned in payment order. First-come crests.
 4. **Does Dammy walk?** Default no (he's the Judge, same as Big Steppas). If he competes, he still holds the pot — update Decree copy.
 5. **The pot figure** — displayed as computed (`paid × $20`), never hard-coded; if it's awkward during muster, show `$20 × walkers sworn`.
-6. **Birthday line** — only if a walker has an Oct 4–Nov 1 birthday *and offers it*; off by default.
+6. **Birthday line** — only if a walker has an Oct 4–Oct 31 birthday *and offers it*; off by default.
 7. **`?now=` QA param** — demo-only; consider gating behind `?demo=1` so production can't be time-traveled by a shared link. Default: gate it.
 8. **Finds cadence** — build the view when the first photo arrives, not before.

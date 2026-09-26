@@ -51,7 +51,7 @@ const CAPTIONS = {
   kickoff: (m, ctx) => `${longDay(ctx.challenge.kickoff)} · 12:00 AM, your time`,
   weekEnd: (m, ctx) => `Week ${m.week} is called ${longDay(ctx.challenge.weeks[m.week - 1].end)} at midnight`,
   due:     m => `Week ${m.week} screenshots are due tonight, 11:59 PM — DIRECTLY TO DAMMY`,
-  bell:    () => "The clock strikes 12:00 AM on November 1st",
+  bell:    () => "Midnight at the end of Halloween · 12:00 AM, November 1st",
 };
 
 const srSentence = (p, label) => `${+p.d} days, ${+p.h} hours and ${+p.m} minutes ${label}.`;

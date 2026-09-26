@@ -20,13 +20,14 @@ const article = (i, title, body) => `
 export function render(ctx) {
   const c = ctx.challenge;
   const season = `
-    <p class="decree-lead">OCTOBER 4TH – NOVEMBER 1ST</p>
+    <p class="decree-lead">OCTOBER 4TH – 31ST</p>
     <table class="season">
       <thead><tr><th scope="col">Week</th><th scope="col">Walk</th><th scope="col">Screenshots due</th></tr></thead>
       <tbody>${c.weeks.map(w => `<tr><td class="num">${w.n}</td><td>${fmtRange(w.start, w.end)}</td><td>${day(w.due)}</td></tr>`).join("")}</tbody>
     </table>
     <p>Weeks run Sunday to Saturday. Kickoff is October 4.</p>
-    <p class="decree-quote">The challenge officially ends when the clock strikes 12:00 AM on November 1st!</p>`;
+    <p class="decree-quote">The challenge officially ends when the clock strikes 12:00 AM on November 1st!</p>
+    <p class="ruling">The Judge clarifies: that is midnight at the end of Halloween. The last steps that count are Saturday, October 31st — week 4's screenshots are due the next day.</p>`;
 
   const tribute = `
     <p>$20 to Dammy by Venmo before October 4th.</p>
@@ -40,6 +41,7 @@ export function render(ctx) {
 
   const reckoning = `
     <p>The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… <strong class="champion-line">THE OCTOBER STEP CHAMPION!</strong></p>
+    <p>The Judge counts the last screenshots and names the champion on Sunday, November 1st.</p>
     <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. Dammy will send the funds through Venmo on November 1st.</p>`;
 
   const fine = `

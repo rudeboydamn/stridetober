@@ -38,7 +38,7 @@ export function mount(root, ctx) {
   reveal(root);
   root.querySelector("#shareBtn").addEventListener("click", () => share({
     title: "Stridetober",
-    text: "The October Steps Challenge. $20 to Dammy before Oct 4. Top three split the pot — most total steps is crowned THE OCTOBER STEP CHAMPION!",
+    text: "The October Steps Challenge, Oct 4 – Oct 31. $20 to Dammy before Oct 4. Top three split the pot — most total steps is crowned THE OCTOBER STEP CHAMPION!",
     url: `${location.origin}/`,
   }, ctx.copy.TOASTS.copied));
 }

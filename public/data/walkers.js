@@ -5,7 +5,8 @@
 // paid:false → "tribute pending" on the Roll and excluded from ALL standings/honours.
 // Nine on the Roll. Surnames for the last three are pending.
 export const WALKERS = [
-  { id: "rod",    name: "Rod Colon",     short: "Rod",    crest: "🌰", color: "cranberry", paid: true,  birthday: null },
+  // The Colon-Ramos family: Rod Sr. is the father of Rod Jr. and Alicia (Alicia Ramos).
+  { id: "rod-jr", name: "Rod Colon Jr.", short: "Rod Jr", crest: "🌰", color: "cranberry", paid: true,  birthday: null },
   { id: "rod-sr", name: "Rod Colon Sr.", short: "Rod Sr", crest: "☕", color: "goldenrod", paid: true,  birthday: null },
   { id: "alicia", name: "Alicia Ramos",  short: "Alicia", crest: "🍁", color: "moss",      paid: true,  birthday: null },
   { id: "lizzie", name: "Lizzie Henry",  short: "Lizzie", crest: "🎃", color: "spruce",    paid: true,  birthday: null },

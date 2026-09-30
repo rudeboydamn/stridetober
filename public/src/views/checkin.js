@@ -4,7 +4,7 @@ import { parseLocal, endOfDay, weekStatus } from "../lib/time.js";
 import { esc, fmtRange, pick, n } from "../lib/format.js";
 import { parseSteps, weekDates, weekReport, smsHref } from "../lib/report.js";
 import { downloadCalendar } from "../lib/calendar.js";
-import { icon, tallySvg, toast, reveal } from "../lib/fx.js";
+import { icon, tallySvg, toast } from "../lib/fx.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 const sameDay = (now, s) => now >= parseLocal(s) && now <= endOfDay(s);
@@ -71,16 +71,21 @@ function sunday(ctx) {
   </section>`;
 }
 
-export function render(ctx) {
+// The Check-in section of the Court (#/check-in is the Court, scrolled here). Before kickoff the
+// dates live in the trail above it, so the timeline only shows once the walking has begun.
+export function section(ctx) {
   const tl = nodes(ctx).map(x => `
     <li class="tl-node ${x.state}">
       <span class="tl-dot" aria-hidden="true">${x.dot}</span>
       <div><p class="tl-title">${esc(x.title)}</p><p class="tl-meta">${esc(x.meta)}</p></div>
     </li>`).join("");
   return `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">Due every Sunday</span>
-    <h1 class="page-title">Check-in</h1>
+  <div id="checkin">
+  <header class="wrap section" data-reveal>
+    <div class="section-head">
+      <span class="ribbon">Due every Sunday</span>
+      <h2 class="h2">Check-in</h2>
+    </div>
     <blockquote class="flyer-quote">
       <p>“Every Saturday night, before you go to sleep, send a picture/screenshot of your step count <strong>DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!</strong>”</p>
       <footer class="caption">— the flyer</footer>
@@ -88,10 +93,9 @@ export function render(ctx) {
     <p class="ruling">The Judge clarifies: Saturday night is when the week <em>ends</em>. Screenshots are due Sunday, once all seven days are in the books.</p>
   </header>
 
-  <section class="wrap section" data-reveal>
-    <header class="section-head"><h2 class="h2">Check-in dates</h2></header>
+  ${ctx.phase === "muster" ? "" : `<section class="wrap section" data-reveal>
     <div class="card"><ol class="timeline horizontal" style="--nodes:5">${tl}</ol></div>
-  </section>
+  </section>`}
 
   <section class="wrap section" data-reveal>
     <div class="card card-raised submit">
@@ -115,7 +119,8 @@ export function render(ctx) {
     </div>
   </section>
 
-  ${sunday(ctx)}`;
+  ${sunday(ctx)}
+  </div>`;
 }
 
 function mountSunday(root, ctx) {
@@ -163,8 +168,7 @@ function mountSunday(root, ctx) {
   build();
 }
 
-export function mount(root, ctx) {
-  reveal(root);
+export function mountSection(root, ctx) {
   mountSunday(root, ctx);
   root.querySelector("#icsBtn").addEventListener("click", () => downloadCalendar(ctx.challenge));
 

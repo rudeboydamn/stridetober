@@ -11,10 +11,8 @@ import { leaves, gusts, rake, reduced, reveal, puff, burst, toast, wildlife } fr
 import { tree } from "./lib/tree.js";
 import * as court from "./views/court.js";
 import * as ledger from "./views/ledger.js";
-import * as checkin from "./views/checkin.js";
 import * as decree from "./views/decree.js";
 import * as excuses from "./views/excuses.js";
-import * as summons from "./views/summons.js";
 import * as dossier from "./views/dossier.js";
 import * as compare from "./views/compare.js";
 import * as finds from "./views/finds.js";
@@ -69,17 +67,19 @@ const signature = now =>
 
 // ── router ────────────────────────────────────────────────
 const ROUTES = [
+  // Five tabs: Court · Ledger · Finds · Excuses · More (Decree, Settle It, Theme).
+  // #/check-in is the Court and #/invite is the Decree, each scrolled to its section (`focus`).
   { path: "/",         mod: court,    name: "court",   tab: 0, title: "" },
+  { path: "/check-in", mod: court,    name: "court",   tab: 0, title: "Check-in", focus: "checkin" },
   { path: "/ledger",   mod: ledger,   name: "ledger",  tab: 1, title: "The Ledger" },
-  { path: "/check-in", mod: checkin,  name: "checkin", tab: 2, title: "Check-in" },
-  { path: "/rules",    mod: decree,   name: "decree",  tab: 3, title: "The Decree" },
+  { path: "/finds",    mod: finds,    name: "finds",   tab: 2, title: "Fall Finds" },
   { path: "/excuses",  mod: excuses,  name: "excuses", tab: 3, title: "Court of Excuses" },
-  { path: "/finds",    mod: finds,    name: "finds",   tab: 3, title: "Fall Finds" },
-  { path: "/invite",   mod: summons,  name: "summons", tab: 3, title: "The Summons" },
+  { path: "/rules",    mod: decree,   name: "decree",  tab: 4, title: "The Decree" },
+  { path: "/invite",   mod: decree,   name: "decree",  tab: 4, title: "The Summons", focus: "summons" },
   // parameterized (PLAN §5): params land in render(ctx, params)/mount(root, ctx, params)
   { match: /^\/walker\/([a-z0-9-]+)$/i, mod: dossier, name: "dossier", tab: -1,
     title: null, params: m => ({ id: m[1] }) },
-  { match: /^\/compare(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?$/i, mod: compare, name: "compare", tab: 3,
+  { match: /^\/compare(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?$/i, mod: compare, name: "compare", tab: 4,
     title: "Settle It", params: m => ({ a: m[1], b: m[2] }) },
 ];
 const OFF_TRAIL = {
@@ -95,7 +95,7 @@ const OFF_TRAIL = {
 const currentRoute = () => {
   const path = location.hash.replace(/^#/, "").replace(/\/+$/, "") || "/";
   for (const r of ROUTES) {
-    if (r.path === path) return { route: r, params: {} };
+    if (r.path === path) return { route: r, params: r.focus ? { focus: r.focus } : {} };
     if (r.match) {
       const m = r.match.exec(path);
       if (m) return { route: r, params: r.params(m) };
@@ -132,6 +132,7 @@ function applyChrome(now) {
   const tabbar = document.getElementById("tabbar");
   tabbar.dataset.tab = route.tab;
   tabbar.style.setProperty("--tab", Math.max(0, route.tab));
+  moreTab.classList.toggle("is-current", route.tab === 4);   // Decree and Settle It live behind More
   tabbar.querySelectorAll("a.tab").forEach(a => {
     if (+a.dataset.tab === route.tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });

@@ -4,6 +4,7 @@ import { n, esc, rich, fill, pick } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
 import { SPRITE, icon, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
 import { downloadCalendar } from "../lib/calendar.js";
+import { section as checkinSection, mountSection as mountCheckin } from "./checkin.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
@@ -344,17 +345,19 @@ function togetherTile(ctx) {
 // ── view contract ─────────────────────────────────────────
 export function render(ctx) {
   if (ctx.phase === "muster") {
-    return hero(ctx) + countdownCard(ctx) + stakes(ctx) + roll(ctx) + trail(ctx) + calendarCard(ctx)
+    return hero(ctx) + countdownCard(ctx) + stakes(ctx) + roll(ctx) + trail(ctx) + calendarCard(ctx) + checkinSection(ctx)
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + how();
+    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx)
+    + (ctx.phase === "crowned" ? "" : checkinSection(ctx)) + how();
 }
 
 let squirrelTimer = 0;
 
-export function mount(root, ctx) {
+export function mount(root, ctx, params = {}) {
   reveal(root);
+  if (root.querySelector("#checkin")) mountCheckin(root, ctx);
   clearTimeout(squirrelTimer);
   squirrelTimer = setTimeout(() => {
     if ((location.hash.replace(/^#/, "") || "/") === "/") squirrel(ctx.copy.SQUIRREL_LINES);
@@ -365,6 +368,8 @@ export function mount(root, ctx) {
     setTimeout(() => burst({}), reduced() ? 0 : 300);
   }
   root.querySelector("#calBtn")?.addEventListener("click", () => downloadCalendar(ctx.challenge));
+  // #/check-in is the Court, scrolled to its Check-in section.
+  if (params.focus) root.querySelector("#" + params.focus)?.scrollIntoView({ block: "start", behavior: "instant" });
   const bottle = root.querySelector(".bottle");
   const slot = root.querySelector(".bubble-slot");
   const lines = ctx.copy.BOTTLE;

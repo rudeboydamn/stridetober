@@ -2,6 +2,7 @@
 import { esc, fmtRange } from "../lib/format.js";
 import { parseLocal } from "../lib/time.js";
 import { seal, reveal } from "../lib/fx.js";
+import { section as summonsSection, mountSection as mountSummons } from "./summons.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
@@ -65,10 +66,14 @@ export function render(ctx) {
   ${article(2, "The Reckoning", reckoning)}
   ${article(3, "The Fine Print", fine)}
   ${article(4, "The Encouragement", moving)}
+  ${summonsSection(ctx)}
   <p class="wrap flourish">The Judge's word is <em>fairly</em> final.</p>
   <p class="wrap flourish small">Fall into Healthy Habits</p>`;
 }
 
-export function mount(root) {
+export function mount(root, ctx, params = {}) {
   reveal(root);
+  mountSummons(root, ctx);
+  // #/invite is the Decree, scrolled to the Summons.
+  if (params.focus) root.querySelector("#" + params.focus)?.scrollIntoView({ block: "start", behavior: "instant" });
 }

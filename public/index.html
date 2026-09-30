@@ -82,11 +82,10 @@
     <nav class="head-nav" aria-label="Sections">
       <a class="head-link" data-route="court" href="#/">Court</a>
       <a class="head-link" data-route="ledger" href="#/ledger">Ledger</a>
-      <a class="head-link" data-route="checkin" href="#/check-in">Check-in</a>
-      <a class="head-link" data-route="decree" href="#/rules">Decree</a>
-      <a class="head-link" data-route="excuses" href="#/excuses">Excuses</a>
       <a class="head-link" data-route="finds" href="#/finds">Finds</a>
-      <a class="head-link" data-route="summons" href="#/invite">Summons</a>
+      <a class="head-link" data-route="excuses" href="#/excuses">Excuses</a>
+      <a class="head-link" data-route="decree" href="#/rules">Decree</a>
+      <a class="head-link" data-route="compare" href="#/compare">Settle It</a>
     </nav>
     <span class="demo-flag" id="demoFlag" hidden>DEMO</span>
     <span class="phase-chip" id="phaseChip">Muster</span>
@@ -111,8 +110,9 @@
 <nav class="tabbar" id="tabbar" aria-label="Main" data-tab="0">
   <a class="tab" data-tab="0" href="#/"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#gavel"/></svg>Court</a>
   <a class="tab" data-tab="1" href="#/ledger"><svg class="icon" aria-hidden="true" viewBox="0 0 32 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 4v16M11 4v16M16 4v16M21 4v16M3 17L25 7"/></g></svg>Ledger</a>
-  <a class="tab" data-tab="2" href="#/check-in"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#check"/></svg>Check-in</a>
-  <button class="tab" data-tab="3" id="moreTab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#chevron"/></svg>More</button>
+  <a class="tab" data-tab="2" href="#/finds"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#acorn"/></svg>Finds</a>
+  <a class="tab" data-tab="3" href="#/excuses"><svg class="icon" aria-hidden="true" viewBox="-2 -2 104 104"><use href="/assets/sprite.svg#seal"/></svg>Excuses</a>
+  <button class="tab" data-tab="4" id="moreTab" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="sheet"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#chevron"/></svg>More</button>
 </nav>
 
 <div class="scrim" id="scrim" hidden></div>
@@ -120,10 +120,7 @@
   <span class="sheet-grab" aria-hidden="true"></span>
   <h2 class="sheet-title" id="sheetTitle">More from the Court</h2>
   <a class="sheet-link" href="#/rules"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#scroll"/></svg><span>The Decree<small>The rules, read aloud</small></span></a>
-  <a class="sheet-link" href="#/excuses"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#gavel"/></svg><span>Court of Excuses<small>All pleas are heard</small></span></a>
   <a class="sheet-link" href="#/compare"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#sneaker" viewBox="0 0 64 32"/></svg><span>Settle It<small>The Judge adjudicates</small></span></a>
-  <a class="sheet-link" href="#/finds"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#acorn"/></svg><span>Fall Finds<small>The field journal</small></span></a>
-  <a class="sheet-link" href="#/invite"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#share"/></svg><span>The Summons<small>Recruit a rival</small></span></a>
   <button class="sheet-link" id="themeRow" type="button"><svg class="icon" aria-hidden="true"><use href="/assets/sprite.svg#theme"/></svg><span>Theme</span><b id="themeVal">Auto</b></button>
 </div>
 

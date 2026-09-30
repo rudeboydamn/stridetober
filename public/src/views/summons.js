@@ -1,13 +1,18 @@
 // The Summons — a recruitment card built to be shared. Spec: docs/PLAN.md §5.10.
 import { esc } from "../lib/format.js";
-import { icon, seal, reveal, share } from "../lib/fx.js";
+import { icon, seal, share } from "../lib/fx.js";
 
-export function render(ctx) {
+// The Summons, now the last article of the Decree (#/invite is the Decree, scrolled here).
+export function section(ctx) {
   const c = ctx.challenge;
   return `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">You are hereby invited</span>
-    <h1 class="page-title">The Summons</h1>
+  <div id="summons">
+  <header class="wrap section" data-reveal>
+    <div class="section-head">
+      <span class="ribbon">You are hereby invited</span>
+      <h2 class="h2">The Summons</h2>
+      <p class="sub">Know someone who should be walking? Hand them this.</p>
+    </div>
   </header>
   <section class="wrap section" data-reveal>
     <article class="summons">
@@ -28,13 +33,12 @@ export function render(ctx) {
     </article>
     <div class="btn-row summons-actions">
       <button class="btn btn-primary" type="button" id="shareBtn">${icon("share")}Share the Summons</button>
-      <a class="btn btn-secondary" href="#/rules">Read the Decree</a>
     </div>
-  </section>`;
+  </section>
+  </div>`;
 }
 
-export function mount(root, ctx) {
-  reveal(root);
+export function mountSection(root, ctx) {
   root.querySelector("#shareBtn").addEventListener("click", () => share({
     title: "Stridetober",
     text: "The October Steps Challenge, Oct 4 – Oct 31. Most total steps is crowned THE OCTOBER STEP CHAMPION — top three split the pot!",

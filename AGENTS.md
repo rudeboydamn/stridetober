@@ -98,6 +98,10 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
 - The wildlife layer (`.wild`) sits *in front of* the page so it can be tapped; the
   tree's residents sit behind it, so `tree.js` matches their taps by hand and ignores
   any tap on a card.
+- Five tabs, and they are load-bearing: Court · Ledger · Finds · Excuses · More. `route.tab`
+  indices live in `main.js` ROUTES; the More leaf/label is `tab === 4` (Decree, Settle It).
+  Check-in and the Summons are **sections** (Court, Decree) — `#/check-in` and `#/invite`
+  are aliases that scroll to them, so don't add pages for them back.
 - Conventional commits: `feat:` `fix:` `style:` `data(week-N):` `docs:` `test:`.
 
 ## 6. Verify (do not skip)

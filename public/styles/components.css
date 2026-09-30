@@ -110,7 +110,7 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
   left: 0; right: 0; bottom: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   background: var(--surface);
   border-top: 1px solid var(--line);
@@ -120,7 +120,7 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
   position: absolute;
   top: -7px;
   left: 0;
-  width: 25%;
+  width: 20%;
   height: 12px;
   background: var(--accent);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.5 6.5 5 11.5 6.5 16c1 3 3.3 4.8 5.5 6 2.2-1.2 4.5-3 5.5-6C19 11.5 17.5 6.5 12 2z'/%3E%3C/svg%3E") center / 12px 12px no-repeat;
@@ -129,6 +129,7 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
   transition: transform 320ms var(--ease-settle), opacity 200ms;
 }
 .tabbar[data-tab="-1"]::before { opacity: 0; }
+#checkin, #summons { scroll-margin-top: 76px; }
 .tab {
   display: flex;
   flex-direction: column;
@@ -145,7 +146,7 @@ html[data-eve] .phase-chip { background: var(--eve); color: var(--bg); }
   cursor: pointer;
 }
 .tab .icon { transition: transform 320ms var(--ease-settle); }
-.tab[aria-current="page"], .tab[aria-expanded="true"] { color: var(--accent-ink); }
+.tab[aria-current="page"], .tab[aria-expanded="true"], .tab.is-current { color: var(--accent-ink); }
 .tab[aria-current="page"] .icon { transform: translateY(-2px); }
 @media (min-width: 1024px) { .tabbar { display: none; } }
 

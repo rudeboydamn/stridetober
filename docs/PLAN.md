@@ -436,6 +436,8 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 | M36 | **The wildlife** | Every page, one crossing every 24–75s (first 7–16s in), two abroad at most | Fourteen species of emoji cross the page in front of the content: 🐿️ 🐇 🦌 🐕 🦃 🦝 🦫 🦨 🐗 🐢 on the ground lane above the tab bar, 🐦 🦆 🦉 through the sky band. Each one casts a shadow, carries its own gait (`gait-shift`/`gait-trot`/`gait-bound`/`gait-dart`/`flap`) and stops mid-crossing to graze or look around. Nocturnal species (🦝 🦨 🦉) only appear at dusk or after dark; 🦇 only on the Eve; 🐢 is rare and takes 90–130s to cross. `fx.wildlife()`; species table in `fx.WILD` | Nothing crosses |
 | M37 | **Touch an animal** | Tap any resident (M35) or passer-by (M36) | `fx.spook()`: a 14-leaf burst at the animal, a line from `CRITTER_LINES[species]` as a toast, and a `startle` hop. A passer-by then bolts off the way it was heading; a resident wanders off and comes home in its own time. Residents live behind the page, so `tree.js` matches the tap by hand and ignores any tap that lands on a card — where the animal cannot be seen | Toast only, no burst |
 
+| M38 | **The tree waits** | Muster only (before midnight, Oct 4) | The crown stays green and sways (`sway 5.5s`), nothing turns, nothing falls. When the clock strikes kickoff — even with the page open — `tree.begin()` restarts the turn for every leaf from that moment, alongside the kickoff burst and toast (M32) | Green and still |
+
 ### 4.4.1 The tree (`src/lib/tree.js`, M34/M35)
 - `plan({W, H, ground, gutter, top, pile, cs, eve})` is pure: it returns the crown's leaves, the wood outlines, the grain, the holes, the residents' trips and `pileEdge`, all in page pixels. `tests/tree.test.js` proves it fits 320–1920px pages, short and tall. `tree()` owns the DOM and redraws on a `ResizeObserver`, which is what makes the tree follow the page's height through every route change.
 - The crown is seeded by width alone (`mulberry32(1031 + W)`), so a longer page grows a longer trunk, never a new crown. On redraw each leaf's `--d` is shifted by the tree's age, so turning never replays.
@@ -488,6 +490,7 @@ In JS, `fx.reduced()` returns `matchMedia('(prefers-reduced-motion: reduce)').ma
 All screens share the chrome in §5.1, render into `<main id="view">`, and obey the restraint rules in §3.1. Every screen has a per-phase content matrix; phases come from `phaseOf()` (§7.4). Views are strings from `render()` plus a `mount()` for wiring (§2.2).
 
 ### 5.1 Chrome (shared)
+> **Navigation, 2026-09-30.** Five bottom tabs: **Court · Ledger · Finds · Excuses · More**. The More sheet holds only **The Decree, Settle It and Theme**. Check-in is now a section of the Court and the Summons is the last section of the Decree; `#/check-in` and `#/invite` still work and are the Court and the Decree scrolled to `#checkin` / `#summons` (`route.focus`, `scroll-margin-top: 76px`). Tab indices: Court 0, Ledger 1, Finds 2, Excuses 3, More 4 (Decree, Settle It and the Summons sit under More, so the active leaf and the More label follow them). Desktop nav: Court · Ledger · Finds · Excuses · Decree · Settle It.
 
 - **Header.** `.wrap` row, height 64px. Left: wordmark "Stridetober" — "Stride" Fraunces 700 upright, "tober" Fraunces 700 italic in `--accent-ink`; the dot of the "i" is the leaf tittle (M22). Right: the phase chip — a 32px pill in `--surface-2` with Inter 600 12px uppercase text in `--ink-2` (`MUSTER`, `WEEK 1`…`WEEK 4`, `COUNTING`, `EVE 🎃`, `CROWNED`). On Hallowed Eve the chip goes `--eve`. Auto-hides on scroll (M16); the header is `position:sticky; top:0; z-index:40` with a `backdrop-filter: blur(10px)` over `color-mix(in srgb, var(--bg) 82%, transparent)`.
 - **Nav.** `<1024px`: bottom tab bar, fixed, `z-index:50`, `--surface` with a 1px `--line` top border, `padding-bottom: env(safe-area-inset-bottom)`. Four tabs: **Court** (gavel icon), **Ledger** (tally icon), **Check-in** (check icon), **More** (chevron — opens the sheet). 56px icon+label columns, active tab in `--accent-ink`, tab leaf indicator (M15). `≥1024`: the tab bar is replaced by inline links in the header (Court · Ledger · Check-in · Decree · Excuses · Finds · Summons — only links to built views; Finds appears in R3), and "More" disappears.
@@ -564,7 +567,8 @@ One walker, examined.
 - One margin note from `MARGIN_NOTES` on the hero (max one — §3.1).
 - **Unknown `:id`:** card `No such walker has sworn in.` + `See the Roll →`.
 
-### 5.5 Check-in — `#/check-in`
+### 5.5 Check-in — a section of the Court, `#/check-in`
+> Since 2026-09-30 this is `views/checkin.js` `section(ctx)`, embedded in the Court (not a page of its own). Before kickoff it omits the date timeline — the trail above it has the dates. It is hidden in the crowned phase.
 
 The flyer's Saturday-night ritual, as a page.
 
@@ -620,7 +624,8 @@ Field journal of things spotted mid-walk. Heading `Fall Finds`, kicker `THE FIEL
 - Entries: masonry-ish grid (CSS columns, 1→2→3 across breakpoints). Card: photo (`loading="lazy"`, `w`/`h` attrs from the entry to prevent CLS), catalogue number `№ n` in `--ink-3`, caption in Caveat, finder chips (crest + short name → dossier), date. Numbers assigned by date, oldest = №01; display newest first (Big Steppas convention).
 - Missing/queued photo (`img:null`): a `developing the film` placeholder card with `--surface-2` fill and `tally` icon.
 
-### 5.10 The Summons — `#/invite`
+### 5.10 The Summons — the last section of the Decree, `#/invite`
+> Since 2026-09-30 this is `views/summons.js` `section(ctx)`, embedded at the end of the Decree; its old "Read the Decree" button is gone (you are already on it).
 
 Recruitment card, built to be shared. Heading `The Summons`, kicker `YOU ARE HEREBY INVITED`.
 
@@ -990,6 +995,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 > - `fx.share()` replaces two copies of the share-or-copy code, and `rake()` reads layout once per frame.
 > - The new fall motion is M26–M33 in §4.4.
 > **The Sunday text and the end of the buy-in (2026-09-30):** the site no longer mentions the $20 buy-in, Venmo-in or "tribute" anywhere — the Court's Tribute card and pay buttons, the Decree's Tribute article (the rest renumber I–V), the Summons' buy-in line, the PAID seals and "tribute pending" captions on the Roll (it now lists everyone: `on the Ledger` / `at the trailhead`), the og card and meta descriptions. `challenge.buyIn` stays only to size the prize pot; `walker.paid:false` still keeps someone off the Ledger and is the one trace left. The prize (top three split the pot 50/30/20, paid out by Venmo on Nov 1) is unchanged. **Check-in gains §5.5.1, the Sunday text.**
+> **Anticipation mode (2026-09-30):** the muster Court now sells the start. Hero margin note rotates by days left (`MUSTER_DAYS`); **What's on the line** (the podium, from `PODIUM` and `purse()`); **The Roll** of all eight; **The trail to Halloween** (six dated stops with teasers, `TRAIL`); a **calendar card** (one `.ics` — kickoff, four Sunday reminders, the final bell — `lib/calendar.js`, tested); then Check-in. The header chip counts down (`6d to go` → `9h to go` → `12m to go`). Evan Ramos left; eight Striders have eight colours (Jess took denim). The tree waits (M38).
 > **The Judge, not Dammy (2026-09-30):** the app never says "Dammy" any more — it is "the Judge" everywhere, including the flyer's verbatim line (now `DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!`), the manifest and meta descriptions, and `challenge.judge.name`. Agent-facing docs and test messages still say "ask Dammy": that is the human running the project, not the site's voice.
 > **The wildlife and the roster (2026-09-26):** M36/M37 in §4.4 and §4.4.2. The silhouette sprites were dropped for full-bodied emoji with shadows, gaits and a startle; every animal on the site can now be touched. `walkers.js` holds the first six of eight Striders. **The "no Big Steppas names" guard now bans the old challenge's branding, not its people** — some Stridetober walkers walked that one too, so `tests/data.test.js` checks `walkers.js`, `copy.js` and `weeks.js` for `big steppas|steppas|house of` instead of a name list.
 > **The tree (2026-09-22):** M34/M35 in §4.4, built in `src/lib/tree.js` (§4.4.1). The Court hero's sky moved to `.tree::before` so the tree stands in front of it, the footer's pile became a mound at the tree's base, and `.site-foot` lost its border — the tree draws the ground line now.

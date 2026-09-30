@@ -103,14 +103,14 @@ export const TOASTS = {
 
 export const SUNDAY = { // the Sunday text on the Check-in page
   need:   "All seven days, please. The Judge reads the bars, not the headline.",
-  copied: "Copied. Paste it to Dammy, then attach the screenshot.",
+  copied: "Copied. Paste it to the Judge, then attach the screenshot.",
   hint:   "Opens Messages on your phone. On a computer, copy the message instead.",
 };
 
 export const DECOY_TOASTS = [
-  "NOPE. The group chat is for memes. Screenshots go to Dammy.",
-  "The Judge has seen this mistake before. DIRECTLY TO DAMMY.",
-  "Absolutely not. Dammy. Directly. Him.",
+  "NOPE. The group chat is for memes. Screenshots go to the Judge.",
+  "The Judge has seen this mistake before. DIRECTLY TO THE JUDGE.",
+  "Absolutely not. The Judge. Directly. Him.",
 ];
 
 export const BOTTLE = [

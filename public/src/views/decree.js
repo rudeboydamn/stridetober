@@ -30,14 +30,14 @@ export function render(ctx) {
     <p class="ruling">The Judge clarifies: that is midnight at the end of Halloween. The last steps that count are Saturday, October 31st — week 4's screenshots are due the next day.</p>`;
 
   const evidence = `
-    <p>Send your screenshot DIRECTLY TO DAMMY — NOT THE GROUP CHAT!</p>
+    <p>Send your screenshot DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!</p>
     <p><a class="textlink" href="#/check-in">How to check in →</a></p>
     <span class="stamp stamp-lg">No screenshot = No steps!</span>`;
 
   const reckoning = `
     <p>The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… <strong class="champion-line">THE OCTOBER STEP CHAMPION!</strong></p>
     <p>The Judge counts the last screenshots and names the champion on Sunday, November 1st.</p>
-    <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. Dammy will send the funds through Venmo on November 1st.</p>`;
+    <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. The Judge will send the funds through Venmo on November 1st.</p>`;
 
   const fine = `
     <p class="decree-quote">No participation trophies. No sympathy points. And there will definitely be NO rounding up because you were "basically" at 10,000.</p>

@@ -1,7 +1,7 @@
 {
   "name": "Stridetober",
   "short_name": "Stridetober",
-  "description": "The October Steps Challenge — officiated, fairly impartially, by Dammy Henry.",
+  "description": "The October Steps Challenge — officiated, fairly impartially, by the Judge.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

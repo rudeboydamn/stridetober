@@ -7,7 +7,7 @@ export const CHALLENGE = {
   judgePhone: "",                   // e.g. "+15551234567" — the Sunday text opens addressed to it; blank = pick the contact
   kickoff: "2026-10-04T00:00",      // local wall-clock — parse via parseLocal()
   finalBell: "2026-11-01T00:00",    // "the clock strikes 12:00 AM"
-  judge: { name: "Dammy Henry", title: "The Fairly Impartial Judge" },
+  judge: { name: "The Judge", title: "The Fairly Impartial Judge" },
   champion: null,                   // set to a walker id when week 4 posts
   split: [0.5, 0.3, 0.2],           // the pot pays three places: 1st / 2nd / 3rd
   payouts: { 1: false, 2: false, 3: false }, // flip each when its Venmo lands

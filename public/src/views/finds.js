@@ -29,7 +29,7 @@ export function render(ctx) {
     <div class="card empty-state">
       ${seal("", { size: "seal-96", cls: "hollow" })}
       <p class="h3">The trail has yielded nothing yet. Suspicious.</p>
-      <p class="sub">Find something worth photographing on a walk, send it to Dammy, and it joins the journal.</p>
+      <p class="sub">Find something worth photographing on a walk, send it to the Judge, and it joins the journal.</p>
     </div>
   </section>` : `
   <section class="wrap section" data-reveal>

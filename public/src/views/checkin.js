@@ -47,9 +47,10 @@ function sunday(ctx) {
   return `
   <section class="wrap section" data-reveal>
     <div class="card card-raised sunday">
-      <span class="kicker">Every Sunday night</span>
+      <span class="kicker">Optional · every Sunday night</span>
       <h2 class="h2">Text the Judge your week</h2>
-      <p class="sub">Type the seven daily totals from your tracker. The Judge gets them in the shape he likes, ready to send. The screenshot is the evidence; the text is the convenience — send both.</p>
+      <p class="sub"><b>You don't have to type any of this.</b> Send the screenshot and the Judge will figure it out. But if you'd like to save him the squinting, type your seven daily totals and he gets them ready-made. If a text and a screenshot ever disagree, the screenshot wins.</p>
+      <p class="privacy">${icon("lock")}<span>Private. What you type stays on this phone until you tap send, and then it goes to the Judge alone — not the group chat, not this site, not anyone else.</span></p>
       <div class="sunday-pick">
         <label class="field"><span>Who's walking</span><select id="sunWho"><option value="">Pick your name</option>${who}</select></label>
         <label class="field"><span>Which week</span><select id="sunWeek">${weeks}</select></label>
@@ -61,7 +62,7 @@ function sunday(ctx) {
       </dl>
       <pre class="sunday-preview" id="sunPreview" aria-live="polite"></pre>
       <div class="btn-row sunday-actions">
-        <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Text it to Dammy</a>
+        <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Text it to the Judge</a>
         <button class="btn btn-secondary" type="button" id="sunCopy">Copy message</button>
       </div>
       <p class="caption" id="sunHint">${esc(ctx.copy.SUNDAY.need)}</p>
@@ -80,7 +81,7 @@ export function render(ctx) {
     <span class="ribbon">Due every Sunday</span>
     <h1 class="page-title">Check-in</h1>
     <blockquote class="flyer-quote">
-      <p>“Every Saturday night, before you go to sleep, send a picture/screenshot of your step count <strong>DIRECTLY TO DAMMY — NOT THE GROUP CHAT!</strong>”</p>
+      <p>“Every Saturday night, before you go to sleep, send a picture/screenshot of your step count <strong>DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!</strong>”</p>
       <footer class="caption">— the flyer</footer>
     </blockquote>
     <p class="ruling">The Judge clarifies: Saturday night is when the week <em>ends</em>. Screenshots are due Sunday, once all seven days are in the books.</p>
@@ -91,15 +92,13 @@ export function render(ctx) {
     <div class="card"><ol class="timeline horizontal" style="--nodes:5">${tl}</ol></div>
   </section>
 
-  ${sunday(ctx)}
-
   <section class="wrap section" data-reveal>
     <div class="card card-raised submit">
       <h2 class="h2">How to submit</h2>
       <ol class="submit-steps">
         <li>Open your step tracker.</li>
         <li>Screenshot the week — Sunday → Saturday, all seven days showing.</li>
-        <li>Type the seven daily totals into <b>Text the Judge your week</b> above and tap send — then attach the screenshot to that same text.</li>
+        <li>Send it straight to the Judge. That's all — he reads it and does the arithmetic. No numbers to type.</li>
       </ol>
       <h3 class="h3">What the Judge needs to see</h3>
       <ul class="needs">
@@ -113,7 +112,9 @@ export function render(ctx) {
       </div>
       <span class="stamp stamp-lg submit-stamp">No screenshot = No steps!</span>
     </div>
-  </section>`;
+  </section>
+
+  ${sunday(ctx)}`;
 }
 
 const fold = line => line.length <= 72 ? line : line.match(/.{1,72}/g).join("\r\n ");
@@ -130,9 +131,9 @@ function ics(challenge, now) {
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${compact(start)}`,
       `DTEND;VALUE=DATE:${compact(end)}`,
-      `SUMMARY:Stridetober — text Dammy your week`,
-      `DESCRIPTION:Week ${w.n}: ${fmtRange(w.start, w.end)}. Open https://stridetober.vercel.app/#/check-in\\, type your seven days\\, tap send\\, attach the screenshot. DIRECTLY TO DAMMY — NOT THE GROUP CHAT!`,
-      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Sunday night: text the Judge your week", "TRIGGER:PT20H", "END:VALARM",   // 8 PM Sunday, local
+      `SUMMARY:Stridetober — send the Judge your week`,
+      `DESCRIPTION:Week ${w.n}: ${fmtRange(w.start, w.end)}. Screenshot all seven days and send it to the Judge. Details: https://stridetober.vercel.app/#/check-in DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!`,
+      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Sunday night: send the Judge your week", "TRIGGER:PT20H", "END:VALARM",   // 8 PM Sunday, local
       "END:VEVENT",
     ];
   });

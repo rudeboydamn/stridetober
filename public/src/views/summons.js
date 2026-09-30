@@ -18,7 +18,7 @@ export function render(ctx) {
       <p class="summons-tag">Walk it. Track it. Win it!</p>
       <ul class="summons-terms">
         <li><b>Four weeks</b> — Sunday to Saturday, every step counts</li>
-        <li><b>Weekly numbers</b> to Dammy, due each Sunday night</li>
+        <li><b>Weekly screenshot</b> to the Judge, due each Sunday</li>
         <li><b>Top three split the pot</b> — 50% / 30% / 20%</li>
       </ul>
       <p class="summons-count">${ctx.walkers.length ? `${ctx.walkers.length} on the Roll` : "The Roll is open"}</p>

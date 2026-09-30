@@ -49,7 +49,7 @@ function hero(ctx) {
 const CAPTIONS = {
   kickoff: (m, ctx) => `${longDay(ctx.challenge.kickoff)} · 12:00 AM, your time`,
   weekEnd: (m, ctx) => `Week ${m.week} is called ${longDay(ctx.challenge.weeks[m.week - 1].end)} at midnight`,
-  due:     m => `Week ${m.week} screenshots are due tonight, 11:59 PM — DIRECTLY TO DAMMY`,
+  due:     m => `Week ${m.week} screenshots are due tonight, 11:59 PM — DIRECTLY TO THE JUDGE`,
   bell:    () => "Midnight at the end of Halloween · 12:00 AM, November 1st",
 };
 
@@ -127,7 +127,7 @@ function kit() {
 function how() {
   const steps = [
     ["Walk", "Oct 4 – Oct 31. Every step counts."],
-    ["Report", "Screenshot your week. Send it DIRECTLY TO DAMMY — NOT THE GROUP CHAT!"],
+    ["Report", "Screenshot your week. Send it DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!"],
     ["Win", "Top three split the pot — 50/30/20. Crowned November 1."],
   ];
   return `
@@ -155,8 +155,8 @@ function job() {
   return `
   <section class="section" data-reveal>
     <div class="card job">
-      <span class="kicker">DAMMY'S JOB:</span>
-      <p class="job-lede">Our official Count Holder, Dammy Henry, will keep track of everyone's numbers and let us know:</p>
+      <span class="kicker">THE JUDGE'S JOB:</span>
+      <p class="job-lede">Our official Count Holder, the Judge, will keep track of everyone's numbers and let us know:</p>
       <ul class="job-list">${items.map(([e, t]) => `<li><span aria-hidden="true">${e}</span>${t}</li>`).join("")}</ul>
     </div>
   </section>`;
@@ -204,7 +204,7 @@ function coronation(ctx) {
     <ol class="podium">${rows}</ol>
     <p class="sub payout-line">${allSent
       ? "The pot has been sent. The matter is settled."
-      : `Dammy sends the $${n(pot)} pot by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
+      : `The Judge sends the $${n(pot)} pot by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
   </section>`;
 }
 

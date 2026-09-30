@@ -174,6 +174,10 @@ html[data-daypart="afternoon"] .sky-orb { animation: rise 1.8s var(--ease-settle
 /* steps(), not a smooth fade: four repaints per leaf instead of sixty a second. */
 .tl { color: var(--from); animation: turn var(--t) steps(4, jump-none) var(--d) both; }
 .tl.holdout { animation: none; }
+/* Before kickoff: green, and the crown sways a little, like it's holding its breath (M38). */
+@keyframes sway { 0%, 100% { transform: rotate(-.5deg); } 50% { transform: rotate(.6deg); } }
+.tree.waiting .tl { animation: none; color: var(--from); }
+.tree.waiting .tree-crown { animation: sway 5.5s ease-in-out infinite; }
 .tree-crown.shiver { animation: shiver 1.6s var(--ease-swing); }
 .tree-drop.is-landed .leaf-sway, .tree-drop.is-landed .leaf-flip { animation: none; }
 .tree-drop.is-landed { opacity: 0; transition: opacity 1.2s ease 12s; }

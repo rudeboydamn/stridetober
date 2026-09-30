@@ -126,10 +126,12 @@ const pose = p => `rotate(${p.r}deg) scaleX(${p.f})`;
 const pick = list => list[Math.floor(Math.random() * list.length)];
 const rr = (a, b) => a + Math.random() * (b - a);
 
-export function tree(layer, pile, head, lines) {
-  if (!layer || !pile) return { gust() {} };
+// waiting: before kickoff the crown stays green and sways, nothing falls. begin() starts the turn.
+export function tree(layer, pile, head, lines, { waiting: start = false } = {}) {
+  if (!layer || !pile) return { gust() {}, begin() {} };
   const html = document.documentElement;
-  const born = performance.now(), since = () => (performance.now() - born) / 1000;
+  let born = performance.now(), waiting = start;
+  const since = () => (performance.now() - born) / 1000;
   const life = Object.assign(document.createElement("div"), { className: "tree-life" });
   layer.append(life);
   const critters = new Map();
@@ -152,6 +154,7 @@ export function tree(layer, pile, head, lines) {
     const mr = `${Math.round(m.W - m.gutter - g.pileEdge)}px`;   // heap the pile against the trunk
     if (pile.style.marginRight !== mr) { pile.style.marginRight = mr; m = measure(); g = plan(m); }
     [lastW, lastH] = [m.W, m.H];
+    layer.classList.toggle("waiting", waiting);
     const f1 = v => v.toFixed(1), age = since();
     const ellipses = (list, cls) => list.map(([x, y, a, b]) => `<ellipse class="${cls}" cx="${f1(x)}" cy="${f1(y)}" rx="${f1(a)}" ry="${f1(b)}"/>`).join("");
     layer.querySelector(".tree-svg")?.remove();
@@ -256,7 +259,7 @@ export function tree(layer, pile, head, lines) {
   }
 
   // ── M34 falling: a turned leaf lets go and drifts the whole way down ──
-  const ready = () => g.leaves.flatMap((l, i) => (!fallen.has(i) && !l.holdout && l.d + l.t < since() ? [i] : []));
+  const ready = () => waiting ? [] : g.leaves.flatMap((l, i) => (!fallen.has(i) && !l.holdout && l.d + l.t < since() ? [i] : []));
   function drop(i, push = 0) {
     const l = g.leaves[i];
     fallen.add(i);
@@ -322,6 +325,14 @@ export function tree(layer, pile, head, lines) {
       crown.classList.add("shiver");
       ready().sort(() => Math.random() - .5).slice(0, 3 + Math.floor(Math.random() * 3))
         .forEach((i, k) => setTimeout(() => drop(i, rr(90, 180)), k * 160));
+    },
+    // The gun goes: the leaves start to turn from this moment, every one of them.
+    begin() {
+      if (!waiting) return;
+      waiting = false;
+      born = performance.now();
+      fallen = new Set();
+      draw();
     },
   };
 }

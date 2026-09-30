@@ -97,6 +97,52 @@ html[data-eve] .sky-moon { display: none; }
 .roll-card .caption { grid-area: status; }
 .roll-empty { display: grid; justify-items: center; gap: var(--s-3); padding-block: var(--s-7); text-align: center; }
 
+/* ── anticipation: the stakes, the trail, the calendar (muster) ── */
+.stakes { display: grid; gap: var(--s-3); list-style: none; }
+.stake { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--s-4); padding: var(--s-4) var(--s-5); }
+.stake-1 { border-color: var(--gold); box-shadow: 0 0 0 1.5px var(--gold), var(--shadow-1); }
+.stake-medal { font-size: 34px; line-height: 1; }
+.stake-title { font: 600 var(--step-0)/1.25 var(--font-display); }
+.stake-share { color: var(--ink-2); font-size: 14px; }
+.stake-amount { font: 600 var(--step-2)/1 var(--font-display); }
+.stake-fine { margin-top: var(--s-3); }
+@media (min-width: 768px) {
+  .stakes { grid-template-columns: 1.15fr 1fr 1fr; align-items: stretch; }
+  .stake { grid-template-columns: 1fr; justify-items: start; gap: var(--s-2); padding: var(--s-5); }
+  .stake > div { min-width: 0; }
+  .stake-amount { font-size: var(--step-3); }
+}
+
+.trail { position: relative; display: grid; gap: var(--s-5); list-style: none; padding-left: 4px; }
+.trail::before { content: ""; position: absolute; left: 25px; top: 18px; bottom: 18px; border-left: 2px dashed var(--line-strong); }
+.trail-stop { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: var(--s-4); align-items: start; min-width: 0; }
+.trail-dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--line-strong);
+  color: var(--accent-ink);
+}
+.trail-mark { width: 24px; height: 24px; }
+.trail-emoji { font-size: 22px; line-height: 1; }
+.trail-stop.is-kick .trail-dot { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.trail-stop.is-finale .trail-dot { border-color: var(--gold); color: var(--gold-ink); }
+.trail-stop.is-eve .trail-dot { border-color: var(--eve); color: var(--eve); }
+.trail-body { display: grid; gap: 2px; min-width: 0; padding-top: 2px; }
+.trail-date { color: var(--accent-ink); font: 700 12px/1.2 var(--font-ui); letter-spacing: .12em; text-transform: uppercase; }
+.trail-body p:last-child { color: var(--ink-2); }
+@media (min-width: 1024px) {
+  .trail { grid-template-columns: repeat(3, 1fr); gap: var(--s-6) var(--s-5); padding-left: 0; }
+  .trail::before { display: none; }
+  .trail-stop { grid-template-columns: 1fr; gap: var(--s-2); }
+}
+
+.calendar-card { display: grid; gap: var(--s-3); justify-items: start; max-width: 640px; }
+
 .duo { display: grid; gap: var(--s-7); }
 .duo > .section { margin-top: 0; width: auto; }
 @media (min-width: 1024px) {

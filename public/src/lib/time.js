@@ -51,6 +51,9 @@ export function nextMilestone({ now, challenge, weeks }) {
   return { key: "weekEnd", week: cur.n, target: endOfDay(cur.end) };
 }
 
+// Whole days to go, rounded up: anything under 24h left is "1", so the last day reads "Tomorrow".
+export const daysTo = (now, target) => Math.max(0, Math.ceil((target - now) / DAY));
+
 export function countdownParts(now, target) {
   const totalMs = Math.max(0, target - now);
   const pad = v => String(v).padStart(2, "0");

@@ -3,11 +3,47 @@
 // without touching views. Voice: docs/PLAN.md §6.1.
 
 export const PHASE_LINES = {
-  muster:   { kick:"OCTOBER STEPS CHALLENGE", head:"Walk it. Track it. Win it!",
+  muster:   { kick:"KICKOFF · SUNDAY, OCTOBER 4", head:"Walk it. Track it. Win it!",
               sub:"Four weeks. Every step counted. One champion. The leaves are watching." },
   walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. The Judge counts them." },
   counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The Judge is counting. The ledger is frozen-ish." },
   crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot splits three ways by Venmo." },
+};
+
+// Anticipation (muster only). Short, because it is a hand-lettered margin note on the hero.
+export const MUSTER_DAYS = [ // first row whose `max` covers the days left wins
+  { max: 1,   line: "Tomorrow. Lay out the sneakers." },
+  { max: 2,   line: "Two sleeps. Hydrate like it's a sport." },
+  { max: 3,   line: "Three days. Stretch now, thank us later." },
+  { max: 5,   line: "Almost. The Judge has sharpened his pencil." },
+  { max: 7,   line: "Under a week. Break in those shoes." },
+  { max: 14,  line: "Two weeks. Plan your route. Tell the couch." },
+  { max: 999, line: "The leaves are still green. Not for long." },
+];
+
+export const STAKES = {
+  head: "What's on the line",
+  sub:  "{n} walkers. Four weeks. Three places on the podium. Everyone else gets a leaf pile.",
+  fine: "Top three split the pot 50 / 30 / 20. Paid by the Judge on November 1st.",
+};
+
+export const TRAIL = { // teasers for the trail to Halloween, in order: kickoff, weeks 1–3 called, the Eve, the crowning
+  head: "The trail to Halloween",
+  sub:  "Six dates. One of them is the day someone gets a wreath.",
+  kickoff:  { tag: "Kickoff", line: "Midnight. The couch becomes the opposition." },
+  week:     [
+    "Everyone's first numbers land. The Judge studies the Ledger like a racing form.",
+    "The Ledger gets honest. So does the couch.",
+    "The slump. Some will surge. Some will 'rest'. The Judge will be there either way.",
+  ],
+  eve:      { tag: "Hallowed Eve · the final bell", line: "The last steps that count. Costumes permitted. Excuses not." },
+  crowning: { tag: "The Crowning", line: "The Judge names the champion. The wreath drops. The pot is sent." },
+};
+
+export const CALENDAR_CARD = {
+  head: "Don't sleep through it",
+  sub:  "One tap puts kickoff, every Sunday-night reminder and the final bell in your calendar — each with an alarm.",
+  btn:  "Add it all to my calendar",
 };
 
 export const COURT_WALKING = [ // hero line, rotates by week number

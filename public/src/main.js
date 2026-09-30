@@ -4,7 +4,7 @@ import { WALKERS } from "../data/walkers.js";
 import { WEEKS, ANNOUNCEMENT } from "../data/weeks.js";
 import { FALL_FINDS } from "../data/finds.js";
 import * as COPY from "../data/copy.js";
-import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, announcementLive } from "./lib/time.js";
+import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, announcementLive, countdownParts } from "./lib/time.js";
 import { standings, honours, paidWalkers } from "./lib/stats.js";
 import { esc, rich } from "./lib/format.js";
 import { leaves, gusts, rake, reduced, reveal, puff, burst, toast, wildlife } from "./lib/fx.js";
@@ -104,7 +104,13 @@ const currentRoute = () => {
   return { route: OFF_TRAIL, params: {} };
 };
 
-let ctx = null, sig = "", route = null, params = {}, lastEve = null;
+let ctx = null, sig = "", route = null, params = {}, lastEve = null, grove = null;
+
+// The header chip counts down to the gun while the Muster lasts.
+const kickoffChip = now => {
+  const p = countdownParts(now, parseLocal(CHALLENGE.kickoff));
+  return +p.d ? `${+p.d}d to go` : +p.h ? `${+p.h}h to go` : `${+p.m}m to go`;
+};
 
 function applyChrome(now) {
   root.dataset.daypart = daypart(now);
@@ -115,7 +121,7 @@ function applyChrome(now) {
   const chip = document.getElementById("phaseChip");
   chip.textContent = eve && ctx.phase === "walking" ? "Eve 🎃"
     : ctx.phase === "walking" ? `Week ${ctx.week.n}`
-    : ctx.phase === "muster" ? "Muster"
+    : ctx.phase === "muster" ? kickoffChip(now)
     : ctx.phase === "counting" ? "Counting" : "Crowned";
   document.getElementById("demoFlag").hidden = !DEMO;
 
@@ -188,6 +194,7 @@ function render({ transition = false, focus = false } = {}) {
   }
   if (focus) view.focus({ preventScroll: true });
   if (before) celebrate(before, ctx.phase);
+  if (before === "muster" && ctx.phase !== "muster") grove?.begin();   // the gun: the tree starts to turn
 }
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -198,6 +205,7 @@ function tick() {
   const now = clock();
   if (signature(now) !== sig) { render(); return; }
   root.dataset.daypart = daypart(now);
+  if (ctx.phase === "muster") document.getElementById("phaseChip").textContent = kickoffChip(now);
   route.mod.tick?.(view, { ...ctx, now });
 }
 setInterval(tick, 1000);
@@ -315,6 +323,6 @@ document.addEventListener("pointerdown", e => {
 rake(document.getElementById("leafPile"), document.getElementById("rakeLine"), COPY.RAKE_LINES, COPY.JUMP_LINES);
 render();
 // After the first render, so the pile (the tree's ground line) is where it will stay.
-const grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"), COPY.CRITTER_LINES);
+grove = tree(document.getElementById("tree"), document.getElementById("leafPile"), document.getElementById("siteHead"), COPY.CRITTER_LINES, { waiting: ctx.phase === "muster" });
 gusts(document.querySelector(".leaves"), grove.gust);
 wildlife(document.getElementById("wild"), COPY.CRITTER_LINES);

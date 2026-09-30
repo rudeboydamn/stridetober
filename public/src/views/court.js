@@ -1,8 +1,9 @@
 // The Court — home, per phase. Spec: docs/PLAN.md §5.2.
-import { nextMilestone, countdownParts, parseLocal } from "../lib/time.js";
+import { nextMilestone, countdownParts, parseLocal, daysTo } from "../lib/time.js";
 import { n, esc, rich, fill, pick } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
-import { SPRITE, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
+import { SPRITE, icon, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
+import { downloadCalendar } from "../lib/calendar.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
 
@@ -20,7 +21,7 @@ function hero(ctx) {
         <h1 class="hero-title">${rich(head, { n: wk })}</h1>
         <p class="hero-sub">${rich(L.sub)}</p>
         ${muster ? `<p class="hero-lede">It's time to find out who has the most active feet… and who has been training professionally for the Couch Olympics.</p>
-        ${note("stretch now, thank us later", "hero-note flip")}` : ""}
+        ${note(pick(ctx.copy.MUSTER_DAYS.filter(r => r.max >= daysTo(ctx.now, parseLocal(ctx.challenge.kickoff))), 0).line, "hero-note flip")}` : ""}
         <div class="btn-row hero-cta">
           ${muster
             ? `<a class="btn btn-primary" href="#/rules">Read the Decree</a>
@@ -90,7 +91,7 @@ function roll(ctx) {
         <li class="card roll-card thuds" style="--i:${i}">
           ${crest(w)}
           <span class="roll-name">${esc(w.name)}</span>
-          <span class="caption">${w.paid ? "on the Ledger" : "at the trailhead"}</span>
+          <span class="caption">${w.paid ? "locked in" : "at the trailhead"}</span>
         </li>`).join("")}</ul>`
     : `<div class="card roll-empty">
         ${seal("", { size: "seal-96", cls: "hollow" })}
@@ -104,6 +105,68 @@ function roll(ctx) {
       <p class="sub">${list.length ? `${list.length} walkers. One champion. The Judge is counting.` : "Walkers appear here as they sign up."}</p>
     </header>
     ${body}
+  </section>`;
+}
+
+// What the walkers are walking toward: the podium and what sits on it.
+function stakes(ctx) {
+  const { shares } = purse(ctx.walkers, ctx.challenge);
+  const S = ctx.copy.STAKES;
+  return `
+  <section class="wrap section" data-reveal>
+    <header class="section-head">
+      <h2 class="h2">${esc(S.head)}</h2>
+      <p class="sub">${esc(fill(S.sub, { n: ctx.walkers.length }))}</p>
+    </header>
+    <ol class="stakes">${ctx.copy.PODIUM.map((p, i) => `
+      <li class="card stake stake-${p.place}" style="--i:${i}">
+        <span class="stake-medal" aria-hidden="true">${p.medal}</span>
+        <div>
+          <p class="stake-title">${esc(p.title)}</p>
+          <p class="stake-share">${esc(p.share)}</p>
+        </div>
+        <b class="num stake-amount">$${n(shares[i]?.amount ?? 0)}</b>
+      </li>`).join("")}</ol>
+    <p class="caption stake-fine">${esc(S.fine)}</p>
+  </section>`;
+}
+
+// The six dates that matter, each with a teaser.
+function trail(ctx) {
+  const T = ctx.copy.TRAIL, c = ctx.challenge;
+  const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const last = c.weeks.length - 1;
+  const stops = [
+    { date: c.kickoff, tag: T.kickoff.tag, line: T.kickoff.line, mark: icon("sneaker", "trail-mark", "0 0 64 32"), cls: "is-kick" },
+    ...c.weeks.slice(0, last).map(w => ({ date: w.end, tag: `Week ${w.n} is called`, line: T.week[w.n - 1], mark: icon("leaf-maple", "trail-mark") })),
+    { date: c.weeks[last].end, tag: T.eve.tag, line: T.eve.line, mark: icon("jack", "trail-mark"), cls: "is-eve" },
+    { date: c.weeks[last].due, tag: T.crowning.tag, line: T.crowning.line, mark: `<span class="trail-emoji">🏆</span>`, cls: "is-finale" },
+  ];
+  return `
+  <section class="wrap section" data-reveal>
+    <header class="section-head"><h2 class="h2">${esc(T.head)}</h2><p class="sub">${esc(T.sub)}</p></header>
+    <ol class="trail">${stops.map((x, i) => `
+      <li class="trail-stop ${x.cls || ""}" style="--i:${i}">
+        <span class="trail-dot" aria-hidden="true">${x.mark}</span>
+        <div class="trail-body">
+          <p class="trail-date">${esc(day(x.date))}</p>
+          <h3 class="h3">${esc(x.tag)}</h3>
+          <p>${esc(x.line)}</p>
+        </div>
+      </li>`).join("")}</ol>
+  </section>`;
+}
+
+function calendarCard(ctx) {
+  const K = ctx.copy.CALENDAR_CARD;
+  return `
+  <section class="wrap section" data-reveal>
+    <div class="card card-raised calendar-card">
+      <span class="kicker">Mark the day</span>
+      <h2 class="h2">${esc(K.head)}</h2>
+      <p class="sub">${esc(K.sub)}</p>
+      <div class="btn-row"><button class="btn btn-primary" type="button" id="calBtn">${icon("calendar")}${esc(K.btn)}</button></div>
+    </div>
   </section>`;
 }
 
@@ -281,7 +344,7 @@ function togetherTile(ctx) {
 // ── view contract ─────────────────────────────────────────
 export function render(ctx) {
   if (ctx.phase === "muster") {
-    return hero(ctx) + countdownCard(ctx) + roll(ctx)
+    return hero(ctx) + countdownCard(ctx) + stakes(ctx) + roll(ctx) + trail(ctx) + calendarCard(ctx)
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
@@ -301,6 +364,7 @@ export function mount(root, ctx) {
     try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }
     setTimeout(() => burst({}), reduced() ? 0 : 300);
   }
+  root.querySelector("#calBtn")?.addEventListener("click", () => downloadCalendar(ctx.challenge));
   const bottle = root.querySelector(".bottle");
   const slot = root.querySelector(".bubble-slot");
   const lines = ctx.copy.BOTTLE;

@@ -3,6 +3,7 @@
 import { parseLocal, endOfDay, weekStatus } from "../lib/time.js";
 import { esc, fmtRange, pick, n } from "../lib/format.js";
 import { parseSteps, weekDates, weekReport, smsHref } from "../lib/report.js";
+import { downloadCalendar } from "../lib/calendar.js";
 import { icon, tallySvg, toast, reveal } from "../lib/fx.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -107,7 +108,7 @@ export function render(ctx) {
         <li>Sent after the week ends. A Saturday-evening screenshot is a partial week. The Judge has seen this trick before.</li>
       </ul>
       <div class="btn-row submit-actions">
-        <button class="btn btn-primary" type="button" id="icsBtn">${icon("calendar")}Remind me every Sunday night</button>
+        <button class="btn btn-primary" type="button" id="icsBtn">${icon("calendar")}Add the dates to my calendar</button>
         <button class="btn btn-secondary" type="button" id="decoy"><span>Post it in the group chat</span></button>
       </div>
       <span class="stamp stamp-lg submit-stamp">No screenshot = No steps!</span>
@@ -115,30 +116,6 @@ export function render(ctx) {
   </section>
 
   ${sunday(ctx)}`;
-}
-
-const fold = line => line.length <= 72 ? line : line.match(/.{1,72}/g).join("\r\n ");
-
-function ics(challenge, now) {
-  const stamp = now.toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
-  const compact = d => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
-  const events = challenge.weeks.flatMap(w => {
-    const start = parseLocal(w.due), end = parseLocal(w.due);
-    end.setDate(end.getDate() + 1);
-    return [
-      "BEGIN:VEVENT",
-      `UID:stridetober-week-${w.n}@stridetober.vercel.app`,
-      `DTSTAMP:${stamp}`,
-      `DTSTART;VALUE=DATE:${compact(start)}`,
-      `DTEND;VALUE=DATE:${compact(end)}`,
-      `SUMMARY:Stridetober — send the Judge your week`,
-      `DESCRIPTION:Week ${w.n}: ${fmtRange(w.start, w.end)}. Screenshot all seven days and send it to the Judge. Details: https://stridetober.vercel.app/#/check-in DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!`,
-      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Sunday night: send the Judge your week", "TRIGGER:PT20H", "END:VALARM",   // 8 PM Sunday, local
-      "END:VEVENT",
-    ];
-  });
-  return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Stridetober//Check-ins//EN", "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH", "X-WR-CALNAME:Stridetober", ...events, "END:VCALENDAR"].map(fold).join("\r\n") + "\r\n";
 }
 
 function mountSunday(root, ctx) {
@@ -189,14 +166,7 @@ function mountSunday(root, ctx) {
 export function mount(root, ctx) {
   reveal(root);
   mountSunday(root, ctx);
-  root.querySelector("#icsBtn").addEventListener("click", () => {
-    const url = URL.createObjectURL(new Blob([ics(ctx.challenge, new Date())], { type: "text/calendar;charset=utf-8" }));
-    const a = Object.assign(document.createElement("a"), { href: url, download: "stridetober-checkins.ics" });
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 4000);
-  });
+  root.querySelector("#icsBtn").addEventListener("click", () => downloadCalendar(ctx.challenge));
 
   const decoy = root.querySelector("#decoy"), label = decoy.querySelector("span");
   let k = 0, reset = 0;

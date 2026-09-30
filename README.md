@@ -1,6 +1,6 @@
 # 🍂 Stridetober
 
-The official ledger of the October Steps Challenge. $20 buy-in, four weeks,
+The official ledger of the October Steps Challenge. Four weeks, most steps wins,
 top three split the pot 50/30/20. Officiated by Dammy Henry, The *Fairly* Impartial Judge.
 
 > **Picking this up as an agent?** Read [AGENTS.md](AGENTS.md) first, then the
@@ -52,5 +52,7 @@ Sundays: screenshots land in `checkins/week-N/` (git-ignored) → apply the rule
 
 ## Exposure
 
-Public but unlisted: `noindex` everywhere, no phone numbers, no emails, Venmo
-is a plain link. Still — no secrets in this repo.
+Public but unlisted: `noindex` everywhere, no emails. `challenge.judgePhone` is
+blank on purpose — this repo and the site are public, so a number set there is
+published to the world; leave it blank and the Sunday text asks the phone who to
+address. Still — no secrets in this repo.

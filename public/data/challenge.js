@@ -3,9 +3,8 @@
 export const CHALLENGE = {
   title: "Stridetober",
   tagline: "Walk it. Track it. Win it!",
-  buyIn: 20,
-  venmoHandle: "Dammyhenry",
-  venmoUrl: "https://venmo.com/u/Dammyhenry",  // /u/ path returns 200; the bare path 302s
+  buyIn: 20,                        // only ever used to size the prize pot; the site never says so
+  judgePhone: "",                   // e.g. "+15551234567" — the Sunday text opens addressed to it; blank = pick the contact
   kickoff: "2026-10-04T00:00",      // local wall-clock — parse via parseLocal()
   finalBell: "2026-11-01T00:00",    // "the clock strikes 12:00 AM"
   judge: { name: "Dammy Henry", title: "The Fairly Impartial Judge" },

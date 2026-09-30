@@ -518,7 +518,7 @@ Home. Its content is a stack of cards in `.wrap` (single column mobile; two-colu
 
 **Muster phase** (now → Oct 4 00:00), top to bottom:
 
-1. **Hero.** Sky tint band (§3.2) behind a `.wrap` block, `padding-block: var(--s-8)`. Olive ribbon kicker `OCTOBER STEPS CHALLENGE` (§3.5 ribbon). H1 `--step-4`: `Walk it. Track it. Win it!` Sub in `--ink-2` `--step-1`: `Four weeks. Twenty dollars. One champion. The leaves are watching.` Right of it ≥1024 (stacked below on mobile): the pair-of-sneakers + water bottle vignette — `sneaker` symbol 120px next to the `bottle` sticker (tap → M20). Margin note on the hero: `stretch now, thank us later` with a drawn arrow to the CTA row (M11).
+1. **Hero.** Sky tint band (§3.2) behind a `.wrap` block, `padding-block: var(--s-8)`. Olive ribbon kicker `OCTOBER STEPS CHALLENGE` (§3.5 ribbon). H1 `--step-4`: `Walk it. Track it. Win it!` Sub in `--ink-2` `--step-1`: `Four weeks. Every step counted. One champion. The leaves are watching.` Right of it ≥1024 (stacked below on mobile): the pair-of-sneakers + water bottle vignette — `sneaker` symbol 120px next to the `bottle` sticker (tap → M20). Margin note on the hero: `stretch now, thank us later` with a drawn arrow to the CTA row (M11).
 2. **Countdown card.** Label `until the walking begins` (§6.4), target Oct 4 00:00 local, four-cell countdown (§3.5), falling digits (M6), urgency states (M7).
 3. **Buy-in card.** Left: wax seal 56px embossed `$20`. Right: heading `The Tribute`, body `Send your $20 to Dammy BEFORE October 4th!` (verbatim), primary button `Pay the Tribute 🪙` → `CHALLENGE.venmoUrl` (new tab, `rel="noopener"`), with the muster-only pulse ring (M14). Under the button, caption `--ink-3`: `Venmo @Dammyhenry`. Bottom-right of the card, ink stamp `NO $20 = NO COMPETING!` (§3.5 stamp, static here).
 4. **The Roll.** Heading `The Roll of the Sworn`, sub `Walkers appear here as their tribute lands.` Roster grid (`auto-fill, minmax(min(160px,100%),1fr)`): each card = 40px crest, name, and either a PAID wax seal (stamp M8, `thud` on the card) or a hollow `--line-strong` outline seal captioned `tribute pending`. Empty state: centered card, hollow seal, `The Roll awaits its first tribute.` + margin note `the early bird avoids the guilt`.
@@ -573,6 +573,15 @@ The flyer's Saturday-night ritual, as a page.
 - **How to submit** card: `1. Open your step tracker. 2. Screenshot the week (Sunday → Saturday, all seven days showing). 3. Send it straight to Dammy — iMessage, WhatsApp, wherever you already bother him.` Then `What the Judge needs to see`: the full week, per-day numbers visible, sent after the week ends (`A Saturday-evening screenshot is a partial week. The Judge has seen this trick before.`).
 - **The Decoy:** secondary button `Post it in the group chat` → M19 (`nope` shake, label becomes `NOPE.` for 1500ms, toast from `DECOY_TOASTS`). Primary button beside it: `Add the check-ins to my calendar` → generates and downloads `stridetober-checkins.ics` client-side (Blob, `VEVENT` per due date, all-day, `SUMMARY:Stridetober check-in — screenshot to Dammy`).
 - Ink stamp `No screenshot = No steps!` (verbatim) sits bottom-right of the submit card.
+
+### 5.5.1 The Sunday text (Check-in)
+- A card above "How to submit": **Text the Judge your week.** Pick your name (remembered in `stridetober:me`) and the week (default: the latest week that has ended, else week 1), then type seven daily totals, Sunday first. Commas are fine; blanks, decimals, negatives and anything over 200,000 are rejected (`report.parseSteps`).
+- The message (`report.weekReport`) copies a fitness app's week view — one line a day, then the total and the average:
+  `Stridetober · Week 2 · Oct 11 – 17` / the walker's name / `Sunday, Oct 11 — 17,078` … `Saturday, Oct 17 — 8,004` / `Total Steps: 76,416` / `Avg Daily: 10,917`. Days are Sunday-first (the Judge's rule), the average is the total over seven days, rounded to a whole number, and **a message is never built until all seven days are real** — the Judge never gets an invented day.
+- **Text it to Dammy** is an `sms:` link (`report.smsHref`, `?&body=` so it works on iOS and Android) that opens Messages with the text filled in; the walker taps send. Nothing is sent from the site and no server sees a number. `challenge.judgePhone` (`"+15551234567"`) addresses it; blank means the phone asks who. **Copy message** is the fallback for a computer.
+- The screenshot is still the evidence (§9.2). The text is the convenience, sent alongside it: attach the screenshot to the same message.
+- A half-typed week is saved per walker and week in `localStorage` (`stridetober:sunday:<id>:<n>`), so a trip to the Health app and back loses nothing.
+- **"Remind me every Sunday night"** (the `.ics`) now alarms at 8 PM on each due Sunday: `TRIGGER:PT20H` from the all-day event's midnight start. A browser cannot send a text on a schedule, so the reminder is a calendar alarm and the sending is a tap.
 
 ### 5.6 The Decree — `#/rules`
 
@@ -657,7 +666,7 @@ Every user-facing string lives in `public/data/copy.js` (or in the view markup w
 ```js
 PHASE_LINES = {
   muster:   { kick:"OCTOBER STEPS CHALLENGE", head:"Walk it. Track it. Win it!",
-              sub:"Four weeks. Twenty dollars. One champion. The leaves are watching." },
+              sub:"Four weeks. Every step counted. One champion. The leaves are watching." },
   walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. The Judge counts them." },
   counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The Judge is counting. The ledger is frozen-ish." },
   crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot is settled by Venmo." },
@@ -979,6 +988,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 > - Phone charts are drawn at the card's real width (`phoneWidth`) with 12px axis labels (`tests/charts.test.js`). Podium names are 44px tap targets.
 > - `fx.share()` replaces two copies of the share-or-copy code, and `rake()` reads layout once per frame.
 > - The new fall motion is M26–M33 in §4.4.
+> **The Sunday text and the end of the buy-in (2026-09-30):** the site no longer mentions the $20 buy-in, Venmo-in or "tribute" anywhere — the Court's Tribute card and pay buttons, the Decree's Tribute article (the rest renumber I–V), the Summons' buy-in line, the PAID seals and "tribute pending" captions on the Roll (it now lists everyone: `on the Ledger` / `at the trailhead`), the og card and meta descriptions. `challenge.buyIn` stays only to size the prize pot; `walker.paid:false` still keeps someone off the Ledger and is the one trace left. The prize (top three split the pot 50/30/20, paid out by Venmo on Nov 1) is unchanged. **Check-in gains §5.5.1, the Sunday text.**
 > **The wildlife and the roster (2026-09-26):** M36/M37 in §4.4 and §4.4.2. The silhouette sprites were dropped for full-bodied emoji with shadows, gaits and a startle; every animal on the site can now be touched. `walkers.js` holds the first six of eight Striders. **The "no Big Steppas names" guard now bans the old challenge's branding, not its people** — some Stridetober walkers walked that one too, so `tests/data.test.js` checks `walkers.js`, `copy.js` and `weeks.js` for `big steppas|steppas|house of` instead of a name list.
 > **The tree (2026-09-22):** M34/M35 in §4.4, built in `src/lib/tree.js` (§4.4.1). The Court hero's sky moved to `.tree::before` so the tree stands in front of it, the footer's pile became a mound at the tree's base, and `.site-foot` lost its border — the tree draws the ground line now.
 > Deviations from this plan, all deliberate:

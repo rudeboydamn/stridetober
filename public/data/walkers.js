@@ -1,8 +1,9 @@
-// The Roll fills in as tribute lands. Schema — docs/PLAN.md §7.1:
+// The Roll lists every walker. Schema — docs/PLAN.md §7.1:
 // { id:"sam", name:"Sam Reyes", short:"Sam", crest:"🦊", color:"spruce",
 //   paid:true, paidOn:"2026-09-30", birthday:null }   // "MM-DD", only if Oct 4–Oct 31
 // Crests: a unique fall emoji each (PLAN §3.6). Colors: palette keys in roster order (§3.2).
-// paid:false → "tribute pending" on the Roll and excluded from ALL standings/honours.
+// paid:false → not on the Ledger yet: excluded from ALL standings/honours. The site no longer
+// mentions buy-ins; this flag is the only trace of them, so flip it when the Judge says so.
 // Nine on the Roll. Surnames for the last three are pending.
 export const WALKERS = [
   // The Colon-Ramos family: Rod Sr. is the father of Rod Jr. and Alicia (Alicia Ramos).
@@ -13,9 +14,8 @@ export const WALKERS = [
   { id: "evan",   name: "Evan Ramos",    short: "Evan",   crest: "🦊", color: "denim",     paid: false, birthday: null },
   { id: "tedi",   name: "Tedi Revenew",  short: "Tedi",   crest: "🧣", color: "fig",       paid: true,  paidOn: "2026-09-26", birthday: null },
   // Christina and Cristina are two different people. Check the spelling before posting a week.
-  // Surname pending for Cristina. When it lands, make her short an
-  // initial too, so the Ledger never shows two walkers called Cri/hristina.
+  // Christina B. and Cristina C. carry initials so the Ledger never shows two walkers a letter apart.
   { id: "christina", name: "Christina Ballard", short: "Christina B.", crest: "🍄", color: "cinnamon",  paid: true,  paidOn: "2026-09-26", birthday: null },
-  { id: "cristina",  name: "Cristina",  short: "Cristina",  crest: "🌽", color: "rosehip",   paid: false, birthday: null },
+  { id: "cristina",  name: "Cristina Colon", short: "Cristina C.", crest: "🌽", color: "rosehip", paid: true, paidOn: "2026-09-30", birthday: null },
   { id: "jess",      name: "Jessica Jones", short: "Jess",   crest: "🍎", color: "cranberry", paid: true,  paidOn: "2026-09-29", birthday: null },  // 9th: colour reused, chart line dashed (PLAN §3.2)
 ];

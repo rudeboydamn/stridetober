@@ -46,7 +46,7 @@ export function render(ctx, { a, b } = {}) {
   }
 
   const A = ctx.walkers.find(w => w.id === a);
-  if (!A || !A.paid) return head() + emptyState("No such walker has sworn in.", "The Court only hears paid contenders.");
+  if (!A || !A.paid) return head() + emptyState("No such walker is on the Ledger.", "The Court only hears walkers the Judge has counted.");
 
   if (!b) {
     return head() + `<section class="wrap section" data-reveal>
@@ -56,7 +56,7 @@ export function render(ctx, { a, b } = {}) {
   }
 
   const B = ctx.walkers.find(w => w.id === b);
-  if (!B || !B.paid) return head() + emptyState("No such walker has sworn in.", "The Court only hears paid contenders.");
+  if (!B || !B.paid) return head() + emptyState("No such walker is on the Ledger.", "The Court only hears walkers the Judge has counted.");
 
   if (a === b) {
     return head() + emptyState("The Judge declines to adjudicate a walker against themselves.",

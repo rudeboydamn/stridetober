@@ -83,28 +83,16 @@ html[data-eve] .sky-moon { display: none; }
 
 .countdown-card .kicker { color: var(--accent-ink); }
 
-.tribute { display: grid; grid-template-columns: auto 1fr; gap: var(--s-4); align-items: start; padding-bottom: var(--s-7); }
-.tribute-body { display: grid; justify-items: start; gap: var(--s-3); min-width: 0; }
-.tribute-line { font-weight: 600; }
-.pot { color: var(--ink-2); font-size: 15px; }
-.tribute-stamp { position: absolute; right: 14px; bottom: 12px; }
-@media (max-width: 479px) {
-  .tribute { grid-template-columns: 1fr; justify-items: start; }
-  .tribute .seal-96 { --size: 72px; }
-  .tribute-stamp { font-size: 12px; }
-}
-
 .roll { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr)); gap: var(--s-3); list-style: none; }
 .roll-card {
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: "crest seal" "name name" "status status";
+  grid-template-columns: 1fr;
+  grid-template-areas: "crest" "name" "status";
   row-gap: 6px;
   min-width: 0;
   padding: var(--s-4);
 }
 .roll-card .crest { grid-area: crest; }
-.roll-card .seal { grid-area: seal; }
 .roll-name { grid-area: name; margin-top: 6px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .roll-card .caption { grid-area: status; }
 .roll-empty { display: grid; justify-items: center; gap: var(--s-3); padding-block: var(--s-7); text-align: center; }
@@ -197,6 +185,41 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .needs li::marker { color: var(--ink-3); }
 .submit-actions { margin-top: var(--s-2); }
 .submit-stamp { justify-self: end; margin-top: var(--s-2); }
+
+/* ── the Sunday text ───────────────────────────────────── */
+.sunday { display: grid; gap: var(--s-4); }
+.sunday-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: var(--s-3); }
+.field, .day-field { display: grid; gap: 6px; min-width: 0; }
+.field > span, .day-field > span { color: var(--ink-2); font: 600 13px/1.2 var(--font-ui); }
+.field select, .day-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: 500 16px/1.2 var(--font-ui);                 /* 16px: iOS zooms the page on anything smaller */
+}
+.day-field input { font-variant-numeric: tabular-nums; }
+.day-field input[aria-invalid] { border-color: var(--down); }
+.field select:focus-visible, .day-field input:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
+.sunday-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr)); gap: var(--s-3); }
+.sunday-sum { display: flex; flex-wrap: wrap; gap: var(--s-6); margin: 0; }
+.sunday-sum dt { color: var(--ink-2); font: 600 13px/1.2 var(--font-ui); }
+.sunday-sum dd { margin: 2px 0 0; font: 600 var(--step-2)/1.1 var(--font-display); }
+.sunday-preview {
+  margin: 0;
+  padding: var(--s-4);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 400 14px/1.6 var(--font-ui);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sunday-actions .btn[aria-disabled="true"], .sunday-actions .btn:disabled { opacity: .5; cursor: not-allowed; }
 @media (min-width: 768px) {
   .submit { padding-bottom: 88px; }
   .submit-stamp { position: absolute; right: 16px; bottom: 18px; margin: 0; }

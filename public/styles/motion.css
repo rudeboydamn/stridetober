@@ -17,7 +17,6 @@
 @keyframes thud        {0%,100%{transform:none}30%{transform:translateY(2px)}60%{transform:translateY(-1px)}}
 @keyframes gavel       {0%{transform:rotate(0)}40%{transform:rotate(-35deg)}70%{transform:rotate(10deg)}100%{transform:rotate(0)}}
 @keyframes draw        {to{stroke-dashoffset:0}}
-@keyframes ring        {from{opacity:.55;transform:scale(1)}to{opacity:0;transform:scale(1.18)}}
 @keyframes flicker     {0%,100%{opacity:1}42%{opacity:.88}47%{opacity:.62}52%{opacity:.94}70%{opacity:.8}}
 @keyframes blink       {50%{opacity:.35}}
 @keyframes tally       {0%,12%{stroke-dashoffset:var(--len)}20%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
@@ -78,17 +77,6 @@ html.js [data-reveal]:not(.is-in) { opacity: 0; }
 .is-in .note svg path, .note.is-in svg path { animation: draw 700ms ease-out 200ms forwards; }
 .check-row svg path { stroke-dasharray: 30; stroke-dashoffset: 30; }
 .is-in .check-row svg path { animation: draw 500ms ease-out forwards; animation-delay: calc(var(--i, 0) * 180ms + 200ms); }
-
-/* ── M14 buttons: muster-only ring on the tribute CTA ───── */
-.btn-ring::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: 0 0 0 2px var(--accent);
-  animation: ring 2.4s var(--ease-settle) infinite;
-  pointer-events: none;
-}
 
 /* ── M18 counting tally ─────────────────────────────────── */
 .tally.counting path { --len: 24; stroke-dasharray: var(--len); animation: tally 2.4s infinite both; }

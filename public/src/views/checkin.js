@@ -1,7 +1,8 @@
 // Check-in — the weekly screenshot ritual. Spec: docs/PLAN.md §5.5, adjusted to the
 // locked decision in §1.2: the week ENDS Saturday night; screenshots are due Sunday.
 import { parseLocal, endOfDay, weekStatus } from "../lib/time.js";
-import { esc, fmtRange, pick } from "../lib/format.js";
+import { esc, fmtRange, pick, n } from "../lib/format.js";
+import { parseSteps, weekDates, weekReport, smsHref } from "../lib/report.js";
 import { icon, tallySvg, toast, reveal } from "../lib/fx.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -32,6 +33,42 @@ function nodes(ctx) {
   return list;
 }
 
+// The week worth reporting: the latest one that has ended, else the first.
+const defaultWeek = ({ now, challenge }) =>
+  [...challenge.weeks].reverse().find(w => now > endOfDay(w.end))?.n ?? 1;
+
+const short = d => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+
+function sunday(ctx) {
+  const wk = defaultWeek(ctx);
+  const me = (() => { try { return localStorage.getItem("stridetober:me"); } catch { return null; } })();
+  const who = ctx.walkers.map(w => `<option value="${esc(w.id)}"${w.id === me ? " selected" : ""}>${esc(w.name)}</option>`).join("");
+  const weeks = ctx.challenge.weeks.map(w => `<option value="${w.n}"${w.n === wk ? " selected" : ""}>Week ${w.n} · ${esc(fmtRange(w.start, w.end))}</option>`).join("");
+  return `
+  <section class="wrap section" data-reveal>
+    <div class="card card-raised sunday">
+      <span class="kicker">Every Sunday night</span>
+      <h2 class="h2">Text the Judge your week</h2>
+      <p class="sub">Type the seven daily totals from your tracker. The Judge gets them in the shape he likes, ready to send. The screenshot is the evidence; the text is the convenience — send both.</p>
+      <div class="sunday-pick">
+        <label class="field"><span>Who's walking</span><select id="sunWho"><option value="">Pick your name</option>${who}</select></label>
+        <label class="field"><span>Which week</span><select id="sunWeek">${weeks}</select></label>
+      </div>
+      <div class="sunday-days" id="sunDays"></div>
+      <dl class="sunday-sum">
+        <div><dt>Total steps</dt><dd class="num" id="sunTotal">—</dd></div>
+        <div><dt>Avg daily</dt><dd class="num" id="sunAvg">—</dd></div>
+      </dl>
+      <pre class="sunday-preview" id="sunPreview" aria-live="polite"></pre>
+      <div class="btn-row sunday-actions">
+        <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Text it to Dammy</a>
+        <button class="btn btn-secondary" type="button" id="sunCopy">Copy message</button>
+      </div>
+      <p class="caption" id="sunHint">${esc(ctx.copy.SUNDAY.need)}</p>
+    </div>
+  </section>`;
+}
+
 export function render(ctx) {
   const tl = nodes(ctx).map(x => `
     <li class="tl-node ${x.state}">
@@ -54,13 +91,15 @@ export function render(ctx) {
     <div class="card"><ol class="timeline horizontal" style="--nodes:5">${tl}</ol></div>
   </section>
 
+  ${sunday(ctx)}
+
   <section class="wrap section" data-reveal>
     <div class="card card-raised submit">
       <h2 class="h2">How to submit</h2>
       <ol class="submit-steps">
         <li>Open your step tracker.</li>
         <li>Screenshot the week — Sunday → Saturday, all seven days showing.</li>
-        <li>Send it straight to Dammy on Sunday — iMessage, WhatsApp, wherever you already bother him.</li>
+        <li>Type the seven daily totals into <b>Text the Judge your week</b> above and tap send — then attach the screenshot to that same text.</li>
       </ol>
       <h3 class="h3">What the Judge needs to see</h3>
       <ul class="needs">
@@ -69,7 +108,7 @@ export function render(ctx) {
         <li>Sent after the week ends. A Saturday-evening screenshot is a partial week. The Judge has seen this trick before.</li>
       </ul>
       <div class="btn-row submit-actions">
-        <button class="btn btn-primary" type="button" id="icsBtn">${icon("calendar")}Add the check-ins to my calendar</button>
+        <button class="btn btn-primary" type="button" id="icsBtn">${icon("calendar")}Remind me every Sunday night</button>
         <button class="btn btn-secondary" type="button" id="decoy"><span>Post it in the group chat</span></button>
       </div>
       <span class="stamp stamp-lg submit-stamp">No screenshot = No steps!</span>
@@ -91,9 +130,9 @@ function ics(challenge, now) {
       `DTSTAMP:${stamp}`,
       `DTSTART;VALUE=DATE:${compact(start)}`,
       `DTEND;VALUE=DATE:${compact(end)}`,
-      `SUMMARY:Stridetober check-in — screenshot to Dammy`,
-      `DESCRIPTION:Week ${w.n}: ${fmtRange(w.start, w.end)}. Screenshot all seven days. DIRECTLY TO DAMMY — NOT THE GROUP CHAT!`,
-      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Stridetober screenshots are due today", "TRIGGER:PT10H", "END:VALARM",
+      `SUMMARY:Stridetober — text Dammy your week`,
+      `DESCRIPTION:Week ${w.n}: ${fmtRange(w.start, w.end)}. Open https://stridetober.vercel.app/#/check-in\\, type your seven days\\, tap send\\, attach the screenshot. DIRECTLY TO DAMMY — NOT THE GROUP CHAT!`,
+      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:Sunday night: text the Judge your week", "TRIGGER:PT20H", "END:VALARM",   // 8 PM Sunday, local
       "END:VEVENT",
     ];
   });
@@ -101,8 +140,54 @@ function ics(challenge, now) {
     "METHOD:PUBLISH", "X-WR-CALNAME:Stridetober", ...events, "END:VCALENDAR"].map(fold).join("\r\n") + "\r\n";
 }
 
+function mountSunday(root, ctx) {
+  const $ = id => root.querySelector(id);
+  const who = $("#sunWho"), weekSel = $("#sunWeek"), grid = $("#sunDays"), send = $("#sunSend"), copy = $("#sunCopy");
+  const key = () => `stridetober:sunday:${who.value || "anon"}:${weekSel.value}`;
+  const week = () => ctx.challenge.weeks[weekSel.value - 1];
+  const read = () => { try { return JSON.parse(localStorage.getItem(key())) || []; } catch { return []; } };
+  const save = () => { try { localStorage.setItem(key(), JSON.stringify([...grid.querySelectorAll("input")].map(i => i.value))); } catch { /* private mode */ } };
+
+  const build = () => {                                   // one field per day, Sunday first; a half-typed week survives a trip to the Health app
+    const saved = read();
+    grid.innerHTML = weekDates(week()).map((d, i) => `
+      <label class="day-field"><span>${esc(short(d))}</span>
+        <input type="text" inputmode="numeric" autocomplete="off" enterkeyhint="${i < 6 ? "next" : "done"}" placeholder="0" value="${esc(saved[i] || "")}" aria-label="${esc(short(d))} steps"></label>`).join("");
+    update();
+  };
+
+  const update = () => {
+    const days = [...grid.querySelectorAll("input")].map(i => parseSteps(i.value));
+    grid.querySelectorAll("input").forEach((el, i) => el.toggleAttribute("aria-invalid", el.value.trim() !== "" && days[i] === null));
+    const r = weekReport({ name: ctx.walkers.find(w => w.id === who.value)?.name || "", week: week(), days });
+    const ready = !!r && !!who.value;
+    $("#sunTotal").textContent = r ? n(r.total) : "—";
+    $("#sunAvg").textContent = r ? n(r.avg) : "—";
+    $("#sunPreview").textContent = r ? r.text : "";
+    $("#sunPreview").hidden = !r;
+    send.setAttribute("aria-disabled", String(!ready));
+    copy.disabled = !ready;
+    send.href = ready ? smsHref(ctx.challenge.judgePhone, r.text) : "#/check-in";
+    $("#sunHint").textContent = ready ? ctx.copy.SUNDAY.hint : who.value ? ctx.copy.SUNDAY.need : "Pick your name first.";
+    return r;
+  };
+
+  grid.addEventListener("input", () => { save(); update(); });
+  who.addEventListener("change", () => { try { localStorage.setItem("stridetober:me", who.value); } catch { /* ignore */ } build(); });
+  weekSel.addEventListener("change", build);
+  send.addEventListener("click", e => { if (send.getAttribute("aria-disabled") === "true") { e.preventDefault(); toast(esc(ctx.copy.SUNDAY.need)); } });
+  copy.addEventListener("click", async () => {
+    const r = update();
+    if (!r) return;
+    try { await navigator.clipboard.writeText(r.text); toast(esc(ctx.copy.SUNDAY.copied)); }
+    catch { toast("Select the message above and copy it by hand."); }
+  });
+  build();
+}
+
 export function mount(root, ctx) {
   reveal(root);
+  mountSunday(root, ctx);
   root.querySelector("#icsBtn").addEventListener("click", () => {
     const url = URL.createObjectURL(new Blob([ics(ctx.challenge, new Date())], { type: "text/calendar;charset=utf-8" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: "stridetober-checkins.ics" });

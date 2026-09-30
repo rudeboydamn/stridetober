@@ -13,8 +13,11 @@ list). This file is the map, the weekly job, and the traps.
 
 ## 1. What this is
 
-An October step challenge. $20 buy-in by Venmo to Dammy; the pot pays three
-places — **50% / 30% / 20%** (`challenge.split`, `challenge.payouts`).
+An October step challenge. The pot pays three places — **50% / 30% / 20%**
+(`challenge.split`, `challenge.payouts`). Entries are settled and **the site no
+longer mentions the buy-in, Venmo-in or "tribute" anywhere** — don't bring them
+back. `walker.paid:false` still keeps someone off the Ledger; that flag is the
+only trace left, so flip it when Dammy says so.
 Four weeks, **Sunday 00:00 → Saturday 23:59**; screenshots are due each Sunday
 (Oct 11, 18, 25, Nov 1). Most total steps is crowned THE OCTOBER STEP CHAMPION
 on Nov 1. Officiated by Dammy Henry, "The *Fairly* Impartial Judge" — he does
@@ -47,6 +50,9 @@ not compete by default.
    - Chart-measured splits go in `derived` and render `~`. Weekly totals are
      never derived.
    - **Never invent a number.** Ambiguous → ask Dammy.
+   Walkers can also **text** their seven daily totals from the Check-in page (PLAN
+   §5.5.1): Dammy gets a message with a line per day, a total and an average. Treat
+   it as a convenience — the screenshot is still the evidence, and the two must agree.
 3. Append the `WEEKS` entry in `public/data/weeks.js` (`steps` = authoritative
    weekly totals, `days` = 7 numbers **Sunday-first** or `null`), write the
    `judgeNote` (PLAN §6.11), set `champion`/`payoutSent` on week 4.

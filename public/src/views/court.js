@@ -12,7 +12,6 @@ function hero(ctx) {
   const wk = ctx.week?.n ?? ctx.weeks.length;
   const head = ctx.phase === "walking" ? pick(ctx.copy.COURT_WALKING, wk - 1) : L.head;
   const muster = ctx.phase === "muster";
-  const venmo = esc(ctx.challenge.venmoUrl);
   return `
   <section class="hero" data-reveal>
     <div class="wrap hero-grid">
@@ -24,8 +23,8 @@ function hero(ctx) {
         ${note("stretch now, thank us later", "hero-note flip")}` : ""}
         <div class="btn-row hero-cta">
           ${muster
-            ? `<a class="btn btn-primary" href="${venmo}" target="_blank" rel="noopener">Pay the Tribute 🪙</a>
-               <a class="btn btn-secondary" href="#/rules">Read the Decree</a>`
+            ? `<a class="btn btn-primary" href="#/rules">Read the Decree</a>
+               <a class="btn btn-secondary" href="#/check-in">Check-in</a>`
             : `<a class="btn btn-primary" href="#/ledger">See the Ledger</a>
                <a class="btn btn-secondary" href="#/check-in">Check-in</a>`}
         </div>
@@ -84,44 +83,25 @@ function countdownCard(ctx) {
 }
 
 // ── muster sections ───────────────────────────────────────
-function tribute(ctx) {
-  const sworn = ctx.paid.length, pot = sworn * ctx.challenge.buyIn;
-  return `
-  <section class="wrap section" data-reveal>
-    <div class="card card-raised tribute">
-      ${seal("$20", { size: "seal-96", label: "Twenty dollar tribute" })}
-      <div class="tribute-body">
-        <h2 class="h2">The Tribute</h2>
-        <p class="tribute-line">Send your $20 to Dammy BEFORE October 4th!</p>
-        <a class="btn btn-primary btn-ring" href="${esc(ctx.challenge.venmoUrl)}" target="_blank" rel="noopener">Pay the Tribute 🪙</a>
-        <p class="caption">Venmo @${esc(ctx.challenge.venmoHandle)}</p>
-        <p class="pot">The pot so far: <b class="num" data-count="${pot}">${n(pot)}</b> dollars · ${sworn} sworn · splits 50/30/20</p>
-      </div>
-      <span class="stamp tribute-stamp">NO $20 = NO COMPETING!</span>
-    </div>
-  </section>`;
-}
-
 function roll(ctx) {
   const list = [...ctx.walkers].sort((a, b) => Number(b.paid === true) - Number(a.paid === true));
   const body = list.length
     ? `<ul class="roll">${list.map((w, i) => `
         <li class="card roll-card thuds" style="--i:${i}">
           ${crest(w)}
-          ${w.paid ? seal("Paid", { cls: "stamps", i, label: "Paid" }) : seal("", { cls: "hollow" })}
           <span class="roll-name">${esc(w.name)}</span>
-          <span class="caption">${w.paid ? "sworn in" : "tribute pending"}</span>
+          <span class="caption">${w.paid ? "on the Ledger" : "at the trailhead"}</span>
         </li>`).join("")}</ul>`
     : `<div class="card roll-empty">
         ${seal("", { size: "seal-96", cls: "hollow" })}
-        <p class="h3">The Roll awaits its first tribute.</p>
+        <p class="h3">The Roll awaits its first walker.</p>
         ${note("the early bird avoids the guilt")}
       </div>`;
   return `
   <section class="wrap section" data-reveal>
     <header class="section-head">
-      <h2 class="h2">The Roll of the Sworn</h2>
-      <p class="sub">Walkers appear here as their tribute lands.</p>
+      <h2 class="h2">The Roll</h2>
+      <p class="sub">${list.length ? `${list.length} walkers. One champion. The Judge is counting.` : "Walkers appear here as they sign up."}</p>
     </header>
     ${body}
   </section>`;
@@ -301,7 +281,7 @@ function togetherTile(ctx) {
 // ── view contract ─────────────────────────────────────────
 export function render(ctx) {
   if (ctx.phase === "muster") {
-    return hero(ctx) + countdownCard(ctx) + tribute(ctx) + roll(ctx)
+    return hero(ctx) + countdownCard(ctx) + roll(ctx)
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))

@@ -29,11 +29,6 @@ export function render(ctx) {
     <p class="decree-quote">The challenge officially ends when the clock strikes 12:00 AM on November 1st!</p>
     <p class="ruling">The Judge clarifies: that is midnight at the end of Halloween. The last steps that count are Saturday, October 31st — week 4's screenshots are due the next day.</p>`;
 
-  const tribute = `
-    <p>$20 to Dammy by Venmo before October 4th.</p>
-    <div class="btn-row"><a class="btn btn-primary" href="${esc(c.venmoUrl)}" target="_blank" rel="noopener">Pay the Tribute 🪙</a></div>
-    <span class="stamp stamp-lg">NO $20 = NO COMPETING!</span>`;
-
   const evidence = `
     <p>Send your screenshot DIRECTLY TO DAMMY — NOT THE GROUP CHAT!</p>
     <p><a class="textlink" href="#/check-in">How to check in →</a></p>
@@ -66,11 +61,10 @@ export function render(ctx) {
     <p class="sub">The rules of Stridetober, read aloud by the <em>Fairly</em> Impartial Judge.</p>
   </header>
   ${article(0, "The Season", season)}
-  ${article(1, "The Tribute", tribute)}
-  ${article(2, "The Evidence", evidence)}
-  ${article(3, "The Reckoning", reckoning)}
-  ${article(4, "The Fine Print", fine)}
-  ${article(5, "The Encouragement", moving)}
+  ${article(1, "The Evidence", evidence)}
+  ${article(2, "The Reckoning", reckoning)}
+  ${article(3, "The Fine Print", fine)}
+  ${article(4, "The Encouragement", moving)}
   <p class="wrap flourish">The Judge's word is <em>fairly</em> final.</p>
   <p class="wrap flourish small">Fall into Healthy Habits</p>`;
 }

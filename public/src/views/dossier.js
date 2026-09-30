@@ -38,7 +38,7 @@ export function render(ctx, { id } = {}) {
   const w = ctx.walkers.find(x => x.id === id);
   if (!w) {
     return `<section class="wrap section"><div class="card off-trail" data-reveal>
-      <h1 class="h2">No such walker has sworn in.</h1>
+      <h1 class="h2">No such walker is on the Roll.</h1>
       <p class="sub">The Roll knows nothing of “${esc(id || "?")}”.</p>
       <a class="btn btn-primary" href="#/">See the Roll</a></div></section>`;
   }
@@ -46,13 +46,13 @@ export function render(ctx, { id } = {}) {
   const r = ctx.standings.find(x => x.walker.id === id);
   if (!r) {
     return `<header class="wrap page-head" data-reveal>
-        <span class="ribbon">Tribute pending</span>
+        <span class="ribbon">At the trailhead</span>
         <h1 class="page-title">${esc(w.name)}</h1>
       </header>
       <section class="wrap section"><div class="card empty-state" data-reveal>
         ${seal("", { size: "seal-96", cls: "hollow" })}
-        <p class="h3">The $20 has not landed yet.</p>
-        <p class="sub">The Ledger will not see ${esc(w.short)} until it does. NO $20 = NO COMPETING!</p>
+        <p class="h3">Not on the Ledger yet.</p>
+        <p class="sub">The Judge has not put ${esc(w.short)} on the Ledger. Until he does, the steps are ${esc(w.short)}'s own business.</p>
         <a class="textlink" href="#/">Back to the Roll →</a>
       </div></section>`;
   }

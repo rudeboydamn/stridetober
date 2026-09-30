@@ -4,7 +4,7 @@
 
 export const PHASE_LINES = {
   muster:   { kick:"OCTOBER STEPS CHALLENGE", head:"Walk it. Track it. Win it!",
-              sub:"Four weeks. Twenty dollars. One champion. The leaves are watching." },
+              sub:"Four weeks. Every step counted. One champion. The leaves are watching." },
   walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. The Judge counts them." },
   counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The Judge is counting. The ledger is frozen-ish." },
   crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot splits three ways by Venmo." },
@@ -85,7 +85,7 @@ export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED
   { plea:"My watch and I are taking a break.", ruling:"Couples counseling for you and your watch is not the Court's problem." },
   { plea:"It's too spooky out.", ruling:"Spookiness is not a defense. Especially not this week." },
   { plea:"I was pacing during a call.", ruling:"Pacing counts. Show the screenshot next time.", pardon:true },
-  { plea:"Big steps run in my family.", ruling:"Then the family may also pay tribute." },
+  { plea:"Big steps run in my family.", ruling:"Then the family may also walk." },
 ];
 
 export const PODIUM = [ // the pot pays three places (challenge.split); medal is canon — third gets a chestnut
@@ -99,6 +99,12 @@ export const TOASTS = {
   weekPosted: "Week {n} has been counted. The Ledger is updated. Adjust your stride accordingly.",
   copied:     "Copied. Go forth and summon.",
   pardoned:   "A pardon! Rare as a quiet Saturday.",
+};
+
+export const SUNDAY = { // the Sunday text on the Check-in page
+  need:   "All seven days, please. The Judge reads the bars, not the headline.",
+  copied: "Copied. Paste it to Dammy, then attach the screenshot.",
+  hint:   "Opens Messages on your phone. On a computer, copy the message instead.",
 };
 
 export const DECOY_TOASTS = [
@@ -149,7 +155,7 @@ export const JUMP_LINES = [ // footer leaf pile, on a tap (M29)
 
 export const SQUIRREL_LINES = [ // the once-a-session squirrel, when tapped (M33)
   "The squirrel has been fined one acorn for jaywalking.",
-  "The squirrel paid no tribute. It is walking anyway.",
+  "The squirrel is unsponsored and unlicensed. It is walking anyway.",
   "Steps credited to the squirrel: 0. It has filed an appeal.",
   "The Judge notes the squirrel is out-walking at least one of you.",
 ];
@@ -167,7 +173,7 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
   ],
   squirrel: [
     "Fined one acorn for loitering in a court of law.",
-    "Eleven thousand steps and no tribute. The Judge is *fairly* annoyed.",
+    "Eleven thousand steps and not one screenshot. The Judge is *fairly* annoyed.",
     "It has buried something. The Judge has decided not to investigate.",
   ],
   caterpillar: [
@@ -231,7 +237,7 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
     "Steps logged: 9,000. Route: one dumpster, repeatedly.",
   ],
   default: [
-    "Wildlife. Not a walker, and not paying tribute either.",
+    "Wildlife. Not a walker, and not on the Ledger either.",
   ],
 };
 

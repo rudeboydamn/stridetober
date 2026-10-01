@@ -97,6 +97,10 @@ test("champion: only after week 4, and only the overall leader", () => {
   assert.equal(standings(WALKERS, WEEKS)[0].walker.id, CHALLENGE.champion, "champion is not the total-steps leader");
 });
 
+test("judgePhone: blank, or a full E.164 number — a typo here would text a stranger", () => {
+  assert.match(CHALLENGE.judgePhone, /^(\+[1-9]\d{9,14})?$/);
+});
+
 test("announcement: null, or a live-until timestamp with a known mode", () => {
   if (ANNOUNCEMENT == null) return;
   assert.ok(!Number.isNaN(+parseLocal(ANNOUNCEMENT.until)), "ANNOUNCEMENT.until must be YYYY-MM-DDTHH:mm");

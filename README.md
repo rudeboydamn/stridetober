@@ -53,6 +53,6 @@ Sundays: screenshots land in `checkins/week-N/` (git-ignored) → apply the rule
 ## Exposure
 
 Public but unlisted: `noindex` everywhere, no emails. `challenge.judgePhone` is
-blank on purpose — this repo and the site are public, so a number set there is
-published to the world; leave it blank and the Sunday text asks the phone who to
+the Judge's number, set on purpose — this repo and the site are public, so it is
+published to the world. Blank it and the Sunday text asks the phone who to
 address. Still — no secrets in this repo.

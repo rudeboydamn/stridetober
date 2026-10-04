@@ -573,7 +573,7 @@ a.chip, button.chip { min-height: 44px; border: 0; cursor: pointer; }
 @media (min-width: 1024px) { .note { font-size: 24px; } }
 
 /* ── announcement banner ────────────────────────────────── */
-.anno { margin-top: var(--s-4); }
+.anno { position: relative; margin-top: var(--s-4); padding-right: 52px; }
 .anno .kicker { color: var(--gold-ink); }
 .anno-close {
   position: absolute;
@@ -659,3 +659,9 @@ a.chip, button.chip { min-height: 44px; border: 0; cursor: pointer; }
 }
 .sq-body { display: inline-flex; align-items: flex-end; }
 .sq-acorn { margin-right: -6px; font-size: 16px; }
+.anno-who {
+  background: radial-gradient(120% 90% at 0% 0%, color-mix(in srgb, var(--c) 16%, transparent), transparent 65%), var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line), inset 3px 0 0 var(--c);
+}
+.anno-who .anno-crest { float: left; margin: 2px var(--s-3) var(--s-1) 0; }
+.anno-who .textlink { display: inline-block; margin-top: var(--s-2); }

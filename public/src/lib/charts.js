@@ -50,7 +50,9 @@ export function climbChart(standings, weeks, vw) {
   const lines = series.map((s, i) => {
     const c = `var(--walker-${s.walker.color})`;
     const pts = s.pts.map((v, k) => `${x(k).toFixed(1)},${y(v).toFixed(1)}`);
-    const dash = i >= 8 ? ` stroke-dasharray="7 4"` : "";
+    // The palette has 8 colours; walkers 9+ in ROSTER order reuse them and are told apart by a dash
+    // (PLAN §3.2). Roster order, not rank, so the same walker is always the dashed one.
+    const dash = s.walker.dashed ? ` stroke-dasharray="7 4"` : "";
     return `<polyline class="chart-line" points="${pts.join(" ")}" style="stroke:${c}"${dash}/>` +
       s.pts.map((v, k) => `<circle class="chart-pt" cx="${x(k).toFixed(1)}" cy="${y(v).toFixed(1)}" r="4.5" style="fill:${c}"/>`).join("");
   }).join("");

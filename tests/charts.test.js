@@ -23,3 +23,14 @@ test("totals chart leaves room for the leader's number inside the viewBox", () =
   const [, x] = svg.match(/class="chart-axis chart-val" x="([\d.]+)"/);
   assert.ok(+x + "172,650".length * 7 <= width, `leader's total starts at ${x} and runs past ${width}`);
 });
+
+test("climbChart: the dash follows the walker flagged as a palette reuse, not ninth place", async () => {
+  const { climbChart } = await import("../public/src/lib/charts.js");
+  const mk = (id, color, dashed, total) => ({ walker: { id, color, dashed, short: id, name: id, crest: "🍂" }, total });
+  const rows = [mk("pie", "cranberry", true, 900), ...Array.from({ length: 8 }, (_, i) => mk("w" + i, "moss", false, 800 - i))];
+  const weeks = [{ week: 1, steps: Object.fromEntries(rows.map(r => [r.walker.id, r.total])) }];
+  const svg = climbChart(rows, weeks, 375);
+  const lines = svg.match(/<polyline[^>]*>/g);
+  assert.match(lines[0], /stroke-dasharray/, "the flagged walker is dashed even in first place");
+  assert.equal(lines.filter(l => l.includes("stroke-dasharray")).length, 1);
+});

@@ -119,7 +119,7 @@ html[data-eve] .wm-jack { animation: flicker 3s infinite; }
   92%  { opacity: var(--leaf-opacity); }
   100% { opacity: 0; transform: translate3d(108vw, calc(var(--arc) * .4), 0) rotate(var(--turns)); }
 }
-@keyframes gust-push { 0%, 100% { transform: none; } 45% { transform: translateX(34px); } }
+@keyframes gust-push { 0%, 100% { translate: 0 0; } 45% { translate: 34px 0; } }
 .gust-leaf {
   position: absolute;
   left: 0;
@@ -132,7 +132,10 @@ html[data-eve] .wm-jack { animation: flicker 3s infinite; }
   will-change: transform;
 }
 .gust-leaf svg { width: 100%; height: 100%; }
-.leaves.gusting { animation: gust-push 2.6s ease-in-out; }
+/* The push moves the leaves, never the fixed layer itself: a fixed box sliding past the edge
+   widens the page, and iOS answers by shifting its layout viewport — which knocks the tab bar
+   loose. `translate` composes with each leaf's own falling `transform`. */
+.leaves.gusting .leaf { animation: leaf-fall var(--dur) linear var(--delay) infinite, gust-push 2.6s ease-in-out; }
 
 /* ── M27 the samara: one ambient "leaf" is a spinning maple seed ─ */
 @keyframes samara-spin { to { transform: rotate(360deg); } }

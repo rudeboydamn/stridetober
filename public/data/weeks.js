@@ -7,7 +7,14 @@
 // steps is authoritative as submitted. days null = pending — never guess.
 export const WEEKS = [];
 
-export const ANNOUNCEMENT = null;
-// or { until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",
+// Alicia's birthday falls on kickoff day. Live all day Sunday Oct 4, then it retires itself.
+export const ANNOUNCEMENT = {
+  from: "2026-10-04T00:00", until: "2026-10-05T00:00", mode: "note", who: "alicia",
+  kicker: "Hear ye, hear ye",
+  title: "🎂 The Maple turns a year more golden today!",
+  lead: "Born on the very first day of Stridetober, which the Judge finds *fairly* suspicious. Happy birthday, Alicia! Birthday steps still count exactly once. The Judge is generous, not careless.",
+  cta: "Read her Chronicle",
+};
+// or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }
 // mode:"getwell" replaces the Court's ledger preview; mode:"note" is a dismissible banner.

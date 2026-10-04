@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { CHALLENGE } from "../public/data/challenge.js";
 import {
   parseLocal, endOfDay, phaseOf, weekStatus, currentWeek, nextMilestone,
-  countdownParts, daypart, isEve, phaseSignature,
+  countdownParts, daypart, isEve, phaseSignature, announcementLive,
 } from "../public/src/lib/time.js";
 
 const at = parseLocal;
@@ -127,4 +127,14 @@ test("phaseSignature: stable within a state, changes when the view must re-rende
   const anno = { until: "2026-10-08T00:00" };
   assert.notEqual(phaseSignature({ ...base, announcement: anno }),
                   phaseSignature({ ...base, announcement: anno, now: at("2026-10-08T00:00") }));
+});
+
+test("announcementLive: honours an optional from, and always retires at until", () => {
+  const a = { from: "2026-10-04T00:00", until: "2026-10-05T00:00", mode: "note" };
+  assert.equal(announcementLive(a, parseLocal("2026-10-03T23:59")), false);
+  assert.equal(announcementLive(a, parseLocal("2026-10-04T00:00")), true);
+  assert.equal(announcementLive(a, parseLocal("2026-10-04T18:30")), true);
+  assert.equal(announcementLive(a, parseLocal("2026-10-05T00:00")), false);
+  assert.equal(announcementLive({ until: "2026-10-05T00:00" }, parseLocal("2026-10-01T09:00")), true);
+  assert.equal(announcementLive(null, parseLocal("2026-10-04T09:00")), false);
 });

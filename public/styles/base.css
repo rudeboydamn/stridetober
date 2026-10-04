@@ -24,6 +24,7 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 body.locked { overflow: hidden; }
+#view { overflow-x: clip; }   /* a settling card's −0.4° tilt must never poke past the screen edge */
 
 /* paper grain: an image tile, not a live filter */
 body::before {

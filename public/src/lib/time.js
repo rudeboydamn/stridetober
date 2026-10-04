@@ -76,8 +76,10 @@ export function daypart(now) {
 
 export const isEve = now => now.getMonth() === 9 && now.getDate() === 31;
 
+// Live from `from` (optional, local wall-clock) until `until`, so news can be posted ahead of its day.
 export const announcementLive = (announcement, now) =>
-  !!announcement && now < parseLocal(announcement.until);
+  !!announcement && now < parseLocal(announcement.until) &&
+  (!announcement.from || now >= parseLocal(announcement.from));
 
 // Changes exactly when the current view has to re-render (PLAN §7.7).
 export function phaseSignature({ now, challenge, weeks, crownedSeen = false, announcement = null }) {

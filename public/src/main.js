@@ -24,11 +24,13 @@ const query = new URLSearchParams(location.search);
 // ?demo=1 swaps in the fictional fixture; ?now= time-travel only works inside demo (PLAN §10.7).
 const DEMO = query.get("demo") === "1";
 let walkers = WALKERS, allWeeks = WEEKS;
+const markDashed = list => list.forEach((w, i) => { w.dashed = i >= 8; });   // palette reuse (charts.js)
 if (DEMO) {
   const demo = await import("../data/demo.js");
   walkers = demo.DEMO_WALKERS;
   allWeeks = demo.DEMO_WEEKS;
 }
+markDashed(walkers);
 const offset = DEMO && query.get("now") ? parseLocal(query.get("now")) - Date.now() : 0;
 const clock = () => new Date(Date.now() + offset);
 
@@ -149,15 +151,27 @@ function renderAnnouncement() {
   let dismissed = false;
   try { dismissed = !!key && localStorage.getItem(key) === "1"; } catch { /* ignore */ }
   if (!a || a.mode !== "note" || dismissed) { slot.innerHTML = ""; return; }
-  slot.innerHTML = `<aside class="card anno" aria-label="Announcement">
+  const who = a.who ? ctx.walkers.find(w => w.id === a.who) : null;
+  const fresh = slot.dataset.shown !== key;
+  slot.dataset.shown = key;
+  slot.innerHTML = `<aside class="card anno${who ? " anno-who" : ""}" aria-label="Announcement"${who ? ` style="--c:var(--walker-${who.color})"` : ""}>
+    ${who ? `<span class="crest crest-56 anno-crest" aria-hidden="true">${who.crest}</span>` : ""}
     <span class="kicker">${esc(a.kicker || "From the bench")}</span>
     <h2 class="h3">${rich(a.title || "")}</h2>
     ${a.lead ? `<p class="sub">${rich(a.lead)}</p>` : ""}
+    ${who && a.cta ? `<a class="textlink" href="#/walker/${who.id}">${esc(a.cta)} →</a>` : ""}
     <button class="anno-close" type="button" aria-label="Dismiss announcement">✕</button></aside>`;
   slot.querySelector(".anno-close").addEventListener("click", () => {
     try { localStorage.setItem(key, "1"); } catch { /* ignore */ }
     slot.innerHTML = "";
   });
+  if (fresh && who) {           // once per page load: the leaves go up for the news
+    const c = slot.querySelector(".anno-crest");
+    setTimeout(() => {
+      const b = c?.getBoundingClientRect();
+      if (b) burst({ x: b.left + b.width / 2, y: b.top + b.height / 2, count: 26, power: .6, from: c });
+    }, 900);
+  }
 }
 
 function celebrate(from, to) {
@@ -259,6 +273,36 @@ document.getElementById("themeRow").addEventListener("click", () => {
 });
 showTheme();
 
+// ── iOS tab bar pin ───────────────────────────────────────
+// iOS 26 WebKit mis-anchors position:fixed; bottom:0 once the toolbar collapses or the
+// keyboard has been up: the bar floats up the page and leaves a gap. On iOS only, pin it
+// from the top at the visual viewport's bottom edge instead, re-measured every frame it moves.
+{
+  const bar = document.getElementById("tabbar");
+  const vv = window.visualViewport;
+  const iOS = /iP(hone|od|ad)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (vv && iOS) {
+    let queued = false;
+    const pin = () => {
+      queued = false;
+      if (innerWidth >= 1024) { bar.style.top = bar.style.bottom = ""; return; }
+      const top = vv.offsetTop + vv.height - bar.offsetHeight;
+      bar.style.bottom = "auto";
+      bar.style.top = `${Math.round(top)}px`;
+    };
+    const queue = () => { if (!queued) { queued = true; requestAnimationFrame(pin); } };
+    vv.addEventListener("resize", queue);
+    vv.addEventListener("scroll", queue);
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    addEventListener("orientationchange", queue);
+    addEventListener("pageshow", queue);
+    document.addEventListener("visibilitychange", queue);
+    document.addEventListener("focusout", () => setTimeout(queue, 300));   // keyboard closed
+    pin();
+  }
+}
+
 // ── header auto-hide (M16) ────────────────────────────────
 {
   const head = document.getElementById("siteHead");
@@ -304,7 +348,7 @@ document.addEventListener("pointerdown", e => {
 // posted — can sit behind a cached copy. Whenever the tab comes back, re-fetch
 // the two data files past every cache; reload only if they really changed.
 {
-  const mine = JSON.stringify([WALKERS, WEEKS]);
+  const mine = JSON.stringify([WALKERS, WEEKS, ANNOUNCEMENT]);
   let checked = 0;
   const catchUp = async () => {
     if (DEMO || document.hidden || Date.now() - checked < 600_000) return;
@@ -314,7 +358,7 @@ document.addEventListener("pointerdown", e => {
         import(`../data/walkers.js?t=${checked}`),
         import(`../data/weeks.js?t=${checked}`),
       ]);
-      if (JSON.stringify([w.WALKERS, k.WEEKS]) !== mine) location.reload();
+      if (JSON.stringify([w.WALKERS, k.WEEKS, k.ANNOUNCEMENT]) !== mine) location.reload();
     } catch { /* offline — try again next time */ }
   };
   document.addEventListener("visibilitychange", catchUp);

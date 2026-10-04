@@ -102,6 +102,11 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
   indices live in `main.js` ROUTES; the More leaf/label is `tab === 4` (Decree, Settle It).
   Check-in and the Summons are **sections** (Court, Decree) — `#/check-in` and `#/invite`
   are aliases that scroll to them, so don't add pages for them back.
+- **Nothing fixed may ever poke past the screen edge**, not even mid-animation. A wider page
+  makes iOS shift its layout viewport and the tab bar floats loose. Animate children with
+  `translate`, never the fixed layer itself. On iOS the tab bar is also pinned to the visual
+  viewport from `main.js` (iOS 26 WebKit mis-anchors `bottom:0`); `npm test` can't see either.
+- Announcements take an optional `from`, so news can be pushed the night before its day.
 - Conventional commits: `feat:` `fix:` `style:` `data(week-N):` `docs:` `test:`.
 
 ## 6. Verify (do not skip)

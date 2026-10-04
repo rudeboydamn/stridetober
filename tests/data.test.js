@@ -105,6 +105,8 @@ test("announcement: null, or a live-until timestamp with a known mode", () => {
   if (ANNOUNCEMENT == null) return;
   assert.ok(!Number.isNaN(+parseLocal(ANNOUNCEMENT.until)), "ANNOUNCEMENT.until must be YYYY-MM-DDTHH:mm");
   assert.ok(["note", "getwell"].includes(ANNOUNCEMENT.mode), `unknown ANNOUNCEMENT.mode "${ANNOUNCEMENT.mode}"`);
+  if (ANNOUNCEMENT.from) assert.ok(parseLocal(ANNOUNCEMENT.from) < parseLocal(ANNOUNCEMENT.until), "ANNOUNCEMENT.from must come before until");
+  if (ANNOUNCEMENT.who) assert.ok(WALKERS.some(w => w.id === ANNOUNCEMENT.who), `ANNOUNCEMENT.who "${ANNOUNCEMENT.who}" is not on the Roll`);
 });
 
 test("finds: every photo exists in public/finds (or img is null)", () => {

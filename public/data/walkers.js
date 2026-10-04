@@ -17,6 +17,6 @@ export const WALKERS = [
   { id: "christina", name: "Christina Ballard", short: "Christina B.", crest: "🍄", color: "cinnamon",  paid: true,  paidOn: "2026-09-26", birthday: null },
   { id: "cristina",  name: "Cristina Colon", short: "Cristina C.", crest: "🌽", color: "rosehip", paid: true, paidOn: "2026-09-30", birthday: null },
   { id: "jess",      name: "Jessica Jones", short: "Jess",   crest: "🍎", color: "denim",     paid: true,  paidOn: "2026-09-29", birthday: null },
-  // Ashlea joined last minute (Oct 3). Last name not yet given; paid:false until her Venmo lands — then flip it and set paidOn.
-  { id: "ashlea",    name: "Ashlea",        short: "Ashlea", crest: "🥧", color: "cranberry", paid: false, birthday: null },
+  // Ashlea joined last minute (Oct 3) as the ninth walker.
+  { id: "ashlea",    name: "Ashlea Coulter", short: "Ashlea", crest: "🥧", color: "cranberry", paid: true,  paidOn: "2026-10-03", birthday: null },
 ];

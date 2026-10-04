@@ -4,7 +4,7 @@
 // Crests: a unique fall emoji each (PLAN §3.6). Colors: palette keys in roster order (§3.2).
 // paid:false → not on the Ledger yet: excluded from ALL standings/honours. The site no longer
 // mentions buy-ins; this flag is the only trace of them, so flip it when the Judge says so.
-// Eight Striders — the field is closed. Eight walkers, eight palette colours, no repeats.
+// Nine Striders. Ashlea joined last minute (Oct 3) as the ninth, so she reuses the first palette colour (PLAN §3.2).
 export const WALKERS = [
   // The Colon-Ramos family: Rod Sr. is the father of Rod Jr. and Alicia (Alicia Ramos).
   { id: "rod-jr", name: "Rod Colon Jr.", short: "Rod Jr", crest: "🌰", color: "cranberry", paid: true,  birthday: null },
@@ -17,4 +17,6 @@ export const WALKERS = [
   { id: "christina", name: "Christina Ballard", short: "Christina B.", crest: "🍄", color: "cinnamon",  paid: true,  paidOn: "2026-09-26", birthday: null },
   { id: "cristina",  name: "Cristina Colon", short: "Cristina C.", crest: "🌽", color: "rosehip", paid: true, paidOn: "2026-09-30", birthday: null },
   { id: "jess",      name: "Jessica Jones", short: "Jess",   crest: "🍎", color: "denim",     paid: true,  paidOn: "2026-09-29", birthday: null },
+  // Ashlea joined last minute (Oct 3). Last name not yet given; paid:false until her Venmo lands — then flip it and set paidOn.
+  { id: "ashlea",    name: "Ashlea",        short: "Ashlea", crest: "🥧", color: "cranberry", paid: false, birthday: null },
 ];

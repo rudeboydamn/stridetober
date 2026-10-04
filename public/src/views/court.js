@@ -85,14 +85,16 @@ function countdownCard(ctx) {
 }
 
 // ── muster sections ───────────────────────────────────────
-function roll(ctx) {
+export function roll(ctx) {
   const list = [...ctx.walkers].sort((a, b) => Number(b.paid === true) - Number(a.paid === true));
   const body = list.length
     ? `<ul class="roll">${list.map((w, i) => `
-        <li class="card roll-card thuds" style="--i:${i}">
-          ${crest(w)}
-          <span class="roll-name">${esc(w.name)}</span>
-          <span class="caption">${w.paid ? "locked in" : "at the trailhead"}</span>
+        <li class="card roll-card thuds" style="--i:${i}; --c:var(--walker-${w.color})">
+          <a class="roll-link" href="#/walker/${w.id}">
+            ${crest(w)}
+            <span class="roll-name">${esc(w.name)}</span>
+            <span class="caption">${esc(ctx.copy.LORE?.[w.id]?.epithet || (w.paid ? "locked in" : "at the trailhead"))}</span>
+          </a>
         </li>`).join("")}</ul>`
     : `<div class="card roll-empty">
         ${seal("", { size: "seal-96", cls: "hollow" })}
@@ -103,7 +105,7 @@ function roll(ctx) {
   <section class="wrap section" data-reveal>
     <header class="section-head">
       <h2 class="h2">The Roll</h2>
-      <p class="sub">${list.length ? `${list.length} walkers. One champion. The Judge is counting.` : "Walkers appear here as they sign up."}</p>
+      <p class="sub">${list.length ? `${list.length} walkers. One champion. Tap a Strider to read their Chronicle.` : "Walkers appear here as they sign up."}</p>
     </header>
     ${body}
   </section>`;
@@ -349,7 +351,7 @@ export function render(ctx) {
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx)
+    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + roll(ctx)
     + (ctx.phase === "crowned" ? "" : checkinSection(ctx)) + how();
 }
 

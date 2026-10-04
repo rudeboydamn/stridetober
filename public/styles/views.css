@@ -84,7 +84,13 @@ html[data-eve] .sky-moon { display: none; }
 .countdown-card .kicker { color: var(--accent-ink); }
 
 .roll { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr)); gap: var(--s-3); list-style: none; }
-.roll-card {
+.roll-card { padding: 0; min-width: 0; transition: transform 200ms var(--ease-settle), box-shadow 200ms var(--ease-settle); }
+.roll-card:has(.roll-link:hover) { transform: translateY(-2px); box-shadow: inset 0 0 0 2px var(--c); }
+.roll-card:active { transform: scale(.97); }
+.roll-link {
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas: "crest" "name" "status";
@@ -92,6 +98,7 @@ html[data-eve] .sky-moon { display: none; }
   min-width: 0;
   padding: var(--s-4);
 }
+.roll-link:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
 .roll-card .crest { grid-area: crest; }
 .roll-name { grid-area: name; margin-top: 6px; font-weight: 600; line-height: 1.25; overflow-wrap: anywhere; }
 .roll-card .caption { grid-area: status; }
@@ -449,3 +456,79 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .find-finders { display: flex; flex-wrap: wrap; gap: 8px; }
 .finder { gap: 8px; }
 .finder .crest { --size: 22px; font-size: 12px; }
+
+/* ── view: dossier — the Chronicle (PLAN §5.4.1) ───────── */
+.chronicle-wrap { padding-top: var(--s-5); }
+.chronicle {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  overflow: hidden;
+  padding: var(--s-7) var(--s-5) var(--s-6);
+  text-align: center;
+  background:
+    radial-gradient(120% 60% at 50% 0%, color-mix(in srgb, var(--c) 22%, transparent), transparent 70%),
+    radial-gradient(80% 50% at 50% 100%, color-mix(in srgb, var(--gold) 12%, transparent), transparent 70%),
+    var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line), inset 0 0 0 6px var(--surface), inset 0 0 0 7px color-mix(in srgb, var(--c) 55%, var(--line));
+}
+.chronicle > * { position: relative; min-width: 0; max-width: 100%; }
+.chronicle-corner { position: absolute; top: 14px; font-size: 18px; opacity: .7; }
+.chronicle-corner.tl { left: 16px; transform: rotate(-30deg); }
+.chronicle-corner.tr { right: 16px; transform: scaleX(-1) rotate(-30deg); }
+.chronicle-kicker { color: var(--ink-3); letter-spacing: .24em; }
+.chronicle-crest { position: relative; display: grid; place-items: center; padding: 18px; }
+.chronicle-crest::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c) 35%, transparent) 0%, transparent 68%);
+  animation: twinkle 3.2s var(--ease-swing) infinite;
+}
+.crest-xl {
+  --size: clamp(104px, 30vw, 136px);
+  box-shadow: inset 0 0 0 3px var(--c), 0 0 0 6px color-mix(in srgb, var(--c) 18%, transparent), 0 14px 30px -12px color-mix(in srgb, var(--c) 70%, transparent);
+  animation: rise 900ms var(--ease-settle) both, breathe 4s var(--ease-swing) 900ms infinite;
+}
+.chronicle-epithet {
+  margin-top: var(--s-2);
+  font: 600 var(--step-4)/1 var(--font-display);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+  animation: settle 700ms var(--ease-settle) 250ms both;
+}
+.chronicle-name {
+  font: 800 var(--step-0)/1.3 var(--font-ui);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+  animation: settle 700ms var(--ease-settle) 380ms both;
+}
+.chronicle-motto {
+  font: 600 var(--step-2)/1.15 var(--font-hand);
+  color: var(--accent-ink);
+  text-wrap: balance;
+  animation: settle 700ms var(--ease-settle) 500ms both;
+}
+.chronicle-rule { display: flex; align-items: center; gap: var(--s-3); width: min(320px, 100%); color: var(--gold-ink); }
+.chronicle-rule span { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.chronicle-tale { display: grid; gap: var(--s-3); max-width: 34rem; text-align: left; color: var(--ink); font-size: var(--step-0); line-height: 1.6; }
+.chronicle-tale p:first-child::first-letter {
+  float: left;
+  margin: 6px 10px 0 0;
+  font: 600 3.4em/.8 var(--font-display);
+  color: var(--accent-ink);
+}
+.chronicle-kin { display: grid; justify-items: center; gap: var(--s-2); margin-top: var(--s-2); }
+.kin-row { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-2); }
+.kin-chip { min-height: 44px; padding-left: 4px; text-decoration: none; color: var(--ink); }
+.kin-chip .crest { --size: 34px; }
+.kin-chip span { display: grid; text-align: left; line-height: 1.15; font-weight: 600; }
+.kin-chip small { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.chronicle-seal { margin-top: var(--s-2); }
+.chronicle-seal .seal { animation: seal-stamp 520ms var(--ease-stamp) 1100ms both; }
+@media (max-width: 400px) { .chronicle { padding-inline: var(--s-4); } }

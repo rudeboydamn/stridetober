@@ -1,6 +1,6 @@
 // Dossier — one walker, examined. Spec: docs/PLAN.md §5.4.
 import { n, esc, rich, ord, pick, fill, fmtRange } from "../lib/format.js";
-import { seal, crest, note, delta, reveal } from "../lib/fx.js";
+import { seal, crest, note, delta, reveal, burst } from "../lib/fx.js";
 import { dailyChart } from "../lib/charts.js";
 import { h2h } from "../lib/stats.js";
 
@@ -34,6 +34,34 @@ function weekCard(ctx, w, wk) {
   </article>`;
 }
 
+// The Chronicle — the walker's legend, crest and kin (copy.LORE). Spec: PLAN §5.4.1.
+function chronicle(ctx, w) {
+  const L = ctx.copy.LORE?.[w.id];
+  if (!L) return `<header class="wrap page-head" data-reveal>
+      <span class="ribbon">Dossier</span>
+      <h1 class="page-title">${esc(w.name)}</h1>
+    </header>`;
+  const kin = (L.kin || []).map(k => {
+    const o = ctx.walkers.find(x => x.id === k.id);
+    return o ? `<a class="chip kin-chip" href="#/walker/${o.id}">${crest(o)}<span><small>${esc(k.as)}</small>${esc(o.short)}</span></a>` : "";
+  }).join("");
+  return `
+  <section class="wrap chronicle-wrap" data-reveal>
+    <article class="card chronicle" style="--c:var(--walker-${w.color})">
+      <span class="chronicle-corner tl" aria-hidden="true">🍂</span><span class="chronicle-corner tr" aria-hidden="true">🍂</span>
+      <span class="kicker chronicle-kicker">The Chronicle of</span>
+      <div class="chronicle-crest">${crest(w, "crest-xl")}</div>
+      <p class="chronicle-epithet">${esc(L.epithet)}</p>
+      <h1 class="chronicle-name">${esc(w.name)}</h1>
+      <p class="chronicle-motto">“${esc(L.motto)}”</p>
+      <div class="chronicle-rule" aria-hidden="true"><span></span>✦<span></span></div>
+      <div class="chronicle-tale">${L.tale.map(t => `<p>${rich(t)}</p>`).join("")}</div>
+      ${kin ? `<div class="chronicle-kin"><span class="kicker">Of the same blood</span><div class="kin-row">${kin}</div></div>` : ""}
+      <div class="chronicle-seal">${seal(w.paid ? "SWORN" : "PENDING", { size: "seal-96", cls: w.paid ? "" : "hollow", label: w.paid ? "Sworn Strider" : "Not yet sworn" })}</div>
+    </article>
+  </section>`;
+}
+
 export function render(ctx, { id } = {}) {
   const w = ctx.walkers.find(x => x.id === id);
   if (!w) {
@@ -45,10 +73,7 @@ export function render(ctx, { id } = {}) {
 
   const r = ctx.standings.find(x => x.walker.id === id);
   if (!r) {
-    return `<header class="wrap page-head" data-reveal>
-        <span class="ribbon">At the trailhead</span>
-        <h1 class="page-title">${esc(w.name)}</h1>
-      </header>
+    return chronicle(ctx, w) + `
       <section class="wrap section"><div class="card empty-state" data-reveal>
         ${seal("", { size: "seal-96", cls: "hollow" })}
         <p class="h3">Not on the Ledger yet.</p>
@@ -79,16 +104,25 @@ export function render(ctx, { id } = {}) {
     return `<li class="chip">🍂 ${esc(meta?.label || h.key)}</li>`;
   }).join("");
 
-  return `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">Dossier</span>
-  </header>
-  <section class="wrap" data-reveal>
+  if (!ctx.weeks.length) {
+    return chronicle(ctx, w) + `
+    <section class="wrap section" data-reveal>
+      <div class="card empty-state">
+        <p class="h3">The Ledger is blank. The legend is not.</p>
+        <p class="sub">${esc(w.short)}'s numbers arrive when Week 1 is counted. Until then, the Judge has only the Chronicle to go on.</p>
+        <a class="textlink" href="#/ledger">See the Ledger →</a>
+      </div>
+    </section>`;
+  }
+
+  return chronicle(ctx, w) + `
+  <section class="wrap section" data-reveal>
+    <header class="section-head"><h2 class="h2">The Dossier</h2></header>
     <div class="card card-raised dossier-hero">
       <div class="dossier-top">
         ${crest(w, "crest-56")}
         <div class="dossier-id">
-          <h1 class="h2">${esc(w.name)}</h1>
+          <h2 class="h2">${esc(w.name)}</h2>
           <p class="caption">${ord(r.rank)} of ${ctx.standings.length} ${delta(r)}</p>
         </div>
       </div>
@@ -124,4 +158,12 @@ const gapTo = (r, lead) => lead.total - r.total;
 
 export function mount(root) {
   reveal(root);
+  // The crest rises, then the leaves go up around it. Reduced motion: a pulse, no leaves.
+  const c = root.querySelector(".chronicle-crest");
+  if (!c) return;
+  setTimeout(() => {
+    if (!c.isConnected) return;
+    const b = c.getBoundingClientRect();
+    burst({ x: b.left + b.width / 2, y: b.top + b.height / 2, count: 30, power: .7, from: c });
+  }, 650);
 }

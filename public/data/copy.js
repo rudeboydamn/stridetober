@@ -281,3 +281,90 @@ export const MILESTONE_TOASTS = { // fired when an open page crosses the moment 
   kickoff: "Kickoff. The couch is now the opposition.",
   bell: "The clock has struck midnight. Pens down, sneakers off.",
 };
+
+// The Chronicles — one legend per Strider, shown at the top of their page (#/walker/:id).
+// Keyed by walker id. `kin` links family to each other's pages; `as` is what that relative is to THIS walker.
+// Family on record: Rod Colon Sr. is the father of Rod Colon Jr. and Alicia Ramos. Add no ties the Judge hasn't confirmed.
+export const LORE = {
+  "rod-jr": {
+    epithet: "The Buckeye",
+    motto: "Luck is carried. Steps are earned.",
+    tale: [
+      "Firstborn of the line of the Bean, he set down the coffee cup and took up the buckeye, a nut said to bring fortune to any soul who keeps one in a pocket.",
+      "He keeps one in his pocket. Whether it carries him or he carries it remains to be seen. The Judge has requested the nut's step count and been refused.",
+    ],
+    kin: [{ id: "rod-sr", as: "Father" }, { id: "alicia", as: "Sister" }],
+  },
+  "rod-sr": {
+    epithet: "The Bean",
+    motto: "First up. Last to sit.",
+    tale: [
+      "Patriarch of the Colon-Ramos line, sire of the Buckeye and the Maple. He was brewing before his children could walk, and they learned to walk chiefly to keep up with him.",
+      "The Judge notes he still rises before the sun, and suspects the sun has noticed.",
+    ],
+    kin: [{ id: "rod-jr", as: "Son" }, { id: "alicia", as: "Daughter" }],
+  },
+  alicia: {
+    epithet: "The Maple",
+    motto: "Every October, I turn.",
+    tale: [
+      "Daughter of the Bean, sister of the Buckeye. She took her own name and her own leaf, but the family stride is unmistakable from across a parking lot.",
+      "Maples blaze red in October. So, the Judge predicts, will her rivals.",
+    ],
+    kin: [{ id: "rod-sr", as: "Father" }, { id: "rod-jr", as: "Brother" }],
+  },
+  lizzie: {
+    epithet: "The Pumpkin",
+    motto: "Saved my best for Halloween.",
+    tale: [
+      "She bears the Judge's own surname, a fact the Judge wishes entered into the record as having no bearing whatsoever on any ruling. None. The Judge is *fairly* certain of it.",
+      "Pumpkins do their finest work at the very end of October. So does the final bell. Coincidence, the Court supposes.",
+    ],
+    kin: [],
+  },
+  tedi: {
+    epithet: "The Scarf",
+    motto: "Cold is an excuse. I don't wear excuses.",
+    tale: [
+      "First through the gate, sworn in on the very first day the Roll opened. The Scarf is armour against two things: the October wind, and the excuses of lesser walkers.",
+      "Worn by those who walk while others hibernate. Wrapped twice, for emphasis.",
+    ],
+    kin: [],
+  },
+  christina: {
+    epithet: "The Mushroom",
+    motto: "Christina. With an H.",
+    tale: [
+      "Spelled with an H, and she will remind you. Mushrooms appear overnight where nothing stood the evening before, and so, the Judge has learned, do her step counts.",
+      "Quiet. Patient. Suddenly everywhere. The forest floor fears her.",
+    ],
+    kin: [],
+  },
+  cristina: {
+    epithet: "The Corn",
+    motto: "Cristina. No H. All stalk.",
+    tale: [
+      "Spelled without the H, and she will also remind you. She carries the Colon name and stands with it, tall, in tidy rows.",
+      "Corn grows until the harvest and not one day less. The harvest is November 1st. The rows are watching.",
+    ],
+    kin: [],
+  },
+  jess: {
+    epithet: "The Apple",
+    motto: "One a day. Ten thousand steps a day.",
+    tale: [
+      "An apple a day keeps the doctor away; ten thousand steps a day keep the Ledger honest. She intends both.",
+      "Crisp, steady, and impossible to bruise. The Apple falls far from no tree, and lands, invariably, ahead.",
+    ],
+    kin: [],
+  },
+  ashlea: {
+    epithet: "The Pie",
+    motto: "Last in the oven. First at the table.",
+    tale: [
+      "The final Strider sworn, with mere hours to spare before the first step. All great pies come out of the oven at the last possible minute, and the kitchen holds its breath.",
+      "Never underestimate the latecomer. The Judge has seen what a pie can do to a lead.",
+    ],
+    kin: [],
+  },
+};

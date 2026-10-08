@@ -551,3 +551,5 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 }
 .docket-tab[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 @media (max-width: 359px) { .docket-tab { font-size: 14px; padding: 0 8px; gap: 6px; } }
+
+.chronicle-tz { justify-self: center; margin-top: var(--s-2); font-size: 13px; }

@@ -26,6 +26,7 @@ function checkRoster(walkers, label) {
     assert.ok(PALETTE.includes(w.color), `${label}: ${w.id} color "${w.color}" is not one of ${PALETTE.join(", ")}`);
     assert.equal(typeof w.paid, "boolean", `${label}: ${w.id} paid must be true or false`);
     if (w.birthday != null) assert.match(w.birthday, /^\d\d-\d\d$/, `${label}: ${w.id} birthday is "MM-DD"`);
+    if (w.tz != null) assert.doesNotThrow(() => new Intl.DateTimeFormat("en-US", { timeZone: w.tz }), `${label}: ${w.id} tz "${w.tz}" is not a real time zone`);
   }
 }
 
@@ -76,6 +77,14 @@ test("walkers: slugs, unique crests, palette colors, no Big Steppas callbacks", 
   const banned = /big ?steppas?|steppas|house of/i;
   for (const f of ["walkers.js", "copy.js", "weeks.js"]) {
     assert.doesNotMatch(readFileSync(`public/data/${f}`, "utf8"), banned, `${f} calls back to Big Steppas`);
+  }
+});
+
+test("lore: every Strider has a Chronicle, and kin only point at real walkers", () => {
+  for (const w of WALKERS) {
+    const L = COPY.LORE[w.id];
+    assert.ok(L?.epithet && L?.motto && L?.tale?.length, `copy.js LORE has no Chronicle for "${w.id}"`);
+    for (const k of L.kin || []) assert.ok(WALKERS.some(x => x.id === k.id), `${w.id}: kin "${k.id}" is not a walker`);
   }
 });
 

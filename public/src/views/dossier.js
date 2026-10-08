@@ -35,6 +35,10 @@ function weekCard(ctx, w, wk) {
 }
 
 // The Chronicle — the walker's legend, crest and kin (copy.LORE). Spec: PLAN §5.4.1.
+// "America/Phoenix" → "Arizona"; any other zone → its short name ("MST", "PDT").
+const tzName = tz => tz === "America/Phoenix" ? "Arizona"
+  : new Intl.DateTimeFormat("en-US", { timeZone: tz, timeZoneName: "short" }).formatToParts(new Date()).find(p => p.type === "timeZoneName")?.value || tz;
+
 function chronicle(ctx, w) {
   const L = ctx.copy.LORE?.[w.id];
   if (!L) return `<header class="wrap page-head" data-reveal>
@@ -54,6 +58,7 @@ function chronicle(ctx, w) {
       <p class="chronicle-epithet">${esc(L.epithet)}</p>
       <h1 class="chronicle-name">${esc(w.name)}</h1>
       <p class="chronicle-motto">“${esc(L.motto)}”</p>
+      ${w.tz ? `<p class="chip chronicle-tz">🌵 Walks on ${esc(tzName(w.tz))} time</p>` : ""}
       <div class="chronicle-rule" aria-hidden="true"><span></span>✦<span></span></div>
       <div class="chronicle-tale">${L.tale.map(t => `<p>${rich(t)}</p>`).join("")}</div>
       ${kin ? `<div class="chronicle-kin"><span class="kicker">Of the same blood</span><div class="kin-row">${kin}</div></div>` : ""}

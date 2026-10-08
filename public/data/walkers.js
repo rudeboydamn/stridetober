@@ -21,6 +21,6 @@ export const WALKERS = [
   { id: "jess",      name: "Jessica Jones", short: "Jess",   crest: "🍎", color: "denim",     paid: true,  paidOn: "2026-09-29", birthday: null },
   // Ashlea joined last minute (Oct 3) as the ninth walker.
   { id: "ashlea",    name: "Ashlea Coulter", short: "Ashlea", crest: "🥧", color: "cranberry", paid: true,  paidOn: "2026-10-03", birthday: null },
-  // Brittany joined Oct 8, the fifth day of week 1. Surname pending — add it to `name`, keep `short`.
-  { id: "brittany",  name: "Brittany",       short: "Brittany", crest: "🐿️", color: "goldenrod", paid: true,  paidOn: "2026-10-08", birthday: null, tz: "America/Phoenix" },
+  // Brittany joined Oct 8, the fifth day of week 1.
+  { id: "brittany",  name: "Brittany Bialoszynski", short: "Brittany", crest: "🐿️", color: "goldenrod", paid: true,  paidOn: "2026-10-08", birthday: null, tz: "America/Phoenix" },
 ];

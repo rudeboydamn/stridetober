@@ -369,10 +369,10 @@ export const LORE = {
   },
   brittany: {
     epithet: "The Squirrel",
-    motto: "Never still. Not even at my desk.",
+    motto: "Late to the Roll. Early to everything else.",
     tale: [
-      "Sworn on the fifth day of the walking, four days late to the Roll and not one step behind it. The Court has seen the evidence: a desk on wheels at work, a walking pad under the desk at home, and a wagon carrying three small passengers who do not walk themselves but supervise closely.",
-      "Like her namesake she is never still and never empty-handed. She and the Scarf keep Arizona time, which never springs forward and never falls back: the only two Striders the clocks cannot excuse.",
+      "Sworn on the fifth day of the walking, four days late to the Roll and not one step behind it. Squirrels are never the first to arrive. They simply arrive with more than everyone else.",
+      "She and the Scarf keep Arizona time, which never springs forward and never falls back: the only two Striders the clocks cannot excuse.",
     ],
     kin: [],
   },

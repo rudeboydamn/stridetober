@@ -11,11 +11,9 @@ import { leaves, gusts, rake, reduced, reveal, puff, burst, toast, wildlife } fr
 import { tree } from "./lib/tree.js";
 import * as court from "./views/court.js";
 import * as ledger from "./views/ledger.js";
-import * as decree from "./views/decree.js";
-import * as excuses from "./views/excuses.js";
 import * as dossier from "./views/dossier.js";
-import * as compare from "./views/compare.js";
 import * as finds from "./views/finds.js";
+import * as courtroom from "./views/courtroom.js";
 
 const root = document.documentElement;
 const view = document.getElementById("view");
@@ -69,20 +67,23 @@ const signature = now =>
 
 // ── router ────────────────────────────────────────────────
 const ROUTES = [
-  // Five tabs: Court · Ledger · Finds · Excuses · More (Decree, Settle It, Theme).
-  // #/check-in is the Court and #/invite is the Decree, each scrolled to its section (`focus`).
-  { path: "/",         mod: court,    name: "court",   tab: 0, title: "" },
-  { path: "/check-in", mod: court,    name: "court",   tab: 0, title: "Check-in", focus: "checkin" },
-  { path: "/ledger",   mod: ledger,   name: "ledger",  tab: 1, title: "The Ledger" },
-  { path: "/finds",    mod: finds,    name: "finds",   tab: 2, title: "Fall Finds" },
-  { path: "/excuses",  mod: excuses,  name: "excuses", tab: 3, title: "Court of Excuses" },
-  { path: "/rules",    mod: decree,   name: "decree",  tab: 4, title: "The Decree" },
-  { path: "/invite",   mod: decree,   name: "decree",  tab: 4, title: "The Summons", focus: "summons" },
+  // Four page tabs — Court · Ledger · Finds · Courtroom — and a fifth tab that switches the theme.
+  // Sections live inside pages; their old URLs are aliases that scroll there (`focus`):
+  // #/check-in → the Court, #/rules and #/invite → the Ledger (the Decree, the Summons).
+  // The Courtroom has two dockets: #/excuses (pleas) and #/compare[/a[/b]] (disputes).
+  { path: "/",          mod: court,     name: "court",     tab: 0, title: "" },
+  { path: "/check-in",  mod: court,     name: "court",     tab: 0, title: "Check-in", focus: "checkin" },
+  { path: "/ledger",    mod: ledger,    name: "ledger",    tab: 1, title: "The Ledger" },
+  { path: "/rules",     mod: ledger,    name: "ledger",    tab: 1, title: "The Decree", focus: "decree" },
+  { path: "/invite",    mod: ledger,    name: "ledger",    tab: 1, title: "The Summons", focus: "summons" },
+  { path: "/finds",     mod: finds,     name: "finds",     tab: 2, title: "Fall Finds" },
+  { path: "/excuses",   mod: courtroom, name: "courtroom", tab: 3, title: "The Courtroom" },
+  { path: "/courtroom", mod: courtroom, name: "courtroom", tab: 3, title: "The Courtroom" },
   // parameterized (PLAN §5): params land in render(ctx, params)/mount(root, ctx, params)
   { match: /^\/walker\/([a-z0-9-]+)$/i, mod: dossier, name: "dossier", tab: -1,
     title: null, params: m => ({ id: m[1] }) },
-  { match: /^\/compare(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?$/i, mod: compare, name: "compare", tab: 4,
-    title: "Settle It", params: m => ({ a: m[1], b: m[2] }) },
+  { match: /^\/compare(?:\/([a-z0-9-]+))?(?:\/([a-z0-9-]+))?$/i, mod: courtroom, name: "courtroom", tab: 3,
+    title: "Settle It", params: m => ({ docket: "disputes", a: m[1], b: m[2] }) },
 ];
 const OFF_TRAIL = {
   name: "off-trail", tab: -1, title: "Off the trail", params: () => ({}),
@@ -134,7 +135,6 @@ function applyChrome(now) {
   const tabbar = document.getElementById("tabbar");
   tabbar.dataset.tab = route.tab;
   tabbar.style.setProperty("--tab", Math.max(0, route.tab));
-  moreTab.classList.toggle("is-current", route.tab === 4);   // Decree and Settle It live behind More
   tabbar.querySelectorAll("a.tab").forEach(a => {
     if (+a.dataset.tab === route.tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
@@ -213,7 +213,7 @@ function render({ transition = false, focus = false } = {}) {
 }
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-addEventListener("hashchange", () => { closeSheet(); render({ transition: true, focus: true }); });
+addEventListener("hashchange", () => render({ transition: true, focus: true }));
 
 function tick() {
   if (document.hidden) return;                          // a pocketed phone does no work
@@ -226,51 +226,24 @@ function tick() {
 setInterval(tick, 1000);
 document.addEventListener("visibilitychange", tick);
 
-// ── More sheet ────────────────────────────────────────────
-const sheet = document.getElementById("sheet"), scrim = document.getElementById("scrim"), moreTab = document.getElementById("moreTab");
-let sheetOpen = false, lastFocus = null;
-
-function setSheet(open) {
-  sheetOpen = open;
-  sheet.hidden = false;
-  scrim.hidden = false;
-  void sheet.offsetWidth;                                 // reflow, then toggle (no rAF: backgrounded tabs never fire it)
-  sheet.classList.toggle("open", open);
-  scrim.classList.toggle("open", open);
-  moreTab.setAttribute("aria-expanded", String(open));
-  document.body.classList.toggle("locked", open);
-  if (open) {
-    lastFocus = document.activeElement;
-    sheet.querySelector("a, button")?.focus();
-  } else {
-    setTimeout(() => { if (!sheetOpen) { sheet.hidden = true; scrim.hidden = true; } }, 340);
-    lastFocus?.focus?.({ preventScroll: true });
-  }
-}
-function closeSheet() { if (sheetOpen) setSheet(false); }
-
-moreTab.addEventListener("click", () => setSheet(!sheetOpen));
-scrim.addEventListener("click", closeSheet);
-addEventListener("keydown", e => {
-  if (!sheetOpen) return;
-  if (e.key === "Escape") { closeSheet(); return; }
-  if (e.key !== "Tab") return;
-  const f = [...sheet.querySelectorAll("a, button")];
-  if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f.at(-1).focus(); }
-  else if (!e.shiftKey && document.activeElement === f.at(-1)) { e.preventDefault(); f[0].focus(); }
-});
-
-// Theme: Auto → Dark → Light, remembered per device.
+// Theme: Auto → Dark → Light, remembered per device. The tab bar's fifth button (and the desktop
+// header's) cycles it; its label always says what it is now.
 const THEMES = ["auto", "dark", "light"];
-const themeVal = document.getElementById("themeVal");
 const readTheme = () => root.dataset.theme || "auto";
-const showTheme = () => { const t = readTheme(); themeVal.textContent = t[0].toUpperCase() + t.slice(1); };
-document.getElementById("themeRow").addEventListener("click", () => {
+const toggles = [...document.querySelectorAll(".theme-toggle")];
+const showTheme = () => {
+  const t = readTheme(), name = t[0].toUpperCase() + t.slice(1);
+  toggles.forEach(b => {
+    b.querySelector(".theme-val").textContent = name;
+    b.setAttribute("aria-label", `Theme: ${name}. Tap to change.`);
+  });
+};
+toggles.forEach(b => b.addEventListener("click", () => {
   const next = THEMES[(THEMES.indexOf(readTheme()) + 1) % THEMES.length];
   if (next === "auto") delete root.dataset.theme; else root.dataset.theme = next;
   try { next === "auto" ? localStorage.removeItem("stridetober:theme") : localStorage.setItem("stridetober:theme", next); } catch { /* ignore */ }
   showTheme();
-});
+}));
 showTheme();
 
 // ── iOS tab bar pin ───────────────────────────────────────

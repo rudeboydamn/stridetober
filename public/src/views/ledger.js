@@ -5,6 +5,7 @@ import { n, esc, rich } from "../lib/format.js";
 import { seal, crest, delta, reveal, flip, burst, toast, reduced } from "../lib/fx.js";
 import { climbChart, totalsChart } from "../lib/charts.js";
 import { purse } from "../lib/stats.js";
+import { section as decreeSection, mountSection as mountDecree } from "./decree.js";
 
 const vw = () => (typeof document !== "undefined" ? document.documentElement.clientWidth : 1024);
 
@@ -22,7 +23,7 @@ const empty = inner => `
 
 const missingStamp = `<span class="stamp stamp-sm">No screenshot</span>`;
 
-export function render(ctx) {
+function standings(ctx) {
   if (ctx.phase === "muster") {
     const p = countdownParts(ctx.now, parseLocal(ctx.challenge.kickoff));
     return head("Opens at kickoff") + empty(`
@@ -111,8 +112,13 @@ const SEEN = "stridetober:last-seen-week";
 const seenWeek = () => { try { return +localStorage.getItem(SEEN) || 0; } catch { return Infinity; } };
 const markSeen = w => { try { localStorage.setItem(SEEN, String(w)); } catch { /* private mode */ } };
 
-export function mount(root, ctx) {
+// The Ledger, then the Decree that governs it. #/rules and #/invite scroll down to their sections.
+export const render = ctx => standings(ctx) + decreeSection(ctx);
+
+export function mount(root, ctx, params = {}) {
   reveal(root);
+  mountDecree(root, ctx);
+  if (params.focus) root.querySelector("#" + params.focus)?.scrollIntoView({ block: "start", behavior: "instant" });
   const latest = ctx.weeks.at(-1)?.week ?? 0;
   if (!latest) return;
 

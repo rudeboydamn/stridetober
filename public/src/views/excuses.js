@@ -1,6 +1,6 @@
 // Court of Excuses — the cheek centerpiece. Spec: docs/PLAN.md §5.8.
 import { esc, rich, n } from "../lib/format.js";
-import { icon, seal, note, toast, reveal, reduced } from "../lib/fx.js";
+import { icon, seal, note, toast, reduced } from "../lib/fx.js";
 
 const KEY = "stridetober:pleas";
 const readCount = () => { try { return +localStorage.getItem(KEY) || 0; } catch { return 0; } };
@@ -9,10 +9,6 @@ const saveCount = v => { try { localStorage.setItem(KEY, String(v)); } catch { /
 export function render() {
   const heard = readCount();
   return `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">All pleas are heard. Few are granted.</span>
-    <h1 class="page-title">Court of Excuses</h1>
-  </header>
   <section class="wrap section" data-reveal>
     <div class="card card-raised bench">
       <div class="bench-top">
@@ -28,7 +24,6 @@ export function render() {
 }
 
 export function mount(root, ctx) {
-  reveal(root);
   const pool = ctx.copy.EXCUSES;
   const verdict = root.querySelector("#verdict"), gavel = root.querySelector("#gavel");
   const countEl = root.querySelector("#pleaCount"), noteSlot = root.querySelector("#pleasNote");

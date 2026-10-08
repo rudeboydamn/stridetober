@@ -1,17 +1,13 @@
 // Settle It — head-to-head adjudication. Spec: docs/PLAN.md §5.7.
 import { n, esc, rich, fill } from "../lib/format.js";
-import { crest, icon, reveal, share } from "../lib/fx.js";
+import { crest, icon, share } from "../lib/fx.js";
 import { h2h } from "../lib/stats.js";
 import { climbChart } from "../lib/charts.js";
 
 const DOW = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const vw = () => (typeof document !== "undefined" ? document.documentElement.clientWidth : 1024);
 
-const head = () => `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">The Judge adjudicates</span>
-    <h1 class="page-title">Settle It</h1>
-  </header>`;
+const head = () => "";   // the Courtroom carries the page head
 
 const pickGrid = (ctx, href) => `
   <div class="pick-grid">${ctx.paid.map(w => `
@@ -114,7 +110,6 @@ export function render(ctx, { a, b } = {}) {
 }
 
 export function mount(root, ctx, params = {}) {
-  reveal(root);
   const btn = root.querySelector("#shareBtn");
   if (!btn) return;
   btn.addEventListener("click", () => {

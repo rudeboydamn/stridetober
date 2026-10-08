@@ -98,10 +98,12 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
 - The wildlife layer (`.wild`) sits *in front of* the page so it can be tapped; the
   tree's residents sit behind it, so `tree.js` matches their taps by hand and ignores
   any tap on a card.
-- Five tabs, and they are load-bearing: Court · Ledger · Finds · Excuses · More. `route.tab`
-  indices live in `main.js` ROUTES; the More leaf/label is `tab === 4` (Decree, Settle It).
-  Check-in and the Summons are **sections** (Court, Decree) — `#/check-in` and `#/invite`
-  are aliases that scroll to them, so don't add pages for them back.
+- Five tabs, and they are load-bearing: Court · Ledger · Finds · Courtroom · Theme (a
+  button that cycles the theme — there is no More sheet). `route.tab` indices live in
+  `main.js` ROUTES. Sections live inside pages, and their old URLs are aliases that scroll
+  to them: `#/check-in` → Court; `#/rules`, `#/invite` → Ledger (Decree, Summons). The
+  Courtroom has two dockets with their own URLs: `#/excuses` and `#/compare[/a[/b]]`.
+  Don't add pages for any of these back.
 - **Nothing fixed may ever poke past the screen edge**, not even mid-animation. A wider page
   makes iOS shift its layout viewport and the tab bar floats loose. Animate children with
   `translate`, never the fixed layer itself. On iOS the tab bar is also pinned to the visual

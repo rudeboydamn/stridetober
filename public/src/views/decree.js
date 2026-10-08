@@ -1,7 +1,7 @@
 // The Decree — the rules, read aloud. Spec: docs/PLAN.md §5.6. Flyer phrases are verbatim (§6.2).
 import { esc, fmtRange } from "../lib/format.js";
 import { parseLocal } from "../lib/time.js";
-import { seal, reveal } from "../lib/fx.js";
+import { seal } from "../lib/fx.js";
 import { section as summonsSection, mountSection as mountSummons } from "./summons.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -18,7 +18,8 @@ const article = (i, title, body) => `
     </article>
   </section>`;
 
-export function render(ctx) {
+// The Decree — now the second half of the Ledger page (#/rules is the Ledger, scrolled here).
+export function section(ctx) {
   const c = ctx.challenge;
   const season = `
     <p class="decree-lead">OCTOBER 4TH – 31ST</p>
@@ -56,10 +57,13 @@ export function render(ctx) {
     <p class="hand-line">Just get those steps!</p>`;
 
   return `
-  <header class="wrap page-head" data-reveal>
-    <span class="ribbon">So ordered</span>
-    <h1 class="page-title">The Decree</h1>
-    <p class="sub">The rules of Stridetober, read aloud by the <em>Fairly</em> Impartial Judge.</p>
+  <div id="decree">
+  <header class="wrap section" data-reveal>
+    <div class="section-head">
+      <span class="ribbon">So ordered</span>
+      <h2 class="h2">The Decree</h2>
+      <p class="sub">The rules of Stridetober, read aloud by the <em>Fairly</em> Impartial Judge.</p>
+    </div>
   </header>
   ${article(0, "The Season", season)}
   ${article(1, "The Evidence", evidence)}
@@ -68,12 +72,10 @@ export function render(ctx) {
   ${article(4, "The Encouragement", moving)}
   ${summonsSection(ctx)}
   <p class="wrap flourish">The Judge's word is <em>fairly</em> final.</p>
-  <p class="wrap flourish small">Fall into Healthy Habits</p>`;
+  <p class="wrap flourish small">Fall into Healthy Habits</p>
+  </div>`;
 }
 
-export function mount(root, ctx, params = {}) {
-  reveal(root);
+export function mountSection(root, ctx) {
   mountSummons(root, ctx);
-  // #/invite is the Decree, scrolled to the Summons.
-  if (params.focus) root.querySelector("#" + params.focus)?.scrollIntoView({ block: "start", behavior: "instant" });
 }

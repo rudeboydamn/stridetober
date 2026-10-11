@@ -280,7 +280,7 @@ function coronation(ctx) {
 function docket(ctx) {
   if (!DOCKET || ctx.weeks.some(w => w.week === DOCKET.week)) return "";
   const got = new Set(DOCKET.in);
-  const row = w => `<li class="docket-row${got.has(w.id) ? " is-in" : ""}"><span aria-hidden="true">${w.crest}</span>${esc(w.short)}<b>${got.has(w.id) ? "✓ In" : "Waiting"}</b></li>`;
+  const row = w => `<li class="docket-row${got.has(w.id) ? " is-in" : ""}"><span aria-hidden="true">${w.crest}</span>${esc(w.short.replace(/ [A-Z]\.$/, ""))}<b>${got.has(w.id) ? "✓" : "⏳"}</b></li>`;
   const paid = ctx.walkers.filter(w => w.paid);
   const waiting = paid.filter(w => !got.has(w.id));
   return `

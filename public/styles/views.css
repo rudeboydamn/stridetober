@@ -557,6 +557,6 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 /* Court: screenshot roll call (names only, no numbers) */
 .roll-call-list { list-style: none; margin: 12px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 8px; }
 .docket-row { display: flex; align-items: center; gap: 8px; min-width: 0; padding: 10px 12px; border-radius: 12px; border: 1.5px dashed var(--line, currentColor); color: var(--ink-2); }
-.docket-row b { margin-left: auto; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.docket-row b { margin-left: auto; font-size: 14px; font-weight: 600; white-space: nowrap; }
 .docket-row.is-in { border-style: solid; color: var(--ink); }
 .docket-row.is-in { border-color: var(--walker-moss); }

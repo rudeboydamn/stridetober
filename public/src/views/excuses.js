@@ -30,34 +30,73 @@ function filing(ctx) {
   </section>`;
 }
 
-const entry = (ctx, x) => {
+const day = t => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+// Everyone sees every excuse. Whoever is picked in "Who is pleading" can edit or delete their own.
+const entry = (ctx, x, mine) => {
   const w = ctx.walkers.find(v => v.id === x.walker);
-  return w ? `<li class="card record-row">${crest(w)}<div><p class="record-plea">“${esc(x.body)}”</p>
-    <p class="caption">${esc(w.short)} · ${new Date(x.at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p></div></li>` : "";
+  if (!w) return "";
+  return `<li class="card record-row" data-id="${x.id}">${crest(w)}<div class="record-body">
+    <p class="record-plea">“${esc(x.body)}”</p>
+    <p class="caption">${esc(w.short)} · ${day(x.at)}${x.edited ? " · edited" : ""}</p>
+    ${mine ? `<p class="record-actions"><button class="textlink" type="button" data-act="edit">Edit</button><button class="textlink" type="button" data-act="delete">Delete</button></p>` : ""}
+  </div></li>`;
 };
 
 function mountFiling(root, ctx) {
   const list = root.querySelector("#record"), form = root.querySelector("#filing");
   if (!list) return;
-  const empty = `<li class="caption">No excuses on file. Suspicious.</li>`;
+  let rows = null;
+  const who = () => form.walker.value;
+  const draw = () => {
+    if (!rows) return;
+    list.innerHTML = rows.map(x => entry(ctx, x, x.walker === who())).join("") || `<li class="caption">No excuses on file. Suspicious.</li>`;
+  };
+  const call = (method, body) => fetch("/api/excuses", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+    .then(r => r.ok ? (r.status === 204 ? null : r.json()) : Promise.reject());
+  const recess = () => toast("The Court is in recess. Try again later.");
+
   fetch("/api/excuses").then(r => r.ok ? r.json() : Promise.reject())
-    .then(rows => { list.innerHTML = rows.map(x => entry(ctx, x)).join("") || empty; })
+    .then(r => { rows = r; draw(); })
     .catch(() => { list.innerHTML = `<li class="caption">The Court is in recess. Try again later.</li>`; });
+
+  form.walker.addEventListener("change", () => { try { localStorage.setItem(ME, who()); } catch { /* private mode */ } draw(); });
   form.addEventListener("submit", async e => {
     e.preventDefault();
-    const btn = form.querySelector("button"), data = Object.fromEntries(new FormData(form));
+    const btn = form.querySelector("button[type=submit]");
     btn.disabled = true;
     try {
-      const r = await fetch("/api/excuses", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-      if (!r.ok) throw 0;
-      const row = await r.json();
-      try { localStorage.setItem(ME, data.walker); } catch { /* private mode */ }
-      if (list.querySelector(".record-row")) list.insertAdjacentHTML("afterbegin", entry(ctx, row));
-      else list.innerHTML = entry(ctx, row);
+      const row = await call("POST", { walker: who(), body: form.body.value });
+      try { localStorage.setItem(ME, who()); } catch { /* private mode */ }
+      rows = [row, ...(rows || [])];
+      draw();
       form.body.value = "";
       toast("Entered into the record.");
-    } catch { toast("The Court is in recess. Try again later."); }
+    } catch { recess(); }
     btn.disabled = false;
+  });
+
+  list.addEventListener("click", async e => {
+    const btn = e.target.closest("[data-act]");
+    if (!btn) return;
+    const li = btn.closest("[data-id]"), id = +li.dataset.id, x = rows.find(r => r.id === id);
+    const act = btn.dataset.act;
+    if (act === "delete") {
+      if (!confirm("Delete this excuse for good?")) return;
+      try { await call("DELETE", { id, walker: who() }); rows = rows.filter(r => r.id !== id); draw(); toast("Struck from the record."); }
+      catch { recess(); }
+    } else if (act === "edit") {
+      li.querySelector(".record-body").innerHTML = `
+        <label class="field"><span>Edit your excuse</span><textarea maxlength="280" rows="3">${esc(x.body)}</textarea></label>
+        <p class="record-actions"><button class="textlink" type="button" data-act="save">Save</button><button class="textlink" type="button" data-act="cancel">Cancel</button></p>`;
+      li.querySelector("textarea").focus();
+    } else if (act === "cancel") draw();
+    else if (act === "save") {
+      try {
+        const row = await call("PATCH", { id, walker: who(), body: li.querySelector("textarea").value });
+        rows = rows.map(r => r.id === id ? row : r); draw(); toast("Amended.");
+      } catch { recess(); }
+    }
   });
 }
 

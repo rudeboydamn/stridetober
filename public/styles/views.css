@@ -247,7 +247,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .sunday-pick { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: var(--s-3); }
 .field, .day-field { display: grid; gap: 6px; min-width: 0; }
 .field > span, .day-field > span { color: var(--ink-2); font: 600 13px/1.2 var(--font-ui); }
-.field select, .day-field input {
+.field select, .field textarea, .day-field input {
   width: 100%;
   min-width: 0;
   min-height: 48px;
@@ -563,3 +563,10 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .docket-row b { margin-left: auto; font-size: 14px; font-weight: 600; white-space: nowrap; }
 .docket-row.is-in { border-style: solid; color: var(--ink); }
 .docket-row.is-in { border-color: var(--walker-moss); }
+
+/* Courtroom: typed excuses and the public record */
+.filing { display: grid; gap: var(--s-3); }
+.field textarea { padding: 12px 14px; font: inherit; resize: vertical; }
+.record { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
+.record-row { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: start; }
+.record-plea { font: italic 600 var(--step-0)/1.35 var(--font-display); overflow-wrap: anywhere; }

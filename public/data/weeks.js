@@ -9,7 +9,7 @@ export const WEEKS = [];
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
 // until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.
-export const DOCKET = { week: 1, in: ["tedi", "lizzie", "alicia", "rod-jr", "brittany", "cristina", "ashlea", "jess", "rod-sr"] };
+export const DOCKET = { week: 1, in: ["tedi", "lizzie", "alicia", "rod-jr", "brittany", "cristina", "ashlea", "jess", "rod-sr", "christina"] };
 
 // Alicia's birthday falls on kickoff day. Live all day Sunday Oct 4, then it retires itself.
 export const ANNOUNCEMENT = {

@@ -3,7 +3,7 @@
 import { WALKERS } from "../public/data/walkers.js";
 import { sql } from "./_lib/neon.js";
 
-const IDS = new Set(WALKERS.filter(w => w.paid).map(w => w.id));
+const IDS = new Set([...WALKERS.filter(w => w.paid).map(w => w.id), "judge"]);   // the Judge may plead too; the form never offers him
 const MAX = 280;
 const clean = body => String(body ?? "").trim().replace(/\s+/g, " ");
 const num = r => r && { ...r, id: Number(r.id) };   // Neon's HTTP API returns numbers as text

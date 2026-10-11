@@ -30,11 +30,12 @@ function filing(ctx) {
   </section>`;
 }
 
+const JUDGE = { id: "judge", short: "The Judge", crest: "⚖️", color: "goldenrod" };
 const day = t => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 // Everyone sees every excuse. Whoever is picked in "Who is pleading" can edit or delete their own.
 const entry = (ctx, x, mine) => {
-  const w = ctx.walkers.find(v => v.id === x.walker);
+  const w = x.walker === "judge" ? JUDGE : ctx.walkers.find(v => v.id === x.walker);
   if (!w) return "";
   return `<li class="card record-row" data-id="${x.id}">${crest(w)}<div class="record-body">
     <p class="record-plea">“${esc(x.body)}”</p>

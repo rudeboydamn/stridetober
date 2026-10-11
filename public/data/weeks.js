@@ -5,7 +5,21 @@
 //   derived: [],                                           // ids whose daily split was chart-read
 //   judgeNote: "…" }
 // steps is authoritative as submitted. days null = pending — never guess.
-export const WEEKS = [];
+export const WEEKS = [
+  { week: 1, posted: "2026-10-11T12:00",
+    steps: { tedi: 119502, alicia: 111512, lizzie: 98744, "rod-jr": 71507, brittany: 66773, cristina: 44054,
+             christina: null, jess: null, ashlea: null, "rod-sr": null },
+    days: {
+      tedi: [12675, 18878, 10337, 14700, 18462, 21876, 22574],
+      alicia: [7367, 16343, 16823, 16748, 16982, 16722, 20527],
+      lizzie: null,
+      "rod-jr": [12527, 13367, 8356, 4616, 9088, 7910, 15643],
+      brittany: [11113, 5057, 6704, 6463, 10653, 13459, 13324],
+      cristina: [4382, 6381, 6385, 6611, 7564, 7263, 5468],
+    },
+    derived: [],
+    judgeNote: "The first docket is read, and the Court is *fairly* impressed. Tedi opens with 119,502 and leads Alicia's 111,512 by 7,990. Lizzie's 98,744 sits third. Four Striders have yet to hand in a screenshot, and the Judge counts them as zero only until they do. Their chairs are empty, not lost." },
+];
 
 // Alicia's birthday falls on kickoff day. Live all day Sunday Oct 4, then it retires itself.
 export const ANNOUNCEMENT = {

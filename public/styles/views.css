@@ -171,7 +171,10 @@ html[data-eve] .sky-moon { display: none; }
 
 .preview-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .preview-list { display: grid; gap: 10px; margin: var(--s-4) 0 var(--s-2); list-style: none; }
-.preview-row { display: grid; grid-template-columns: 28px 40px minmax(0, 1fr) auto auto; align-items: center; gap: 10px; }
+.preview-row { display: grid; grid-template-columns: 28px 40px minmax(0, 1fr) auto; align-items: center; column-gap: 10px; padding: 6px 0; }
+.preview-row + .preview-row { border-top: 1px solid var(--line); }
+.preview-row .chase { grid-column: 3 / -1; margin-top: -4px; color: var(--ink-2); font-size: 13px; }
+.preview-row.is-podium .preview-total { color: var(--c); }
 .preview-rank { color: var(--ink-2); font: 600 var(--step-1)/1 var(--font-display); text-align: center; }
 .preview-name { overflow: hidden; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .preview-total { font: 600 var(--step-1)/1 var(--font-display); text-align: right; }

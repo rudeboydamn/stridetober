@@ -2,7 +2,6 @@
 import { esc, fmtRange } from "../lib/format.js";
 import { parseLocal } from "../lib/time.js";
 import { seal } from "../lib/fx.js";
-import { section as summonsSection, mountSection as mountSummons } from "./summons.js";
 
 const day = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
@@ -45,16 +44,6 @@ export function section(ctx) {
     <p class="decree-quote">No participation trophies. No sympathy points. And there will definitely be NO rounding up because you were "basically" at 10,000.</p>
     <p>The Judge trusts your tracker. He also, on occasion, asks questions.</p>`;
 
-  const moving = `
-    <p class="decree-lead">Lace up those sneakers and GET MOVING!!!</p>
-    <ul class="moving">
-      <li>Walk around the block.</li>
-      <li>Walk around the house.</li>
-      <li>Walk while you're on the phone.</li>
-      <li>Walk when you're angry.</li>
-      <li>Walk to avoid your responsibilities.</li>
-    </ul>
-    <p class="hand-line">Just get those steps!</p>`;
 
   return `
   <div id="decree">
@@ -69,13 +58,8 @@ export function section(ctx) {
   ${article(1, "The Evidence", evidence)}
   ${article(2, "The Reckoning", reckoning)}
   ${article(3, "The Fine Print", fine)}
-  ${article(4, "The Encouragement", moving)}
-  ${summonsSection(ctx)}
   <p class="wrap flourish">The Judge's word is <em>fairly</em> final.</p>
-  <p class="wrap flourish small">Fall into Healthy Habits</p>
   </div>`;
 }
 
-export function mountSection(root, ctx) {
-  mountSummons(root, ctx);
-}
+export function mountSection() {}

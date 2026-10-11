@@ -207,7 +207,7 @@ export function reveal(root) {
   if (reduced() || !("IntersectionObserver" in window)) { els.forEach(show); return; }
   io = new IntersectionObserver(entries => {
     for (const e of entries) if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
-  }, { threshold: .15, rootMargin: "0px 0px -10% 0px" });
+  }, { threshold: 0, rootMargin: "0px 0px -10% 0px" });
   els.forEach(el => io.observe(el));
 }
 

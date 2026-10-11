@@ -69,13 +69,13 @@ const signature = now =>
 const ROUTES = [
   // Four page tabs — Court · Ledger · Finds · Courtroom — and a fifth tab that switches the theme.
   // Sections live inside pages; their old URLs are aliases that scroll there (`focus`):
-  // #/check-in → the Court, #/rules and #/invite → the Ledger (the Decree, the Summons).
+  // #/check-in → the Court, #/rules and #/invite → the Ledger (the Decree).
   // The Courtroom has two dockets: #/excuses (pleas) and #/compare[/a[/b]] (disputes).
   { path: "/",          mod: court,     name: "court",     tab: 0, title: "" },
   { path: "/check-in",  mod: court,     name: "court",     tab: 0, title: "Check-in", focus: "checkin" },
   { path: "/ledger",    mod: ledger,    name: "ledger",    tab: 1, title: "The Ledger" },
   { path: "/rules",     mod: ledger,    name: "ledger",    tab: 1, title: "The Decree", focus: "decree" },
-  { path: "/invite",    mod: ledger,    name: "ledger",    tab: 1, title: "The Summons", focus: "summons" },
+  { path: "/invite",    mod: ledger,    name: "ledger",    tab: 1, title: "The Ledger" },
   { path: "/finds",     mod: finds,     name: "finds",     tab: 2, title: "Fall Finds" },
   { path: "/excuses",   mod: courtroom, name: "courtroom", tab: 3, title: "The Courtroom" },
   { path: "/courtroom", mod: courtroom, name: "courtroom", tab: 3, title: "The Courtroom" },

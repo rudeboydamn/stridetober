@@ -101,7 +101,7 @@ tribute pending, excluded from standings) · `weeks.js` (WEEKS + ANNOUNCEMENT) �
 - Five tabs, and they are load-bearing: Court · Ledger · Finds · Courtroom · Theme (a
   button that cycles the theme — there is no More sheet). `route.tab` indices live in
   `main.js` ROUTES. Sections live inside pages, and their old URLs are aliases that scroll
-  to them: `#/check-in` → Court; `#/rules`, `#/invite` → Ledger (Decree, Summons). The
+  to them: `#/check-in` → Court; `#/rules`, `#/invite` → Ledger (Decree; the Summons is gone). The
   Courtroom has two dockets with their own URLs: `#/excuses` and `#/compare[/a[/b]]`.
   Don't add pages for any of these back.
 - **Nothing fixed may ever poke past the screen edge**, not even mid-animation. A wider page

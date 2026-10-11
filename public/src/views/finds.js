@@ -1,6 +1,6 @@
 // Fall Finds — the field journal. Spec: docs/PLAN.md §5.9.
 // Catalogue numbers are assigned by date (oldest = №01); the grid shows newest first.
-import { esc, rich, fmtDay } from "../lib/format.js";
+import { esc, rich, fmtDay, fmtRange } from "../lib/format.js";
 import { crest, tallySvg, seal, reveal } from "../lib/fx.js";
 
 const numbered = finds => {
@@ -12,6 +12,13 @@ const finderChip = (ctx, id) => {
   const w = ctx.walkers.find(x => x.id === id);
   if (!w) return "";
   return `<a class="chip finder" href="#/walker/${w.id}">${crest(w)}<span>${esc(w.short)}</span></a>`;
+};
+
+// Newest week first; a find outside the four weeks joins the nearest one.
+const weeksOf = (ctx, finds) => {
+  const W = ctx.challenge.weeks;
+  const at = f => W.find(w => f.date <= w.end) || W.at(-1);
+  return [...W].reverse().map(w => [w, finds.filter(f => at(f) === w)]).filter(([, l]) => l.length);
 };
 
 export function render(ctx) {
@@ -32,8 +39,10 @@ export function render(ctx) {
       <p class="sub">Find something worth photographing on a walk, send it to the Judge, and it joins the journal.</p>
     </div>
   </section>` : `
+  ${weeksOf(ctx, finds).map(([w, list]) => `
   <section class="wrap section" data-reveal>
-    <div class="finds-grid">${finds.map(f => `
+    <header class="section-head"><h2 class="h2">Week ${w.n}</h2><p class="sub">${fmtRange(w.start, w.end)} · ${list.length} find${list.length === 1 ? "" : "s"}</p></header>
+    <div class="finds-grid">${list.map(f => `
       <figure class="card find">
         ${f.img
           ? `<img src="${esc(f.img)}" width="${f.w}" height="${f.h}" loading="lazy" alt="${esc(f.caption)}">`
@@ -45,7 +54,7 @@ export function render(ctx) {
         </figcaption>
       </figure>`).join("")}
     </div>
-  </section>`}`;
+  </section>`).join("")}`}`;
 }
 
 export function mount(root) {

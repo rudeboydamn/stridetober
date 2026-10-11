@@ -2,7 +2,7 @@
 import { nextMilestone, countdownParts, parseLocal, daysTo } from "../lib/time.js";
 import { n, esc, rich, fill, pick } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
-import { SPRITE, icon, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
+import { SPRITE, icon, seal, crest, note, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
 import { downloadCalendar } from "../lib/calendar.js";
 import { DOCKET } from "../../data/weeks.js";
 import { section as checkinSection, mountSection as mountCheckin } from "./checkin.js";
@@ -308,37 +308,21 @@ function ledgerPreview(ctx) {
   }
   const behind = ctx.week && ctx.week.n - 1 > ctx.weeks.length;
   const tag = ctx.phase === "counting" ? "unofficial" : behind ? ctx.copy.AS_COUNTED : `after week ${ctx.weeks.length}`;
-  const rows = ctx.standings.slice(0, 3).map((r, i) => `
-    <li class="preview-row" style="--c:var(--walker-${r.walker.color})">
-      <span class="preview-rank" aria-label="Rank ${r.rank}">${r.rank}</span>
+  const S = ctx.standings;
+  const rows = S.map((r, i) => `
+    <li class="preview-row${i < 3 ? " is-podium" : ""}" style="--c:var(--walker-${r.walker.color})">
+      <span class="preview-rank" aria-label="Rank ${r.rank}">${["🥇", "🥈", "🥉"][i] || r.rank}</span>
       ${crest(r.walker)}
-      <span class="preview-name">${esc(r.walker.short)}</span>
+      <a class="preview-name" href="#/walker/${r.walker.id}">${esc(r.walker.short)}</a>
       <b class="num preview-total" data-count="${r.total}">${n(r.total)}</b>
-      ${delta(r)}
+      <span class="chase">${i ? `${n(S[i - 1].total - r.total)} to pass ${esc(S[i - 1].walker.short)}` : `leads by ${n(r.total - (S[1]?.total ?? 0))}`}</span>
     </li>`).join("");
   return `
   <section class="wrap section" data-reveal>
     <div class="card preview">
-      <header class="preview-head"><span class="kicker">The Ledger</span><span class="caption">${esc(tag)}</span></header>
+      <header class="preview-head"><span class="kicker">The Chase</span><span class="caption">${esc(tag)}</span></header>
       <ol class="preview-list">${rows}</ol>
-      <a class="textlink" href="#/ledger">See the full Ledger →</a>
-      <div class="preview-note">${note(pick(ctx.copy.MARGIN_NOTES, ctx.weeks.length - 1))}</div>
-    </div>
-  </section>`;
-}
-
-function report(ctx) {
-  const wk = ctx.weeks.at(-1);
-  if (!wk?.judgeNote) return "";
-  return `
-  <section class="wrap section" data-reveal>
-    <div class="card report">
-      ${seal("", { size: "seal-56" })}
-      <div>
-        <span class="kicker">The Judge's Report</span>
-        <blockquote class="report-note">${rich(wk.judgeNote)}</blockquote>
-        <p class="caption">— The <em>Fairly</em> Impartial Judge, Week ${wk.week}</p>
-      </div>
+      <a class="textlink" href="#/ledger">Charts and honours →</a>
     </div>
   </section>`;
 }
@@ -370,8 +354,8 @@ export function render(ctx) {
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + roll(ctx)
-    + (ctx.phase === "crowned" ? "" : checkinSection(ctx)) + how();
+    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + togetherTile(ctx)
+    + (ctx.phase === "crowned" ? "" : checkinSection(ctx));
 }
 
 let squirrelTimer = 0;

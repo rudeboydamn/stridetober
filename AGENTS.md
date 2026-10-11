@@ -38,7 +38,7 @@ not compete by default.
 
 ## 3. The weekly job (Sundays: Oct 11, 18, 25, Nov 1)
 
-1. Screenshots go in `checkins/<walker-id>/week-N/`. **Read every one** —
+1. Screenshots go in `checkins/week-N/<walker-id>/`. **Read every one** —
    money is on it. They are git-ignored: the repo is public, so walkers'
    screenshots never leave this machine.
 2. Rules of evidence (identical every week, full text PLAN §9.2):

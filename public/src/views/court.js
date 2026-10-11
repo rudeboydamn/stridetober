@@ -4,6 +4,7 @@ import { n, esc, rich, fill, pick } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
 import { SPRITE, icon, seal, crest, note, delta, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
 import { downloadCalendar } from "../lib/calendar.js";
+import { DOCKET } from "../../data/weeks.js";
 import { section as checkinSection, mountSection as mountCheckin } from "./checkin.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
@@ -275,6 +276,24 @@ function coronation(ctx) {
 }
 
 // ── walking / counting / crowned sections ─────────────────
+// The roll call for a week's screenshots: names only, so nobody sees a number early.
+function docket(ctx) {
+  if (!DOCKET || ctx.weeks.some(w => w.week === DOCKET.week)) return "";
+  const got = new Set(DOCKET.in);
+  const row = w => `<li class="docket-row${got.has(w.id) ? " is-in" : ""}"><span aria-hidden="true">${w.crest}</span>${esc(w.short)}<b>${got.has(w.id) ? "✓ In" : "Waiting"}</b></li>`;
+  const paid = ctx.walkers.filter(w => w.paid);
+  const waiting = paid.filter(w => !got.has(w.id));
+  return `
+  <section class="wrap section" data-reveal>
+    <div class="card roll-call">
+      <span class="kicker">Week ${DOCKET.week} · Screenshots</span>
+      <p class="h3">${waiting.length ? `${got.size} of ${paid.length} in. The Judge awaits ${waiting.length}.` : "All in. The Judge is counting."}</p>
+      <ul class="roll-call-list">${paid.filter(w => got.has(w.id)).map(row).join("")}${waiting.map(row).join("")}</ul>
+      <p class="sub">No numbers until every Strider is in. The Judge is <em>fairly</em> patient.</p>
+    </div>
+  </section>`;
+}
+
 function ledgerPreview(ctx) {
   const E = ctx.copy.LEDGER_EMPTY;
   if (!ctx.weeks.length) {
@@ -351,7 +370,7 @@ export function render(ctx) {
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + roll(ctx)
+    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + report(ctx) + togetherTile(ctx) + roll(ctx)
     + (ctx.phase === "crowned" ? "" : checkinSection(ctx)) + how();
 }
 

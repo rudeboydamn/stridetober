@@ -7,6 +7,10 @@
 // steps is authoritative as submitted. days null = pending — never guess.
 export const WEEKS = [];
 
+// Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
+// until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.
+export const DOCKET = { week: 1, in: ["tedi", "lizzie", "alicia", "rod-jr", "brittany", "cristina"] };
+
 // Alicia's birthday falls on kickoff day. Live all day Sunday Oct 4, then it retires itself.
 export const ANNOUNCEMENT = {
   from: "2026-10-04T00:00", until: "2026-10-05T00:00", mode: "note", who: "alicia",

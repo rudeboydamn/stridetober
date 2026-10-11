@@ -1087,7 +1087,7 @@ Conventions: every task ends green (`npm test` + the §9.4 visual sweep at 375px
 
 ### 9.2 The weekly runbook (Sundays: Oct 11, 18, 25, Nov 1)
 
-1. Screenshots land in `checkins/<walker-id>/week-N/` (create dirs; filenames keep their timestamps). Read every one — money is on it.
+1. Screenshots land in `checkins/week-N/<walker-id>/` (create dirs; filenames keep their timestamps). Read every one — money is on it.
 2. **Rules of evidence** (adapted from Big Steppas, identical every week):
    - A week is **Sunday 00:00 → Saturday 23:59**. Apps whose week starts Monday show a headline spanning the wrong boundary — **read the per-day bars**.
    - A Saturday-evening screenshot is a **partial Saturday**; the flyer says "before you go to sleep" but settled numbers are what count. If the per-day bars show Saturday clearly lower than the pattern, ask Dammy whether a later shot exists.

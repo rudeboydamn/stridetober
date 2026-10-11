@@ -1,7 +1,7 @@
 // Stridetober — boot, context, router, tick. Spec: docs/PLAN.md §2.2, §5.1, §7.7.
 import { CHALLENGE } from "../data/challenge.js";
 import { WALKERS } from "../data/walkers.js";
-import { WEEKS, ANNOUNCEMENT } from "../data/weeks.js";
+import { WEEKS, ANNOUNCEMENT, DOCKET } from "../data/weeks.js";
 import { FALL_FINDS } from "../data/finds.js";
 import * as COPY from "../data/copy.js";
 import { parseLocal, phaseOf, currentWeek, phaseSignature, daypart, isEve, announcementLive, countdownParts } from "./lib/time.js";
@@ -321,7 +321,7 @@ document.addEventListener("pointerdown", e => {
 // posted — can sit behind a cached copy. Whenever the tab comes back, re-fetch
 // the two data files past every cache; reload only if they really changed.
 {
-  const mine = JSON.stringify([WALKERS, WEEKS, ANNOUNCEMENT]);
+  const mine = JSON.stringify([WALKERS, WEEKS, ANNOUNCEMENT, DOCKET]);
   let checked = 0;
   const catchUp = async () => {
     if (DEMO || document.hidden || Date.now() - checked < 600_000) return;
@@ -331,7 +331,7 @@ document.addEventListener("pointerdown", e => {
         import(`../data/walkers.js?t=${checked}`),
         import(`../data/weeks.js?t=${checked}`),
       ]);
-      if (JSON.stringify([w.WALKERS, k.WEEKS, k.ANNOUNCEMENT]) !== mine) location.reload();
+      if (JSON.stringify([w.WALKERS, k.WEEKS, k.ANNOUNCEMENT, k.DOCKET]) !== mine) location.reload();
     } catch { /* offline — try again next time */ }
   };
   document.addEventListener("visibilitychange", catchUp);

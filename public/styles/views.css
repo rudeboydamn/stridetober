@@ -262,8 +262,6 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .day-field input[aria-invalid] { border-color: var(--down); }
 .field select:focus-visible, .day-field input:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; }
 .sunday-days { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(130px, 100%), 1fr)); gap: var(--s-3); }
-.privacy { display: flex; align-items: flex-start; gap: 10px; color: var(--ink-2); font-size: 14px; }
-.privacy .icon { width: 18px; height: 18px; margin-top: 2px; color: var(--accent-ink); }
 .sunday-sum { display: flex; flex-wrap: wrap; gap: var(--s-6); margin: 0; }
 .sunday-sum dt { color: var(--ink-2); font: 600 13px/1.2 var(--font-ui); }
 .sunday-sum dd { margin: 2px 0 0; font: 600 var(--step-2)/1.1 var(--font-display); }
@@ -570,3 +568,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .record { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-2); }
 .record-row { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: start; }
 .record-plea { font: italic 600 var(--step-0)/1.35 var(--font-display); overflow-wrap: anywhere; }
+.find-week > summary { cursor: pointer; list-style: none; position: relative; padding-right: 32px; }
+.find-week > summary::-webkit-details-marker { display: none; }
+.find-week > summary::after { content: "▾"; position: absolute; right: 4px; top: 4px; color: var(--ink-2); font-size: 20px; transition: rotate .2s; }
+.find-week:not([open]) > summary::after { rotate: -90deg; }

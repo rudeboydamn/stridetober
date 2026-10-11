@@ -14,11 +14,15 @@ const finderChip = (ctx, id) => {
   return `<a class="chip finder" href="#/walker/${w.id}">${crest(w)}<span>${esc(w.short)}</span></a>`;
 };
 
-// Newest week first; a find outside the four weeks joins the nearest one.
+// The current week always sits on top, open; earlier weeks fold away below it.
+// A find outside the four weeks joins the nearest one.
 const weeksOf = (ctx, finds) => {
   const W = ctx.challenge.weeks;
+  const cur = ctx.week?.n ?? (ctx.phase === "muster" ? 1 : W.length);
   const at = f => W.find(w => f.date <= w.end) || W.at(-1);
-  return [...W].reverse().map(w => [w, finds.filter(f => at(f) === w)]).filter(([, l]) => l.length);
+  return [...W].reverse().filter(w => w.n <= cur)
+    .map(w => [w, finds.filter(f => at(f) === w), w.n === cur])
+    .filter(([, l, open]) => open || l.length);
 };
 
 export function render(ctx) {
@@ -39,9 +43,10 @@ export function render(ctx) {
       <p class="sub">Find something worth photographing on a walk, send it to the Judge, and it joins the journal.</p>
     </div>
   </section>` : `
-  ${weeksOf(ctx, finds).map(([w, list]) => `
-  <section class="wrap section" data-reveal>
-    <header class="section-head"><h2 class="h2">Week ${w.n}</h2><p class="sub">${fmtRange(w.start, w.end)} · ${list.length} find${list.length === 1 ? "" : "s"}</p></header>
+  ${weeksOf(ctx, finds).map(([w, list, open]) => `
+  <details class="wrap section find-week" data-reveal${open ? " open" : ""}>
+    <summary class="section-head"><h2 class="h2">Week ${w.n}${open ? " · this week" : ""}</h2><p class="sub">${fmtRange(w.start, w.end)} · ${list.length} find${list.length === 1 ? "" : "s"}</p></summary>
+    ${list.length ? "" : `<p class="sub">Nothing yet this week. Send the Judge a photo from your walk.</p>`}
     <div class="finds-grid">${list.map(f => `
       <figure class="card find">
         ${f.img
@@ -54,7 +59,7 @@ export function render(ctx) {
         </figcaption>
       </figure>`).join("")}
     </div>
-  </section>`).join("")}`}`;
+  </details>`).join("")}`}`;
 }
 
 export function mount(root) {

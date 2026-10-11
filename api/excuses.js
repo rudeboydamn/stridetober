@@ -1,21 +1,9 @@
 // Court of Excuses — typed pleas, kept in Neon. GET lists the latest; POST files one.
-// Talks to Neon's HTTP SQL endpoint with fetch, so the repo stays zero-dependency.
 import { WALKERS } from "../public/data/walkers.js";
+import { sql } from "./_lib/neon.js";
 
 const IDS = new Set(WALKERS.filter(w => w.paid).map(w => w.id));
 const MAX = 280;
-
-async function sql(query, params = []) {
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL is not set");
-  const res = await fetch(`https://${new URL(url).hostname}/sql`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Neon-Connection-String": url },
-    body: JSON.stringify({ query, params }),
-  });
-  if (!res.ok) throw new Error(`neon ${res.status}: ${await res.text()}`);
-  return (await res.json()).rows;
-}
 
 let ready;
 const setup = () => ready ??= sql(`CREATE TABLE IF NOT EXISTS excuses (

@@ -1,7 +1,7 @@
 // Check-in — the weekly screenshot ritual. Spec: docs/PLAN.md §5.5, adjusted to the
 // locked decision in §1.2: the week ENDS Saturday night; screenshots are due Sunday.
 import { parseLocal, endOfDay, weekStatus } from "../lib/time.js";
-import { esc, fmtRange, pick, n } from "../lib/format.js";
+import { esc, fmtRange, n } from "../lib/format.js";
 import { parseSteps, weekDates, weekReport, smsHref } from "../lib/report.js";
 import { downloadCalendar } from "../lib/calendar.js";
 import { icon, tallySvg, toast } from "../lib/fx.js";
@@ -40,18 +40,28 @@ const defaultWeek = ({ now, challenge }) =>
 
 const short = d => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 
-function sunday(ctx) {
+// The Check-in section of the Court (#/check-in is the Court, scrolled here): the dates,
+// then one form — seven days in, a text to the Judge out. Every send is filed (/api/checkins).
+export function section(ctx) {
+  const tl = nodes(ctx).map(x => `
+    <li class="tl-node ${x.state}">
+      <span class="tl-dot" aria-hidden="true">${x.dot}</span>
+      <div><p class="tl-title">${esc(x.title)}</p><p class="tl-meta">${esc(x.meta)}</p></div>
+    </li>`).join("");
   const wk = defaultWeek(ctx);
   const me = (() => { try { return localStorage.getItem("stridetober:me"); } catch { return null; } })();
   const who = ctx.walkers.map(w => `<option value="${esc(w.id)}"${w.id === me ? " selected" : ""}>${esc(w.name)}</option>`).join("");
   const weeks = ctx.challenge.weeks.map(w => `<option value="${w.n}"${w.n === wk ? " selected" : ""}>Week ${w.n} · ${esc(fmtRange(w.start, w.end))}</option>`).join("");
   return `
+  <div id="checkin">
+  ${ctx.phase === "muster" ? "" : `<section class="wrap section" data-reveal>
+    <div class="card"><ol class="timeline horizontal" style="--nodes:5">${tl}</ol></div>
+  </section>`}
   <section class="wrap section" data-reveal>
     <div class="card card-raised sunday">
-      <span class="kicker">Optional · every Sunday night</span>
-      <h2 class="h2">Text the Judge your week</h2>
-      <p class="sub"><b>You don't have to type any of this.</b> Send the screenshot and the Judge will figure it out. But if you'd like to save him the squinting, type your seven daily totals and he gets them ready-made. If a text and a screenshot ever disagree, the screenshot wins.</p>
-      <p class="privacy">${icon("lock")}<span>Private. What you type stays on this phone until you tap send, and then it goes to the Judge alone — not the group chat, not this site, not anyone else.</span></p>
+      <span class="kicker">Due every Sunday</span>
+      <h2 class="h2">Check-in</h2>
+      <p class="sub">Type your seven days and text them to the Judge. Attach your screenshot.</p>
       <div class="sunday-pick">
         <label class="field"><span>Who's walking</span><select id="sunWho"><option value="">Pick your name</option>${who}</select></label>
         <label class="field"><span>Which week</span><select id="sunWeek">${weeks}</select></label>
@@ -61,65 +71,14 @@ function sunday(ctx) {
         <div><dt>Total steps</dt><dd class="num" id="sunTotal">—</dd></div>
         <div><dt>Avg daily</dt><dd class="num" id="sunAvg">—</dd></div>
       </dl>
-      <pre class="sunday-preview" id="sunPreview" aria-live="polite"></pre>
       <div class="btn-row sunday-actions">
         <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Text it to the Judge</a>
         <button class="btn btn-secondary" type="button" id="sunCopy">Copy message</button>
       </div>
       <p class="caption" id="sunHint">${esc(ctx.copy.SUNDAY.need)}</p>
-    </div>
-  </section>`;
-}
-
-// The Check-in section of the Court (#/check-in is the Court, scrolled here). Before kickoff the
-// dates live in the trail above it, so the timeline only shows once the walking has begun.
-export function section(ctx) {
-  const tl = nodes(ctx).map(x => `
-    <li class="tl-node ${x.state}">
-      <span class="tl-dot" aria-hidden="true">${x.dot}</span>
-      <div><p class="tl-title">${esc(x.title)}</p><p class="tl-meta">${esc(x.meta)}</p></div>
-    </li>`).join("");
-  return `
-  <div id="checkin">
-  <header class="wrap section" data-reveal>
-    <div class="section-head">
-      <span class="ribbon">Due every Sunday</span>
-      <h2 class="h2">Check-in</h2>
-    </div>
-    <blockquote class="flyer-quote">
-      <p>“Every Saturday night, before you go to sleep, send a picture/screenshot of your step count <strong>DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!</strong>”</p>
-      <footer class="caption">— the flyer</footer>
-    </blockquote>
-    <p class="ruling">The Judge clarifies: Saturday night is when the week <em>ends</em>. Screenshots are due Sunday, once all seven days are in the books.</p>
-  </header>
-
-  ${ctx.phase === "muster" ? "" : `<section class="wrap section" data-reveal>
-    <div class="card"><ol class="timeline horizontal" style="--nodes:5">${tl}</ol></div>
-  </section>`}
-
-  <section class="wrap section" data-reveal>
-    <div class="card card-raised submit">
-      <h2 class="h2">How to submit</h2>
-      <ol class="submit-steps">
-        <li>Open your step tracker.</li>
-        <li>Screenshot the week — Sunday → Saturday, all seven days showing.</li>
-        <li>Send it straight to the Judge. That's all — he reads it and does the arithmetic. No numbers to type.</li>
-      </ol>
-      <h3 class="h3">What the Judge needs to see</h3>
-      <ul class="needs">
-        <li>The full week, Sunday through Saturday.</li>
-        <li>Per-day numbers visible — the Judge reads the bars, not the headline.</li>
-        <li>Sent after the week ends. A Saturday-evening screenshot is a partial week. The Judge has seen this trick before.</li>
-      </ul>
-      <div class="btn-row submit-actions">
-        <button class="btn btn-primary" type="button" id="icsBtn">${icon("calendar")}Add the dates to my calendar</button>
-        <button class="btn btn-secondary" type="button" id="decoy"><span>Post it in the group chat</span></button>
-      </div>
-      <span class="stamp stamp-lg submit-stamp">No screenshot = No steps!</span>
+      <button class="textlink" type="button" id="icsBtn">${icon("calendar")}Add the due dates to my calendar</button>
     </div>
   </section>
-
-  ${sunday(ctx)}
   </div>`;
 }
 
@@ -146,8 +105,6 @@ function mountSunday(root, ctx) {
     const ready = !!r && !!who.value;
     $("#sunTotal").textContent = r ? n(r.total) : "—";
     $("#sunAvg").textContent = r ? n(r.avg) : "—";
-    $("#sunPreview").textContent = r ? r.text : "";
-    $("#sunPreview").hidden = !r;
     send.setAttribute("aria-disabled", String(!ready));
     copy.disabled = !ready;
     send.href = ready ? smsHref(ctx.challenge.judgePhone, r.text) : "#/check-in";
@@ -158,7 +115,12 @@ function mountSunday(root, ctx) {
   grid.addEventListener("input", () => { save(); update(); });
   who.addEventListener("change", () => { try { localStorage.setItem("stridetober:me", who.value); } catch { /* ignore */ } build(); });
   weekSel.addEventListener("change", build);
-  send.addEventListener("click", e => { if (send.getAttribute("aria-disabled") === "true") { e.preventDefault(); toast(esc(ctx.copy.SUNDAY.need)); } });
+  send.addEventListener("click", e => {
+    if (send.getAttribute("aria-disabled") === "true") { e.preventDefault(); toast(esc(ctx.copy.SUNDAY.need)); return; }
+    const days = [...grid.querySelectorAll("input")].map(i => parseSteps(i.value));
+    fetch("/api/checkins", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ walker: who.value, week: +weekSel.value, days }) }).catch(() => {});
+  });
   copy.addEventListener("click", async () => {
     const r = update();
     if (!r) return;
@@ -171,16 +133,4 @@ function mountSunday(root, ctx) {
 export function mountSection(root, ctx) {
   mountSunday(root, ctx);
   root.querySelector("#icsBtn").addEventListener("click", () => downloadCalendar(ctx.challenge));
-
-  const decoy = root.querySelector("#decoy"), label = decoy.querySelector("span");
-  let k = 0, reset = 0;
-  decoy.addEventListener("click", () => {
-    decoy.classList.remove("nope");
-    void decoy.offsetWidth;
-    decoy.classList.add("nope");
-    label.textContent = "NOPE.";
-    clearTimeout(reset);
-    reset = setTimeout(() => { label.textContent = "Post it in the group chat"; }, 1500);
-    toast(esc(pick(ctx.copy.DECOY_TOASTS, k++)));
-  });
 }

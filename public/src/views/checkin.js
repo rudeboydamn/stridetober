@@ -2,7 +2,7 @@
 // locked decision in §1.2: the week ENDS Saturday night; screenshots are due Sunday.
 import { parseLocal, endOfDay, weekStatus } from "../lib/time.js";
 import { esc, fmtRange, n } from "../lib/format.js";
-import { parseSteps, weekDates, weekReport, smsHref } from "../lib/report.js";
+import { parseSteps, weekDates, weekReport, totalReport, smsHref } from "../lib/report.js";
 import { downloadCalendar } from "../lib/calendar.js";
 import { icon, tallySvg, toast } from "../lib/fx.js";
 
@@ -61,10 +61,14 @@ export function section(ctx) {
     <div class="card card-raised sunday">
       <span class="kicker">Due every Sunday</span>
       <h2 class="h2">Check-in</h2>
-      <p class="sub">Type your seven days and text them to the Judge. Attach your screenshot.</p>
+      <p class="sub">Enter your steps, tap Check in, and attach your screenshot to the text.</p>
       <div class="sunday-pick">
         <label class="field"><span>Who's walking</span><select id="sunWho"><option value="">Pick your name</option>${who}</select></label>
         <label class="field"><span>Which week</span><select id="sunWeek">${weeks}</select></label>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="How to enter steps">
+        <label><input type="radio" name="sunMode" value="day" checked><span>Day by day</span></label>
+        <label><input type="radio" name="sunMode" value="week"><span>Week total</span></label>
       </div>
       <div class="sunday-days" id="sunDays"></div>
       <dl class="sunday-sum">
@@ -72,7 +76,7 @@ export function section(ctx) {
         <div><dt>Avg daily</dt><dd class="num" id="sunAvg">—</dd></div>
       </dl>
       <div class="btn-row sunday-actions">
-        <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Text it to the Judge</a>
+        <a class="btn btn-primary" id="sunSend" href="#/check-in" role="button" aria-disabled="true">Check in</a>
         <button class="btn btn-secondary" type="button" id="sunCopy">Copy message</button>
       </div>
       <p class="caption" id="sunHint">${esc(ctx.copy.SUNDAY.need)}</p>
@@ -88,11 +92,20 @@ function mountSunday(root, ctx) {
   const key = () => `stridetober:sunday:${who.value || "anon"}:${weekSel.value}`;
   const week = () => ctx.challenge.weeks[weekSel.value - 1];
   const read = () => { try { return JSON.parse(localStorage.getItem(key())) || []; } catch { return []; } };
-  const save = () => { try { localStorage.setItem(key(), JSON.stringify([...grid.querySelectorAll("input")].map(i => i.value))); } catch { /* private mode */ } };
+  const save = () => {                                    // slots 0–6 are the days, slot 7 the week total
+    const v = read(), inputs = [...grid.querySelectorAll("input")];
+    if (mode() === "week") v[7] = inputs[0].value; else inputs.forEach((el, i) => { v[i] = el.value; });
+    try { localStorage.setItem(key(), JSON.stringify(v)); } catch { /* private mode */ }
+  };
 
-  const build = () => {                                   // one field per day, Sunday first; a half-typed week survives a trip to the Health app
+  const mode = () => root.querySelector('[name="sunMode"]:checked').value;
+  const build = () => {                                   // one field per day (Sunday first) or one for the week; a half-typed week survives a trip to the Health app
     const saved = read();
-    grid.innerHTML = weekDates(week()).map((d, i) => `
+    grid.classList.toggle("is-total", mode() === "week");
+    grid.innerHTML = mode() === "week"
+      ? `<label class="day-field"><span>Week ${week().n} total</span>
+          <input type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="0" value="${esc(saved[7] || "")}" aria-label="Week total steps"></label>`
+      : weekDates(week()).map((d, i) => `
       <label class="day-field"><span>${esc(short(d))}</span>
         <input type="text" inputmode="numeric" autocomplete="off" enterkeyhint="${i < 6 ? "next" : "done"}" placeholder="0" value="${esc(saved[i] || "")}" aria-label="${esc(short(d))} steps"></label>`).join("");
     update();
@@ -101,25 +114,28 @@ function mountSunday(root, ctx) {
   const update = () => {
     const days = [...grid.querySelectorAll("input")].map(i => parseSteps(i.value));
     grid.querySelectorAll("input").forEach((el, i) => el.toggleAttribute("aria-invalid", el.value.trim() !== "" && days[i] === null));
-    const r = weekReport({ name: ctx.walkers.find(w => w.id === who.value)?.name || "", week: week(), days });
+    const name = ctx.walkers.find(w => w.id === who.value)?.name || "";
+    const r = mode() === "week" ? totalReport({ name, week: week(), total: days[0] }) : weekReport({ name, week: week(), days });
     const ready = !!r && !!who.value;
     $("#sunTotal").textContent = r ? n(r.total) : "—";
     $("#sunAvg").textContent = r ? n(r.avg) : "—";
     send.setAttribute("aria-disabled", String(!ready));
     copy.disabled = !ready;
     send.href = ready ? smsHref(ctx.challenge.judgePhone, r.text) : "#/check-in";
-    $("#sunHint").textContent = ready ? ctx.copy.SUNDAY.hint : who.value ? ctx.copy.SUNDAY.need : "Pick your name first.";
+    $("#sunHint").textContent = ready ? ctx.copy.SUNDAY.hint : !who.value ? "Pick your name first." : mode() === "week" ? "Enter your week total." : ctx.copy.SUNDAY.need;
     return r;
   };
 
   grid.addEventListener("input", () => { save(); update(); });
   who.addEventListener("change", () => { try { localStorage.setItem("stridetober:me", who.value); } catch { /* ignore */ } build(); });
   weekSel.addEventListener("change", build);
+  root.querySelectorAll('[name="sunMode"]').forEach(el => el.addEventListener("change", build));
   send.addEventListener("click", e => {
-    if (send.getAttribute("aria-disabled") === "true") { e.preventDefault(); toast(esc(ctx.copy.SUNDAY.need)); return; }
-    const days = [...grid.querySelectorAll("input")].map(i => parseSteps(i.value));
+    if (send.getAttribute("aria-disabled") === "true") { e.preventDefault(); toast(esc($("#sunHint").textContent)); return; }
+    const vals = [...grid.querySelectorAll("input")].map(i => parseSteps(i.value));
+    const body = mode() === "week" ? { total: vals[0] } : { days: vals };
     fetch("/api/checkins", { method: "POST", keepalive: true, headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ walker: who.value, week: +weekSel.value, days }) }).catch(() => {});
+      body: JSON.stringify({ walker: who.value, week: +weekSel.value, ...body }) }).catch(() => {});
   });
   copy.addEventListener("click", async () => {
     const r = update();

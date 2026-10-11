@@ -1,7 +1,7 @@
 // The Sunday text: parsing, the message shape, and the sms: link.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseSteps, weekDates, weekReport, smsHref } from "../public/src/lib/report.js";
+import { parseSteps, weekDates, weekReport, totalReport, smsHref } from "../public/src/lib/report.js";
 import { CHALLENGE } from "../public/data/challenge.js";
 
 const wk2 = CHALLENGE.weeks[1];
@@ -53,4 +53,10 @@ test("weekReport: never invents a day — any blank means no message", () => {
 test("smsHref: number optional, body encoded, works on iOS and Android", () => {
   assert.equal(smsHref("", "hi\nthere"), "sms:?&body=hi%0Athere");
   assert.equal(smsHref("+1 (555) 123-4567", "a b"), "sms:+15551234567?&body=a%20b");
+});
+
+test("totalReport: one week number in, total and average out; blank means no message", () => {
+  const r = totalReport({ name: "Tedi Revenew", week: wk2, total: 70000 });
+  assert.match(r.text, /Total Steps: 70,000\nAvg Daily: 10,000$/);
+  assert.equal(totalReport({ name: "x", week: wk2, total: null }), null);
 });

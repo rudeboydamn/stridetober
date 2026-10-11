@@ -45,6 +45,14 @@ export function weekReport({ name, week, days }) {
   return { text, total, avg };
 }
 
+// Week-total check-in: one number, no daily split.
+export function totalReport({ name, week, total }) {
+  if (total === null) return null;
+  const avg = Math.round(total / 7);
+  const text = [`Stridetober · Week ${week.n} · ${range(week)}`, name, "", `Total Steps: ${n(total)}`, `Avg Daily: ${n(avg)}`].join("\n");
+  return { text, total, avg };
+}
+
 // sms: needs "?&body=" to work on both iOS and Android; no number = the phone asks who.
 export const smsHref = (phone, text) =>
   `sms:${String(phone || "").replace(/[^\d+]/g, "")}?&body=${encodeURIComponent(text)}`;

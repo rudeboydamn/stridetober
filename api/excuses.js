@@ -6,7 +6,7 @@ import { sql } from "./_lib/neon.js";
 const IDS = new Set(WALKERS.filter(w => w.paid).map(w => w.id));
 const MAX = 280;
 const clean = body => String(body ?? "").trim().replace(/\s+/g, " ");
-const COLS = "id, walker, body, created_at AS at, edited_at AS edited";
+const COLS = "id::int AS id, walker, body, created_at AS at, edited_at AS edited";
 
 let ready;
 const setup = () => ready ??= sql(`CREATE TABLE IF NOT EXISTS excuses (
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       return res.status(201).json(row);
     }
     if (req.method === "PATCH" || req.method === "DELETE") {
-      const { id, walker, body } = req.body || {};
+      const { walker, body } = req.body || {}, id = Number(req.body?.id);
       if (!IDS.has(walker) || !Number.isInteger(id)) return res.status(400).json({ error: "bad request" });
       if (req.method === "DELETE") {
         const gone = await sql("DELETE FROM excuses WHERE id = $1 AND walker = $2 RETURNING id", [id, walker]);

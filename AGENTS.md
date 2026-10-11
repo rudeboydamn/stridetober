@@ -50,6 +50,8 @@ not compete by default.
    - Chart-measured splits go in `derived` and render `~`. Weekly totals are
      never derived.
    - **Never invent a number.** Ambiguous → ask Dammy.
+   Typed check-ins are also filed in Neon (project `hidden-pine-27728763`, database `stridetober`,
+   table `checkins`; excuses in `excuses`). Read them with `SELECT * FROM checkins WHERE week = N`.
    Walkers can also **text** their seven daily totals from the Check-in page (PLAN
    §5.5.1): Dammy gets a message with a line per day, a total and an average. Treat
    it as a convenience — the screenshot is still the evidence, and the two must agree.

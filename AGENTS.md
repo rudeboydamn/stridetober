@@ -25,6 +25,9 @@ not compete by default.
 
 ## 2. The voice (most of why this site exists)
 
+- **The site is about the Striders, not the Judge** (2026-10-11). Keep the Judge out of
+  page copy: no "the Judge counts/notes/awaits". Fall Finds come from the group chat.
+  Check-ins go through the site. The Courtroom keeps its gavel, not a narrator.
 - Third person, mock-royal, dry, affectionate. The Judge never says "I" — he
   "notes", "rules", "is *fairly* certain".
 - The word **fairly** is the running gag. Italicize it; never overuse it.

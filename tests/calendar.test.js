@@ -25,5 +25,5 @@ test("calendar: CRLF endings, folded lines, escaped commas, never the old name",
   assert.ok(!/(^|[^\r])\n/.test(ics.replace(/\\n/g, "")), "a bare LF slipped in");
   for (const line of ics.split("\r\n")) assert.ok(line.length <= 73, `line too long: ${line.slice(0, 40)}…`);
   assert.doesNotMatch(ics, /dammy/i);
-  assert.match(ics.replace(/\r\n /g, ""), /Screenshot all seven days and send it to the Judge\./, "unfolded, the text reads whole");
+  assert.match(ics.replace(/\r\n /g, ""), /with your seven days and a screenshot\./, "unfolded, the text reads whole");
 });

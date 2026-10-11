@@ -40,13 +40,13 @@ export function render(ctx) {
     <div class="card empty-state">
       ${seal("", { size: "seal-96", cls: "hollow" })}
       <p class="h3">The trail has yielded nothing yet. Suspicious.</p>
-      <p class="sub">Find something worth photographing on a walk, send it to the Judge, and it joins the journal.</p>
+      <p class="sub">Post a photo from your walk in the group chat and it joins the journal.</p>
     </div>
   </section>` : `
   ${weeksOf(ctx, finds).map(([w, list, open]) => `
   <details class="wrap section find-week" data-reveal${open ? " open" : ""}>
     <summary class="section-head"><h2 class="h2">Week ${w.n}${open ? " · this week" : ""}</h2><p class="sub">${fmtRange(w.start, w.end)} · ${list.length} find${list.length === 1 ? "" : "s"}</p></summary>
-    ${list.length ? "" : `<p class="sub">Nothing yet this week. Send the Judge a photo from your walk.</p>`}
+    ${list.length ? "" : `<p class="sub">Nothing yet this week. Post a photo from your walk in the group chat.</p>`}
     <div class="finds-grid">${list.map(f => `
       <figure class="card find">
         ${f.img

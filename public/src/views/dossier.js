@@ -29,7 +29,7 @@ function weekCard(ctx, w, wk) {
     ${!postedHere || steps === null ? `
       <p class="week-zero">0 steps counted</p><span class="stamp week-stamp">No screenshot</span>` : `
       <p class="week-total"><b class="num" data-count="${steps}">${n(steps)}</b> steps</p>
-      ${days ? dailyChart(days, { color: w.color, derived, vw: document.documentElement.clientWidth }) : `<p class="caption">Dailies pending — the Judge accepted the total.</p>`}
+      ${days ? dailyChart(days, { color: w.color, derived, vw: document.documentElement.clientWidth }) : `<p class="caption">Week total only — no daily split.</p>`}
       ${derived ? `<details class="chart-data derived-note"><summary>${esc(ctx.copy.DERIVED_NOTE.head)}</summary><p class="caption">${esc(ctx.copy.DERIVED_NOTE.body)}</p></details>` : ""}`}
   </article>`;
 }
@@ -82,7 +82,7 @@ export function render(ctx, { id } = {}) {
       <section class="wrap section"><div class="card empty-state" data-reveal>
         ${seal("", { size: "seal-96", cls: "hollow" })}
         <p class="h3">Not on the Ledger yet.</p>
-        <p class="sub">The Judge has not put ${esc(w.short)} on the Ledger. Until he does, the steps are ${esc(w.short)}'s own business.</p>
+        <p class="sub">${esc(w.short)} is not on the Ledger yet.</p>
         <a class="textlink" href="#/">Back to the Roll →</a>
       </div></section>`;
   }
@@ -114,7 +114,7 @@ export function render(ctx, { id } = {}) {
     <section class="wrap section" data-reveal>
       <div class="card empty-state">
         <p class="h3">The Ledger is blank. The legend is not.</p>
-        <p class="sub">${esc(w.short)}'s numbers arrive when Week 1 is counted. Until then, the Judge has only the Chronicle to go on.</p>
+        <p class="sub">${esc(w.short)}'s numbers arrive when Week 1 is counted. Until then, there is only the Chronicle.</p>
         <a class="textlink" href="#/ledger">See the Ledger →</a>
       </div>
     </section>`;
@@ -150,7 +150,7 @@ export function render(ctx, { id } = {}) {
     <header class="section-head"><h2 class="h2">Honours</h2></header>
     <ul class="honours">${myHonours}</ul>
   </section>` : `<section class="wrap section" data-reveal>
-    <p class="caption">No honours yet. The Judge is watching. <em>Fairly</em>.</p>
+    <p class="caption">No honours yet. Plenty of October left.</p>
   </section>`}
 
   ${h2hRows ? `<section class="wrap section" data-reveal>

@@ -27,10 +27,10 @@ export function calendarFile(challenge, now) {
       "The first day. Every step counts from midnight.",
       [["Tomorrow: Stridetober begins. Lay out the sneakers.", "-PT4H"], ["It has begun. Shoes on.", "PT8H"]]),
     ...challenge.weeks.flatMap(w => event(`week-${w.n}`, w.due,
-      w.n === challenge.weeks.length ? "Stridetober — final screenshots" : "Stridetober — send the Judge your week",
-      `Week ${w.n}: ${fmtRange(w.start, w.end)}. Screenshot all seven days and send it to the Judge. DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!` +
+      w.n === challenge.weeks.length ? "Stridetober — final screenshots" : "Stridetober — check in your week",
+      `Week ${w.n}: ${fmtRange(w.start, w.end)}. Check in on stridetober.vercel.app with your seven days and a screenshot.` +
         (w.n === challenge.weeks.length ? " The champion is named today." : ""),
-      [["Sunday night: send the Judge your week", "PT20H"]])),
+      [["Sunday night: check in your week", "PT20H"]])),
     ...event("final-bell", last.end, "Stridetober — the final bell tonight",
       "The last steps that count. The bell rings at midnight.",
       [["Last steps. The bell rings at midnight.", "PT18H"]]),

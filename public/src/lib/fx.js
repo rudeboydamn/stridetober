@@ -303,7 +303,7 @@ export function rake(pile, line, milestones, jumps = []) {
   const update = () => {
     const hit = [...milestones].reverse().find(m => count >= m.at);
     const note = quip || (hit && hit.at > 1 ? hit.note : "");
-    line.innerHTML = `Leaves raked: <b class="num">${n(count)}</b> · Steps credited: 0 · The Judge checked.` +
+    line.innerHTML = `Leaves raked: <b class="num">${n(count)}</b> · Steps credited: 0` +
       (note ? ` <span class="rake-note">${rich(note)}</span>` : "");
   };
   const settle = () => leafEls.forEach(l => {

@@ -5,8 +5,8 @@
 export const PHASE_LINES = {
   muster:   { kick:"KICKOFF · SUNDAY, OCTOBER 4", head:"Walk it. Track it. Win it!",
               sub:"Four weeks. Every step counted. One champion. The leaves are watching." },
-  walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. The Judge counts them." },
-  counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The Judge is counting. The ledger is frozen-ish." },
+  walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. Ten Striders, one wreath." },
+  counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The last screenshots are coming in. The Ledger is frozen-ish." },
   crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot splits three ways by Venmo." },
 };
 
@@ -15,7 +15,7 @@ export const MUSTER_DAYS = [ // first row whose `max` covers the days left wins
   { max: 1,   line: "Tomorrow. Lay out the sneakers." },
   { max: 2,   line: "Two sleeps. Hydrate like it's a sport." },
   { max: 3,   line: "Three days. Stretch now, thank us later." },
-  { max: 5,   line: "Almost. The Judge has sharpened his pencil." },
+  { max: 5,   line: "Almost. Lace up." },
   { max: 7,   line: "Under a week. Break in those shoes." },
   { max: 14,  line: "Two weeks. Plan your route. Tell the couch." },
   { max: 999, line: "The leaves are still green. Not for long." },
@@ -24,7 +24,7 @@ export const MUSTER_DAYS = [ // first row whose `max` covers the days left wins
 export const STAKES = {
   head: "What's on the line",
   sub:  "{n} walkers. Four weeks. Three places on the podium. Everyone else gets a leaf pile.",
-  fine: "Top three split the pot 50 / 30 / 20. Paid by the Judge on November 1st.",
+  fine: "Top three split the pot 50 / 30 / 20. Paid out on November 1st.",
 };
 
 export const TRAIL = { // teasers for the trail to Halloween, in order: kickoff, weeks 1–3 called, the Eve, the crowning
@@ -32,12 +32,12 @@ export const TRAIL = { // teasers for the trail to Halloween, in order: kickoff,
   sub:  "Six dates. One of them is the day someone gets a wreath.",
   kickoff:  { tag: "Kickoff", line: "Midnight. The couch becomes the opposition." },
   week:     [
-    "Everyone's first numbers land. The Judge studies the Ledger like a racing form.",
+    "Everyone's first numbers land. The Ledger becomes a racing form.",
     "The Ledger gets honest. So does the couch.",
-    "The slump. Some will surge. Some will 'rest'. The Judge will be there either way.",
+    "The slump. Some will surge. Some will 'rest'.",
   ],
   eve:      { tag: "Hallowed Eve · the final bell", line: "The last steps that count. Costumes permitted. Excuses not." },
-  crowning: { tag: "The Crowning", line: "The Judge names the champion. The wreath drops. The pot is sent." },
+  crowning: { tag: "The Crowning", line: "A champion is named. The wreath drops. The pot is sent." },
 };
 
 export const CALENDAR_CARD = {
@@ -50,7 +50,7 @@ export const COURT_WALKING = [ // hero line, rotates by week number
   "The leaves fall. The walkers rise.",
   "October is short. The step counts should not be.",
   "Somewhere, a couch is being defended.",
-  "Week {n}. The Judge expects briskness.",
+  "Week {n}. Brisk, please.",
 ];
 
 export const COUNTDOWN_LABELS = {
@@ -58,19 +58,19 @@ export const COUNTDOWN_LABELS = {
   weekEnd: "until the week is called",
   due: "until screenshots are past due",
   bell: "until the Final Bell",
-  counted: "the Judge is counting",
+  counted: "the count is on",
   done: "the walking is done",
 };
 
 export const DOSSIER_LINES = { // picked by rank band; {name} interpolated
   lead:    ["{name} leads. The others may appeal to their feet.",
-            "First place. The Judge is *fairly* impressed."],
-  chase:   ["Within striking distance. The Judge has noticed.",
+            "First place. Everyone else is taking notes."],
+  chase:   ["Within striking distance. The leader has noticed.",
             "{name} is one good weekend from making this awkward."],
   mid:     ["Mid-pack. Comfortable. Suspiciously comfortable.",
-            "The Judge files {name} under 'quietly plotting'."],
+            "{name}: quietly plotting."],
   bottom:  ["The couch sends its regards.",
-            "There is still time. Technically. The Judge checked the calendar."],
+            "There is still time. Technically. The calendar agrees."],
 };
 
 export const NO_STEPS_WEEK = "NO SCREENSHOT";   // stamp text, verbatim flyer
@@ -88,17 +88,17 @@ export const DERIVED_NOTE = {
 
 export const TOGETHER_LINES = [ // one rotates per view
   "roughly {mi} miles of October",
-  "about {marathons} marathons, if anyone's counting (the Judge is)",
+  "about {marathons} marathons, if anyone's counting",
   "enough to out-walk a leaf blower",
   "the length of {n} very long regrets",
   "approximately one small migration",
 ];
 
 export const VERDICTS = { // Settle It, chosen by margin
-  blowout: "The Judge has examined both. One of them has been walking. The other has been meaning to.",
-  clear:   "The lead is real but not safe. The Judge recommends fewer stairs claimed, more stairs taken.",
-  tight:   "Separated by {gap} steps — a lap around the block. The Judge leans in.",
-  deadEven:"A dead heat. The Judge suggests a walk-off.",
+  blowout: "One of them has been walking. The other has been meaning to.",
+  clear:   "The lead is real but not safe. Fewer stairs claimed, more stairs taken.",
+  tight:   "Separated by {gap} steps — a lap around the block.",
+  deadEven:"A dead heat. Walk-off, anyone?",
 };
 
 export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED ink slam
@@ -106,7 +106,7 @@ export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED
   { plea:"It was raining.", ruling:"Umbrellas exist. So do hallways." },
   { plea:"I walked, I just forgot to track it.", ruling:"Untracked steps are tree-falling-in-the-forest steps." },
   { plea:"Mercury is in retrograde.", ruling:"The Court does not recognize astrology. *Fairly* firm on that." },
-  { plea:"My tracker died.", ruling:"Chargers exist. The Judge is told they are inexpensive." },
+  { plea:"My tracker died.", ruling:"Chargers exist. They are inexpensive." },
   { plea:"Sunday is a day of rest.", ruling:"Not in October. October is a month of receipts." },
   { plea:"I was saving my knees.", ruling:"For what, precisely?" },
   { plea:"I did a marathon… on Netflix.", ruling:"The Court weeps. OVERRULED." },
@@ -114,7 +114,7 @@ export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED
   { plea:"I take the stairs… emotionally.", ruling:"Emotional stair-climbing is not a recognized category." },
   { plea:"I rallied all weekend.", ruling:"Evidence or it didn't happen." },
   { plea:"The sidewalk was lava.", ruling:"That is fair.", pardon:true },
-  { plea:"Chasing my toddler IS cardio.", ruling:"Granted. The Judge is not a monster.", pardon:true },
+  { plea:"Chasing my toddler IS cardio.", ruling:"Granted. Toddlers are cardio.", pardon:true },
   { plea:"I was trick-or-treating.", ruling:"Seasonal. Accepted.", pardon:true },
   { plea:"All my steps were inside the house.", ruling:"Steps are steps. The Court is generous.", pardon:true },
   { plea:"I carried the groceries in one trip.", ruling:"Commendable. Still not a walk." },
@@ -131,42 +131,42 @@ export const PODIUM = [ // the pot pays three places (challenge.split); medal is
 ];
 
 export const TOASTS = {
-  newLeader:  "A new name at the top of the ledger. The Judge is as surprised as you are.",
+  newLeader:  "A new name at the top of the ledger. Everyone is surprised.",
   weekPosted: "Week {n} has been counted. The Ledger is updated. Adjust your stride accordingly.",
   copied:     "Copied. Go forth and summon.",
   pardoned:   "A pardon! Rare as a quiet Saturday.",
 };
 
 export const SUNDAY = { // the Sunday text on the Check-in page
-  need:   "All seven days, please. The Judge reads the bars, not the headline.",
-  copied: "Copied. Paste it to the Judge, then attach the screenshot.",
+  need:   "All seven days, please.",
+  copied: "Copied. Paste it, then attach your screenshot.",
   hint:   "Opens Messages on your phone. On a computer, copy the message instead.",
 };
 
 export const DECOY_TOASTS = [
-  "NOPE. The group chat is for memes. Screenshots go to the Judge.",
-  "The Judge has seen this mistake before. DIRECTLY TO THE JUDGE.",
-  "Absolutely not. The Judge. Directly. Him.",
+  "NOPE. The group chat is for memes and Fall Finds.",
+  "Check in on the site. Memes in the chat.",
+  "Absolutely not.",
 ];
 
 export const BOTTLE = [
   "Small sips. Big steps.",
   "Hydration is a fairly serious matter.",
-  "The Judge drinks water. You should too.",
+  "Water first. Steps second.",
   "Eight glasses a day keeps the cramps away.",
   "Refill me, coward.",
 ];
 
-export const RAKE_LINES = [ // counter line is always "Leaves raked: {n} · Steps credited: 0 · The Judge checked."
+export const RAKE_LINES = [ // counter line is always "Leaves raked: {n} · Steps credited: 0"
   { at:1,   note:"Rake the pile. It does nothing." },
-  { at:25,  note:"The Judge is watching you rake. He is *fairly* impressed." },
+  { at:25,  note:"Still raking. Still zero steps." },
   { at:100, note:"One hundred leaves. This is why you're behind." },
-  { at:500, note:"Five hundred. The Judge suggests a walk instead." },
+  { at:500, note:"Five hundred. A walk would have been faster." },
 ];
 
 export const MARGIN_NOTES = [
   "suspiciously fast 👀", "walks like they're being chased", "the early bird avoids the guilt",
-  "allegedly 'just errands'", "cardio? in this economy?", "the Judge has questions",
+  "allegedly 'just errands'", "cardio? in this economy?", "questions have been raised",
   "stretch first", "professional couch athlete — retired?",
 ];
 
@@ -183,7 +183,7 @@ export const HONOURS = [ // computed by stats.honours(); label renders on the ch
 
 export const JUMP_LINES = [ // footer leaf pile, on a tap (M29)
   "Jumped in the pile. Steps credited: 0. Joy credited: considerable.",
-  "The Judge saw that. The Judge has also done that.",
+  "Everyone saw that. Everyone has done that.",
   "Crunch confirmed. The Ledger remains unmoved.",
   "A flawless landing. Regrettably, not cardio.",
   "Leaf pile: 1. Step count: unchanged.",
@@ -193,14 +193,14 @@ export const SQUIRREL_LINES = [ // the once-a-session squirrel, when tapped (M33
   "The squirrel has been fined one acorn for jaywalking.",
   "The squirrel is unsponsored and unlicensed. It is walking anyway.",
   "Steps credited to the squirrel: 0. It has filed an appeal.",
-  "The Judge notes the squirrel is out-walking at least one of you.",
+  "The squirrel is out-walking at least one of you.",
 ];
 
 export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-by (M36)
   bird: [
     "The bird has crossed four states this month. None of it counts. The bird knows.",
-    "Startled. The Judge apologises to no one.",
-    "It files no screenshots and it fears no Judge.",
+    "Startled. Nobody apologises.",
+    "It files no screenshots and it fears no Ledger.",
   ],
   owl: [
     "Whooo walked today? The owl knows. The owl is not telling.",
@@ -209,11 +209,11 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
   ],
   squirrel: [
     "Fined one acorn for loitering in a court of law.",
-    "Eleven thousand steps and not one screenshot. The Judge is *fairly* annoyed.",
-    "It has buried something. The Judge has decided not to investigate.",
+    "Eleven thousand steps and not one screenshot.",
+    "It has buried something. Best not to investigate.",
   ],
   caterpillar: [
-    "Eleven steps. Eleven legs. The Judge accepts the arithmetic.",
+    "Eleven steps. Eleven legs. The arithmetic holds.",
     "Slow, consistent, uphill. Frankly a better week than some.",
   ],
   hedgehog: [
@@ -226,7 +226,7 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
   ],
   bat: [
     "The bat walks nothing and is somehow still ahead of the couch.",
-    "Hung up on. The Judge will allow it, this once.",
+    "Hung up on. Allowed, this once.",
   ],
   spider: [
     "It has spun more this week than most have walked.",
@@ -234,7 +234,7 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
   ],
   deer: [
     "The deer crossed three counties this week. It sent no screenshot either.",
-    "Spooked. It will be back once the Judge stops watching.",
+    "Spooked. It will be back once you stop watching.",
   ],
   dog: [
     "That dog has out-walked every one of you, and it never once mentions it.",
@@ -245,11 +245,11 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
     "Steps: 900. Infrastructure: considerable.",
   ],
   skunk: [
-    "Give it room. The Judge will not be adjudicating that.",
+    "Give it room. Nobody is adjudicating that.",
     "It has right of way. It has always had right of way.",
   ],
   boar: [
-    "A boar. The Judge suggests walking briskly — in the other direction.",
+    "A boar. Walk briskly — in the other direction.",
     "It does not stride. It charges. Not the same thing.",
   ],
   turtle: [
@@ -257,7 +257,7 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
     "Slow, steady, and still ahead of whoever skipped Tuesday.",
   ],
   duck: [
-    "Migrating. The Judge notes that flying south is not a step count.",
+    "Migrating. Flying south is not a step count.",
     "It has filed no screenshot and left the county anyway.",
   ],
   turkey: [
@@ -266,10 +266,10 @@ export const CRITTER_LINES = { // tap any resident of the tree (M35) or passer-b
   ],
   rabbit: [
     "Hopped it. Steps credited: several, none of them yours.",
-    "Quick off the mark, poor at pacing. The Judge has notes.",
+    "Quick off the mark, poor at pacing.",
   ],
   raccoon: [
-    "It was in the bins. The Judge saw nothing.",
+    "It was in the bins. Nobody saw anything.",
     "Steps logged: 9,000. Route: one dumpster, repeatedly.",
   ],
   default: [

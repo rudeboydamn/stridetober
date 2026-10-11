@@ -30,7 +30,7 @@ function verdictFor(margin, copy) {
 export function render(ctx, { a, b } = {}) {
   if (ctx.phase === "muster" || !ctx.weeks.length) {
     return head() + emptyState("There is nothing to settle yet. Walk first.",
-      "Once the first Ledger posts, the Judge will hear disputes here.") +
+      "Once the first Ledger posts, disputes are settled here.") +
       `<section class="wrap section" data-reveal><a class="textlink" href="#/">See the Roll →</a></section>`;
   }
 
@@ -42,7 +42,7 @@ export function render(ctx, { a, b } = {}) {
   }
 
   const A = ctx.walkers.find(w => w.id === a);
-  if (!A || !A.paid) return head() + emptyState("No such walker is on the Ledger.", "The Court only hears walkers the Judge has counted.");
+  if (!A || !A.paid) return head() + emptyState("No such walker is on the Ledger.", "Only Striders on the Ledger can be compared.");
 
   if (!b) {
     return head() + `<section class="wrap section" data-reveal>
@@ -52,10 +52,10 @@ export function render(ctx, { a, b } = {}) {
   }
 
   const B = ctx.walkers.find(w => w.id === b);
-  if (!B || !B.paid) return head() + emptyState("No such walker is on the Ledger.", "The Court only hears walkers the Judge has counted.");
+  if (!B || !B.paid) return head() + emptyState("No such walker is on the Ledger.", "Only Striders on the Ledger can be compared.");
 
   if (a === b) {
-    return head() + emptyState("The Judge declines to adjudicate a walker against themselves.",
+    return head() + emptyState("A Strider cannot race themselves.",
       "They would win. They would also lose.") +
       `<section class="wrap section" data-reveal><a class="textlink" href="#/compare">Pick two different walkers →</a></section>`;
   }
@@ -116,7 +116,7 @@ export function mount(root, ctx, params = {}) {
     const A = ctx.walkers.find(w => w.id === params.a), B = ctx.walkers.find(w => w.id === params.b);
     share({
       title: `Settle It — ${A.short} vs ${B.short}`,
-      text: `The Judge adjudicates: ${A.short} vs ${B.short}, Stridetober.`,
+      text: `${A.short} vs ${B.short}, Stridetober.`,
       url: location.href,
     }, ctx.copy.TOASTS.copied);
   });

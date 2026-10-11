@@ -90,7 +90,7 @@ const OFF_TRAIL = {
   mod: {
     render: () => `<section class="wrap section"><div class="card off-trail" data-reveal>
       <h1 class="h2">Off the trail.</h1>
-      <p class="sub">This path is not on the map. The Judge suggests turning back.</p>
+      <p class="sub">This path is not on the map. Turn back.</p>
       <a class="btn btn-primary" href="#/">Back to Court</a></div></section>`,
   },
 };

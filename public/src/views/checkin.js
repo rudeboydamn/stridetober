@@ -28,7 +28,7 @@ function nodes(ctx) {
     list.push({
       state, dot,
       title: w.n === challenge.weeks.length ? "Final screenshots" : `Week ${w.n} screenshots`,
-      meta: `${day(w.due)} · covers ${fmtRange(w.start, w.end)}${state === "today" ? " · due today" : state === "counting" ? " · the Judge is counting" : ""}`,
+      meta: `${day(w.due)} · covers ${fmtRange(w.start, w.end)}${state === "today" ? " · due today" : state === "counting" ? " · counting" : ""}`,
     });
   }
   return list;
@@ -61,7 +61,7 @@ export function section(ctx) {
     <div class="card card-raised sunday">
       <span class="kicker">Due every Sunday</span>
       <h2 class="h2">Check-in</h2>
-      <p class="sub">Enter your steps, tap Check in, and attach your screenshot to the text.</p>
+      <p class="sub">Enter your steps, tap Check in, attach your screenshot.</p>
       <div class="sunday-pick">
         <label class="field"><span>Who's walking</span><select id="sunWho"><option value="">Pick your name</option>${who}</select></label>
         <label class="field"><span>Which week</span><select id="sunWeek">${weeks}</select></label>

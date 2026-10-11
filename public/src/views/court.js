@@ -52,7 +52,7 @@ function hero(ctx) {
 const CAPTIONS = {
   kickoff: (m, ctx) => `${longDay(ctx.challenge.kickoff)} · 12:00 AM, your time`,
   weekEnd: (m, ctx) => `Week ${m.week} is called ${longDay(ctx.challenge.weeks[m.week - 1].end)} at midnight`,
-  due:     m => `Week ${m.week} screenshots are due tonight, 11:59 PM — DIRECTLY TO THE JUDGE`,
+  due:     m => `Week ${m.week} check-ins are due tonight, 11:59 PM`,
   bell:    () => "Midnight at the end of Halloween · 12:00 AM, November 1st",
 };
 
@@ -79,7 +79,7 @@ function countdownCard(ctx) {
       <span class="kicker">${esc(label)}</span>
       ${countdownHTML(p)}
       <p class="cd-caption">${esc(CAPTIONS[m.key](m, ctx))}</p>
-      ${m.key === "due" ? `<p class="counting-row small">${tallySvg()}<span>The Judge is counting</span></p>` : ""}
+      ${m.key === "due" ? `<p class="counting-row small">${tallySvg()}<span>Check-ins are coming in</span></p>` : ""}
       <p class="sr-only cd-sr">${srSentence(p, label)}</p>
     </div>
   </section>`;
@@ -194,7 +194,7 @@ function kit() {
 function how() {
   const steps = [
     ["Walk", "Oct 4 – Oct 31. Every step counts."],
-    ["Report", "Screenshot your week. Send it DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!"],
+    ["Report", "Check in every Sunday with your week and a screenshot."],
     ["Win", "Top three split the pot — 50/30/20. Crowned November 1."],
   ];
   return `
@@ -271,7 +271,7 @@ function coronation(ctx) {
     <ol class="podium">${rows}</ol>
     <p class="sub payout-line">${allSent
       ? "The pot has been sent. The matter is settled."
-      : `The Judge sends the $${n(pot)} pot by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
+      : `The $${n(pot)} pot goes out by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
   </section>`;
 }
 
@@ -287,9 +287,9 @@ function docket(ctx) {
   <section class="wrap section" data-reveal>
     <div class="card roll-call">
       <span class="kicker">Week ${DOCKET.week} · Screenshots</span>
-      <p class="h3">${waiting.length ? `${got.size} of ${paid.length} in. The Judge awaits ${waiting.length}.` : "All in. The Judge is counting."}</p>
+      <p class="h3">${waiting.length ? `${got.size} of ${paid.length} in. Waiting on ${waiting.length}.` : "All in. Numbers coming soon."}</p>
       <ul class="roll-call-list">${paid.filter(w => got.has(w.id)).map(row).join("")}${waiting.map(row).join("")}</ul>
-      <p class="sub">No numbers until every Strider is in. The Judge is <em>fairly</em> patient.</p>
+      <p class="sub">No numbers until every Strider is in.</p>
     </div>
   </section>`;
 }

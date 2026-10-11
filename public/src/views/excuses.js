@@ -55,7 +55,7 @@ function mountFiling(root, ctx) {
       if (list.querySelector(".record-row")) list.insertAdjacentHTML("afterbegin", entry(ctx, row));
       else list.innerHTML = entry(ctx, row);
       form.body.value = "";
-      toast("Entered into the record. The Judge has <em>fairly</em> noted it.");
+      toast("Entered into the record.");
     } catch { toast("The Court is in recess. Try again later."); }
     btn.disabled = false;
   });
@@ -68,12 +68,12 @@ export function render(ctx) {
     <div class="card card-raised bench">
       <div class="bench-top">
         <span class="bench-gavel" id="gavel">${icon("gavel")}</span>
-        <p class="h3">State your excuse. The Judge is <em>fairly</em> listening.</p>
+        <p class="h3">Got an excuse? Let's hear it.</p>
       </div>
       <button class="btn btn-primary" type="button" id="plead">Plead your case</button>
       <div class="verdict" id="verdict" aria-live="polite"></div>
       <p class="caption pleas">Pleas heard: <b class="num" id="pleaCount">${n(heard)}</b></p>
-      <div class="pleas-note" id="pleasNote">${heard >= 10 ? note("the Judge has heard everything. Everything.") : ""}</div>
+      <div class="pleas-note" id="pleasNote">${heard >= 10 ? note("the Court has heard everything. Everything.") : ""}</div>
     </div>
   </section>${filing(ctx)}`;
 }
@@ -114,6 +114,6 @@ export function mount(root, ctx) {
     const heard = readCount() + 1;
     saveCount(heard);
     countEl.textContent = n(heard);
-    if (heard === 10) { noteSlot.innerHTML = note("the Judge has heard everything. Everything."); reveal(noteSlot.parentElement.parentElement); }
+    if (heard === 10) { noteSlot.innerHTML = note("the Court has heard everything. Everything."); reveal(noteSlot.parentElement.parentElement); }
   });
 }

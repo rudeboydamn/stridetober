@@ -28,21 +28,21 @@ export function section(ctx) {
     </table>
     <p>Weeks run Sunday to Saturday. Kickoff is October 4.</p>
     <p class="decree-quote">The challenge officially ends when the clock strikes 12:00 AM on November 1st!</p>
-    <p class="ruling">The Judge clarifies: that is midnight at the end of Halloween. The last steps that count are Saturday, October 31st — week 4's screenshots are due the next day.</p>`;
+    <p class="ruling">That is midnight at the end of Halloween. The last steps that count are Saturday, October 31st — week 4's screenshots are due the next day.</p>`;
 
   const evidence = `
-    <p>Send your screenshot DIRECTLY TO THE JUDGE — NOT THE GROUP CHAT!</p>
+    <p>Check in every Sunday with your week and a screenshot.</p>
     <p><a class="textlink" href="#/check-in">How to check in →</a></p>
     <span class="stamp stamp-lg">No screenshot = No steps!</span>`;
 
   const reckoning = `
     <p>The person with the MOST TOTAL STEPS at the end of the challenge will be crowned… <strong class="champion-line">THE OCTOBER STEP CHAMPION!</strong></p>
-    <p>The Judge counts the last screenshots and names the champion on Sunday, November 1st.</p>
-    <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. The Judge will send the funds through Venmo on November 1st.</p>`;
+    <p>The champion is named on Sunday, November 1st.</p>
+    <p>The pot pays three places: <b>50%</b> to the Champion, <b>30%</b> to second, <b>20%</b> to third — a chestnut's share, but a share. Funds go out by Venmo on November 1st.</p>`;
 
   const fine = `
     <p class="decree-quote">No participation trophies. No sympathy points. And there will definitely be NO rounding up because you were "basically" at 10,000.</p>
-    <p>The Judge trusts your tracker. He also, on occasion, asks questions.</p>`;
+    <p>Your tracker is trusted. Questions may still be asked.</p>`;
 
 
   return `
@@ -51,14 +51,13 @@ export function section(ctx) {
     <div class="section-head">
       <span class="ribbon">So ordered</span>
       <h2 class="h2">The Decree</h2>
-      <p class="sub">The rules of Stridetober, read aloud by the <em>Fairly</em> Impartial Judge.</p>
+      <p class="sub">The rules of Stridetober.</p>
     </div>
   </header>
   ${article(0, "The Season", season)}
   ${article(1, "The Evidence", evidence)}
   ${article(2, "The Reckoning", reckoning)}
   ${article(3, "The Fine Print", fine)}
-  <p class="wrap flourish">The Judge's word is <em>fairly</em> final.</p>
   </div>`;
 }
 

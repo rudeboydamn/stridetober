@@ -37,8 +37,8 @@ function standings(ctx) {
   }
 
   const kick = ctx.phase === "crowned" ? "Final" : ctx.phase === "counting" ? "The Final Bell" : `Week ${ctx.week.n} of 4`;
-  const sub = ctx.phase === "crowned" ? "So ordered. The Judge is *fairly* confident in the arithmetic."
-    : ctx.phase === "counting" ? "The Judge is counting — nothing below is final."
+  const sub = ctx.phase === "crowned" ? "Final. Every step counted."
+    : ctx.phase === "counting" ? "Counting — nothing below is final."
     : `Every step accounted for after week ${ctx.weeks.length}. Nothing is rounded. Ever.`;
   const top = Math.max(1, ctx.standings[0]?.total || 0);
   const crowned = ctx.phase === "crowned";

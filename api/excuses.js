@@ -6,7 +6,8 @@ import { sql } from "./_lib/neon.js";
 const IDS = new Set(WALKERS.filter(w => w.paid).map(w => w.id));
 const MAX = 280;
 const clean = body => String(body ?? "").trim().replace(/\s+/g, " ");
-const COLS = "id::int AS id, walker, body, created_at AS at, edited_at AS edited";
+const num = r => r && { ...r, id: Number(r.id) };   // Neon's HTTP API returns numbers as text
+const COLS = "id, walker, body, created_at AS at, edited_at AS edited";
 
 let ready;
 const setup = () => ready ??= sql(`CREATE TABLE IF NOT EXISTS excuses (
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
       const text = clean(body);
       if (!IDS.has(walker) || !text || text.length > MAX) return res.status(400).json({ error: "bad plea" });
       const [row] = await sql(`INSERT INTO excuses (walker, body) VALUES ($1, $2) RETURNING ${COLS}`, [walker, text]);
-      return res.status(201).json(row);
+      return res.status(201).json(num(row));
     }
     if (req.method === "PATCH" || req.method === "DELETE") {
       const { walker, body } = req.body || {}, id = Number(req.body?.id);
@@ -33,12 +34,12 @@ export default async function handler(req, res) {
       const text = clean(body);
       if (!text || text.length > MAX) return res.status(400).json({ error: "bad plea" });
       const [row] = await sql(`UPDATE excuses SET body = $3, edited_at = now() WHERE id = $1 AND walker = $2 RETURNING ${COLS}`, [id, walker, text]);
-      return row ? res.status(200).json(row) : res.status(404).json({ error: "not yours" });
+      return row ? res.status(200).json(num(row)) : res.status(404).json({ error: "not yours" });
     }
     if (req.method !== "GET") return res.status(405).end();
     const rows = await sql(`SELECT ${COLS} FROM excuses ORDER BY id DESC LIMIT 50`);
     res.setHeader("Cache-Control", "no-store");
-    return res.status(200).json(rows);
+    return res.status(200).json(rows.map(num));
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: "the Court is in recess" });

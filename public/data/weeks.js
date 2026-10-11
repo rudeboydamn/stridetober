@@ -5,7 +5,25 @@
 //   derived: [],                                           // ids whose daily split was chart-read
 //   judgeNote: "…" }
 // steps is authoritative as submitted. days null = pending — never guess.
-export const WEEKS = [];
+export const WEEKS = [
+  { week: 1, posted: "2026-10-11T13:52",
+    steps: { tedi: 119502, lizzie: 111512, alicia: 98744, "rod-jr": 71507, brittany: 66773, cristina: 44054, ashlea: 62730, jess: 56718,
+             christina: 79922, "rod-sr": 43272 },
+    days: {
+      tedi: [12675, 18878, 10337, 14700, 18462, 21876, 22574],
+      lizzie: [7367, 16343, 16823, 16748, 16982, 16722, 20527],
+      alicia: [9549, 16110, 15371, 14182, 15946, 11353, 16233],
+      "rod-jr": [12527, 13367, 8356, 4616, 9088, 7910, 15643],
+      brittany: [11113, 5057, 6704, 6463, 10653, 13459, 13324],
+      cristina: [4382, 6381, 6385, 6611, 7564, 7263, 5468],
+      ashlea: [4027, 11031, 8833, 8559, 11437, 6349, 12494],
+      jess: [0, 13797, 13483, 10020, 10019, 6029, 3370],
+      christina: [13113, 10492, 15256, 9332, 12284, 5269, 14176],
+      "rod-sr": [4178, 10147, 3558, 5290, 6808, 6876, 6415],
+    },
+    derived: ["alicia"],
+    judgeNote: "All ten Striders have reported, and the Court is *fairly* impressed. Tedi opens with 119,502 and leads Lizzie's 111,512 by 7,990. Alicia's 98,744 holds third. Christina's 79,922 leads the chase behind them. The Judge notes that three weeks remain, and a podium is only a suggestion until Nov 1." },
+];
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
 // until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.

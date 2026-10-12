@@ -34,13 +34,27 @@ const JUDGE = { id: "judge", short: "The Judge", crest: "⚖️", color: "golden
 const day = t => new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
 // Everyone sees every excuse. Whoever is picked in "Who is pleading" can edit or delete their own.
-const entry = (ctx, x, mine) => {
-  const w = x.walker === "judge" ? JUDGE : ctx.walkers.find(v => v.id === x.walker);
+const who_ = (ctx, id) => id === "judge" ? JUDGE : ctx.walkers.find(v => v.id === id);
+
+const entry = (ctx, x, me, open) => {
+  const w = who_(ctx, x.walker);
   if (!w) return "";
+  const likes = x.likes || [], comments = x.comments || [], liked = likes.includes(me);
+  const thread = open ? `<div class="record-thread">
+      ${comments.map(c => { const cw = who_(ctx, c.walker); return cw ? `<p class="record-comment"><b>${cw.crest} ${esc(cw.short)}</b> ${esc(c.body)}${c.walker === me ? ` <button class="textlink" type="button" data-act="uncomment" data-cid="${c.id}">Delete</button>` : ""}</p>` : ""; }).join("")}
+      ${me ? `<form class="record-reply" data-act="reply"><input name="body" maxlength="280" required placeholder="Add a comment" aria-label="Add a comment"><button class="btn btn-secondary" type="submit">Post</button></form>`
+           : `<p class="caption">Pick your name above to comment.</p>`}
+    </div>` : "";
   return `<li class="card record-row" data-id="${x.id}">${crest(w)}<div class="record-body">
     <p class="record-plea">“${esc(x.body)}”</p>
     <p class="caption">${esc(w.short)} · ${day(x.at)}${x.edited ? " · edited" : ""}</p>
-    ${mine ? `<p class="record-actions"><button class="textlink" type="button" data-act="edit">Edit</button><button class="textlink" type="button" data-act="delete">Delete</button></p>` : ""}
+    <p class="record-actions">
+      <button class="react${liked ? " is-on" : ""}" type="button" data-act="like" aria-pressed="${liked}" title="${esc(likes.map(l => who_(ctx, l)?.short).filter(Boolean).join(", "))}">${liked ? "♥" : "♡"} ${likes.length || ""}</button>
+      <button class="react" type="button" data-act="thread" aria-expanded="${open}">💬 ${comments.length || ""}</button>
+      <button class="react" type="button" data-act="share">↗ Share</button>
+      ${x.walker === me ? `<button class="textlink" type="button" data-act="edit">Edit</button><button class="textlink" type="button" data-act="delete">Delete</button>` : ""}
+    </p>
+    ${thread}
   </div></li>`;
 };
 
@@ -48,10 +62,12 @@ function mountFiling(root, ctx) {
   const list = root.querySelector("#record"), form = root.querySelector("#filing");
   if (!list) return;
   let rows = null;
+  const opened = new Set();
+  const swap = row => { rows = rows.map(r => r.id === row.id ? row : r); draw(); };
   const who = () => form.walker.value;
   const draw = () => {
     if (!rows) return;
-    list.innerHTML = rows.map(x => entry(ctx, x, x.walker === who())).join("") || `<li class="caption">No excuses on file. Suspicious.</li>`;
+    list.innerHTML = rows.map(x => entry(ctx, x, who(), opened.has(x.id))).join("") || `<li class="caption">No excuses on file. Suspicious.</li>`;
   };
   const call = (method, body) => fetch("/api/excuses", { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
     .then(r => r.ok ? (r.status === 204 ? null : r.json()) : Promise.reject());
@@ -77,12 +93,30 @@ function mountFiling(root, ctx) {
     btn.disabled = false;
   });
 
+  list.addEventListener("submit", async e => {
+    e.preventDefault();
+    const f = e.target, id = +f.closest("[data-id]").dataset.id;
+    try { swap(await call("POST", { action: "comment", id, walker: who(), body: f.body.value })); } catch { recess(); }
+  });
+
   list.addEventListener("click", async e => {
-    const btn = e.target.closest("[data-act]");
+    const btn = e.target.closest("button[data-act]");
     if (!btn) return;
     const li = btn.closest("[data-id]"), id = +li.dataset.id, x = rows.find(r => r.id === id);
     const act = btn.dataset.act;
-    if (act === "delete") {
+    if (act === "like") {
+      if (!who()) { toast("Pick your name above to like."); form.walker.focus(); return; }
+      try { swap(await call("POST", { action: "like", id, walker: who() })); } catch { recess(); }
+    } else if (act === "thread") {
+      opened.has(id) ? opened.delete(id) : opened.add(id); draw();
+    } else if (act === "uncomment") {
+      try { swap(await call("POST", { action: "uncomment", id, walker: who(), commentId: +btn.dataset.cid })); } catch { recess(); }
+    } else if (act === "share") {
+      const w = who_(ctx, x.walker), text = `${w.short}'s excuse, on the record at Stridetober: “${x.body}”`;
+      const url = `${location.origin}/#/excuses`;
+      try { if (navigator.share) await navigator.share({ title: "Court of Excuses", text, url }); else { await navigator.clipboard.writeText(`${text} ${url}`); toast("Copied. Spread the word."); } }
+      catch { /* share sheet closed */ }
+    } else if (act === "delete") {
       if (!confirm("Delete this excuse for good?")) return;
       try { await call("DELETE", { id, walker: who() }); rows = rows.filter(r => r.id !== id); draw(); toast("Struck from the record."); }
       catch { recess(); }

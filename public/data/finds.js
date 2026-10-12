@@ -19,4 +19,6 @@ export const FALL_FINDS = [
     caption: "Christina, walking the streets of Boston for her baby girl's birthday. The photo is blurry because she is moving. That counts as evidence." },
   { id: "f08", who: ["alicia"], date: "2026-10-10", img: "/finds/f08.jpg", w: 900, h: 1200,
     caption: "Alicia, one last push of the week with the full crew aboard. Three passengers, one stroller, zero complaints about the pace. Try that, Ledger." },
+  { id: "f09", who: ["christina"], date: "2026-10-11", img: "/finds/f09.jpg", w: 1200, h: 900,
+    caption: "Christina finished HYROX Boston, with the loudest cheering section in the building. Eight kilometres of running, eight stations of suffering, and a sign that says it best: don't quit. She didn't." },
 ];

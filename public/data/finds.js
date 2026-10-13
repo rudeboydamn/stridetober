@@ -21,4 +21,6 @@ export const FALL_FINDS = [
     caption: "Alicia, one last push of the week with the full crew aboard. Three passengers, one stroller, zero complaints about the pace. Try that, Ledger." },
   { id: "f09", who: ["christina"], date: "2026-10-11", img: "/finds/f09.jpg", w: 1200, h: 900,
     caption: "Christina finished HYROX Boston, with the loudest cheering section in the building. Eight kilometres of running, eight stations of suffering, and a sign that says it best: don't quit. She didn't." },
+  { id: "f10", who: ["ashlea"], date: "2026-10-12", img: "/finds/f10.jpg", w: 1200, h: 900,
+    caption: "Ashlea, deep in the woods on a Monday hike. The trees are still deciding between green and gold. The trail already chose gold, and every crunch underfoot counted." },
 ];

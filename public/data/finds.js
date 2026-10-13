@@ -23,4 +23,6 @@ export const FALL_FINDS = [
     caption: "Christina finished HYROX Boston, with the loudest cheering section in the building. Eight kilometres of running, eight stations of suffering, and a sign that says it best: don't quit. She didn't." },
   { id: "f10", who: ["ashlea"], date: "2026-10-12", img: "/finds/f10.jpg", w: 1200, h: 900,
     caption: "Ashlea, deep in the woods on a Monday hike. The trees are still deciding between green and gold. The trail already chose gold, and every crunch underfoot counted." },
+  { id: "f11", who: ["alicia", "lizzie"], date: "2026-10-12", img: "/finds/f11.jpg", w: 900, h: 1200,
+    caption: "Alicia and Lizzie took the kids to the woods. The kids took off. Somewhere up that trail is a pace no grown-up can match, and two moms getting their steps in trying." },
 ];

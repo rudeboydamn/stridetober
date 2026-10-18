@@ -1,10 +1,11 @@
 // The Court — home, per phase. Spec: docs/PLAN.md §5.2.
 import { nextMilestone, countdownParts, parseLocal, daysTo } from "../lib/time.js";
-import { n, esc, rich, fill, pick } from "../lib/format.js";
+import { n, esc, rich, fill, pick, fmtRange } from "../lib/format.js";
 import { totals, together, purse } from "../lib/stats.js";
 import { SPRITE, icon, seal, crest, note, countdownHTML, tickCountdown, tallySvg, reveal, burst, reduced, squirrel } from "../lib/fx.js";
 import { downloadCalendar } from "../lib/calendar.js";
 import { DOCKET } from "../../data/weeks.js";
+import { totalsChart } from "../lib/charts.js";
 import { section as checkinSection, mountSection as mountCheckin } from "./checkin.js";
 
 const longDay = s => parseLocal(s).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" });
@@ -327,6 +328,20 @@ function ledgerPreview(ctx) {
   </section>`;
 }
 
+// The latest posted week on its own: who walked the most that week.
+function weekChart(ctx) {
+  const wk = ctx.weeks.at(-1);
+  if (!wk) return "";
+  const rows = ctx.walkers.filter(w => w.paid && wk.steps[w.id] != null)
+    .map(w => ({ walker: w, total: wk.steps[w.id] })).sort((a, b) => b.total - a.total);
+  const range = ctx.challenge.weeks[wk.week - 1];
+  return `
+  <section class="wrap section" data-reveal>
+    <header class="section-head"><h2 class="h2">Week ${wk.week}</h2><p class="sub">${esc(fmtRange(range.start, range.end))} · steps that week alone</p></header>
+    <div class="card">${totalsChart(rows, document.documentElement.clientWidth)}</div>
+  </section>`;
+}
+
 function togetherTile(ctx) {
   if (!ctx.weeks.length) return "";
   const t = together(totals(ctx.weeks));
@@ -354,7 +369,7 @@ export function render(ctx) {
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
   return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + togetherTile(ctx)
+    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + weekChart(ctx) + togetherTile(ctx)
     + (ctx.phase === "crowned" ? "" : checkinSection(ctx));
 }
 

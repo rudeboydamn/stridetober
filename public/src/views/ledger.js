@@ -3,7 +3,7 @@
 import { countdownParts, parseLocal } from "../lib/time.js";
 import { n, esc, rich } from "../lib/format.js";
 import { seal, crest, delta, reveal, flip, burst, toast, reduced } from "../lib/fx.js";
-import { climbChart, totalsChart } from "../lib/charts.js";
+import { totalsChart } from "../lib/charts.js";
 import { purse } from "../lib/stats.js";
 import { section as decreeSection, mountSection as mountDecree } from "./decree.js";
 
@@ -92,10 +92,6 @@ function standings(ctx) {
         <tbody>${rows}</tbody>
       </table>
     </div>
-  </section>
-  <section class="wrap section" data-reveal>
-    <header class="section-head"><h2 class="h2">The Climb</h2><p class="sub">Cumulative steps, week over week.</p></header>
-    <div class="card">${climbChart(ctx.standings, ctx.weeks, vw())}</div>
   </section>
   <section class="wrap section" data-reveal>
     <header class="section-head"><h2 class="h2">The Totals</h2></header>

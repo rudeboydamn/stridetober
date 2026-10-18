@@ -47,7 +47,8 @@ not compete by default.
 2. Rules of evidence (identical every week, full text PLAN §9.2):
    - A week is Sun 00:00 → Sat 23:59. Apps whose week starts Monday misalign
      the headline — **read the per-day bars**.
-   - A Saturday-evening screenshot is a partial Saturday.
+   - A Saturday-evening screenshot counts as the full Saturday: Striders only send it once
+     they are sure no more steps will land (Dammy, 2026-10-18).
    - Legend markers can sit on data points; re-read occluded bars.
    - Dailies must sum to the submitted total, or **stop and ask Dammy**.
    - Chart-measured splits go in `derived` and render `~`. Weekly totals are

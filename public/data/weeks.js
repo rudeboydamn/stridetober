@@ -23,6 +23,23 @@ export const WEEKS = [
     },
     derived: ["alicia"],
     judgeNote: "All ten Striders have reported, and the Court is *fairly* impressed. Tedi opens with 119,502 and leads Lizzie's 111,512 by 7,990. Alicia's 98,744 holds third. Christina's 79,922 leads the chase behind them. The Judge notes that three weeks remain, and a podium is only a suggestion until Nov 1." },
+  { week: 2, posted: "2026-10-18T15:01",
+    steps: { tedi: 106193, brittany: 106119, "rod-jr": 96988, lizzie: 96578, alicia: 87747, christina: 87155, cristina: 46882, ashlea: 54885, jess: 41901,
+             "rod-sr": 55258 },
+    days: {
+      tedi: [9956, 19125, 23034, 13832, 10498, 16599, 13149],
+      brittany: [9124, 18738, 20625, 26850, 4044, 12104, 14634],
+      "rod-jr": [15405, 15924, 12642, 13292, 13228, 8161, 18336],
+      lizzie: [9707, 16366, 16801, 16277, 11337, 14674, 11416],
+      alicia: null,
+      christina: [25131, 8491, 11672, 12181, 13528, 7267, 8885],
+      ashlea: [4389, 10076, 8018, 10413, 5192, 7352, 9445],
+      "rod-sr": [2244, 11665, 9743, 11884, 4631, 9118, 5973],
+      jess: [988, 9886, 6487, 8899, 4499, 5897, 5245],
+      cristina: [9367, 8677, 6173, 6014, 6677, 4965, 5009],
+    },
+    derived: [],
+    judgeNote: "Tedi takes week two by 74 steps over Brittany, who climbs to fourth. Jess slips past Rod Sr by 89. The top three hold, for now." }
 ];
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court

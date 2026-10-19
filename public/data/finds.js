@@ -25,4 +25,6 @@ export const FALL_FINDS = [
     caption: "Ashlea, deep in the woods on a Monday hike. The trees are still deciding between green and gold. The trail already chose gold, and every crunch underfoot counted." },
   { id: "f11", who: ["alicia", "lizzie"], date: "2026-10-12", img: "/finds/f11.jpg", w: 900, h: 1200,
     caption: "Alicia and Lizzie took the kids to the woods. The kids took off. Somewhere up that trail is a pace no grown-up can match, and two moms getting their steps in trying." },
+  { id: "f12", who: ["alicia"], date: "2026-10-19", img: "/finds/f12.jpg", w: 900, h: 1200,
+    caption: "Alicia, on a chilly Monday morning walk through the quiet cemetery by her house. The Maple met a maple, and it is showing off. A blanket photobombs the corner. The Judge allows it: it is cold, and the tree is that good." },
 ];

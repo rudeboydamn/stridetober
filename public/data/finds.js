@@ -30,4 +30,6 @@ export const FALL_FINDS = [
     caption: "Alicia, on a chilly Monday morning walk through the quiet cemetery by her house. The Maple met a maple, and she is showing off. The top of the stroller photobombs the corner. It is cold out, and the tree is that good." },
   { id: "f13", who: ["tedi"], date: "2026-10-19", img: "/finds/f13.jpg", video: "/finds/f13.mp4", w: 540, h: 960,
     caption: "Tedi parked on the very top of the garage, as far and as high from the restaurant door as a car can go. Every ramp up and every lap back counts. Dinner is earned, and the sunset is free." },
+  { id: "f14", who: ["rod-sr"], date: "2026-10-20", img: "/finds/f14.jpg", video: "/finds/f14.mp4", w: 540, h: 960,
+    caption: "The Bean, caught red-footed: a watch strapped to the ankle, a foot wiggling under the table, and a chair doing all the walking. After two weeks the Ledger has him ninth of ten with 98,530 steps, 89 behind Jess. The ankle is working. The strategy is not." },
 ];

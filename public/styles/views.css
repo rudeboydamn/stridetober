@@ -450,7 +450,7 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .find { padding: 0; overflow: hidden; }
 .find:nth-child(odd) { transform: rotate(-.5deg); }
 .find:nth-child(even) { transform: rotate(.4deg); }
-.find img { width: 100%; height: auto; }
+.find img, .find video { display: block; width: 100%; height: auto; background: var(--surface-2); }
 .find-developing { display: grid; place-items: center; justify-items: center; gap: 10px; min-height: 190px; background: var(--surface-2); color: var(--ink-3); font: 600 15px/1 var(--font-ui); }
 .find figcaption { display: grid; justify-items: start; gap: 6px; padding: var(--s-4); }
 .find-cap { font: italic 600 var(--step-0)/1.35 var(--font-display); font-variation-settings: "SOFT" 100, "WONK" 1; }

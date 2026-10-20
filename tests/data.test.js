@@ -123,6 +123,7 @@ test("finds: every photo exists in public/finds (or img is null)", () => {
     if (f.img === null) continue;
     assert.ok(existsSync("public" + f.img), `finds.js: ${f.id} photo ${f.img} is missing`);
     assert.ok(f.w > 0 && f.h > 0, `finds.js: ${f.id} needs w and h`);
+    if (f.video) assert.ok(existsSync("public" + f.video), `finds.js: ${f.id} video ${f.video} is missing`);
   }
 });
 

@@ -1,6 +1,7 @@
 // Fall Finds — the field journal. Photos live in public/finds/
 // (EXIF-rotated, ≤1200px, JPEG q~75). img:null renders the "developing the film" card.
 // { id:"f01", who:["sam"], date:"2026-10-12", img:"/finds/f01.jpg", w:1200, h:900, caption:"…" }
+// A find may also carry video:"/finds/f13.mp4" (H.264/AAC, faststart, ~540px wide); img is then its poster frame.
 // Credit comes from the sender's filename, never from what's in the picture.
 export const FALL_FINDS = [
   { id: "f01", who: ["christina"], date: "2026-10-05", img: "/finds/f01.jpg", w: 900, h: 1200,
@@ -26,5 +27,7 @@ export const FALL_FINDS = [
   { id: "f11", who: ["alicia", "lizzie"], date: "2026-10-12", img: "/finds/f11.jpg", w: 900, h: 1200,
     caption: "Alicia and Lizzie took the kids to the woods. The kids took off. Somewhere up that trail is a pace no grown-up can match, and two moms getting their steps in trying." },
   { id: "f12", who: ["alicia"], date: "2026-10-19", img: "/finds/f12.jpg", w: 900, h: 1200,
-    caption: "Alicia, on a chilly Monday morning walk through the quiet cemetery by her house. The Maple met a maple, and she is showing off. The top of the stroller photobombs the corner. The Judge allows it: it is cold, and the tree is that good." },
+    caption: "Alicia, on a chilly Monday morning walk through the quiet cemetery by her house. The Maple met a maple, and she is showing off. The top of the stroller photobombs the corner. It is cold out, and the tree is that good." },
+  { id: "f13", who: ["tedi"], date: "2026-10-19", img: "/finds/f13.jpg", video: "/finds/f13.mp4", w: 540, h: 960,
+    caption: "Tedi parked on the very top of the garage, as far and as high from the restaurant door as a car can go. Every ramp up and every lap back counts. Dinner is earned, and the sunset is free." },
 ];

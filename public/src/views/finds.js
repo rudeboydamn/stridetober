@@ -49,7 +49,9 @@ export function render(ctx) {
     ${list.length ? "" : `<p class="sub">Nothing yet this week. Post a photo from your walk in the group chat.</p>`}
     <div class="finds-grid">${list.map(f => `
       <figure class="card find">
-        ${f.img
+        ${f.video
+          ? `<video src="${esc(f.video)}" poster="${esc(f.img || "")}" width="${f.w}" height="${f.h}" controls playsinline preload="metadata" aria-label="${esc(f.caption)}"></video>`
+          : f.img
           ? `<img src="${esc(f.img)}" width="${f.w}" height="${f.h}" loading="lazy" alt="${esc(f.caption)}">`
           : `<div class="find-developing" role="img" aria-label="Photo developing">${tallySvg(false)}<span>developing the film…</span></div>`}
         <figcaption>

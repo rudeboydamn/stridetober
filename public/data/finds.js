@@ -34,4 +34,6 @@ export const FALL_FINDS = [
     caption: "The Bean, caught red-footed: a watch strapped to the ankle, a foot wiggling under the table, and a chair doing all the walking. After two weeks the Ledger has him ninth of ten with 98,530 steps, 89 behind Jess. The ankle is working. The strategy is not." },
   { id: "f15", who: ["christina"], date: "2026-10-24", img: "/finds/f15.jpg", w: 1200, h: 900,
     caption: "Christina and her partner in crime parked at the far end of the lot and walked store to store, peace sign up. Her message to the group: \"We're coming for you, Tedi!!!! 😎\" Tedi has been served notice." },
+  { id: "f16", who: ["alicia"], date: "2026-10-24", img: "/finds/f16.jpg", w: 900, h: 1200,
+    caption: "Alicia's family walk at dusk on the last night of week three. Someone else is pushing the stroller for once, the leaves are red overhead, and the photo is blurry because nobody slowed down to take it." },
 ];

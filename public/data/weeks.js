@@ -67,8 +67,8 @@ export const DOCKET = null;
 export const ANNOUNCEMENT = {
   until: "2026-11-01T00:00", mode: "note",
   kicker: "The final week",
-  title: "Seven days. One crown. 🍂",
-  lead: "Tedi leads by 14,583. Lizzie is second, Alicia is 30,912 back in third, and Brittany sits 19,208 off the podium. The clock strikes midnight on Halloween, and every step until then counts.",
+  title: "Seven days. Three spots on the podium. 🍂",
+  lead: "The leaves have turned and the mornings have teeth, but the podium is still up for grabs. Tedi leads by 14,583, Lizzie is second, Alicia is third, and Brittany sits 19,208 behind her. Bundle up. Every step until midnight on Halloween counts.",
 };
 // or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }

@@ -5,7 +5,7 @@
 export const PHASE_LINES = {
   muster:   { kick:"KICKOFF · SUNDAY, OCTOBER 4", head:"Walk it. Track it. Win it!",
               sub:"Four weeks. Every step counted. One champion. The leaves are watching." },
-  walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. Ten Striders, one wreath." },
+  walking:  { kick:"WEEK {n} OF 4", head:null /* from COURT_WALKING */, sub:"Every step counts. Ten Striders, three places on the podium." },
   counting: { kick:"THE FINAL BELL", head:"The Final Bell has rung.", sub:"The last screenshots are coming in. The Ledger is frozen-ish." },
   crowned:  { kick:"ALL RISE", head:"THE OCTOBER STEP CHAMPION", sub:"So ordered. The pot splits three ways by Venmo." },
 };

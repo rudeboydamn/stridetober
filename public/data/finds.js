@@ -32,4 +32,6 @@ export const FALL_FINDS = [
     caption: "Tedi parked on the very top of the garage, as far and as high from the restaurant door as a car can go. Every ramp up and every lap back counts. Dinner is earned, and the sunset is free." },
   { id: "f14", who: ["rod-sr"], date: "2026-10-20", img: "/finds/f14.jpg", video: "/finds/f14.mp4", w: 540, h: 960,
     caption: "The Bean, caught red-footed: a watch strapped to the ankle, a foot wiggling under the table, and a chair doing all the walking. After two weeks the Ledger has him ninth of ten with 98,530 steps, 89 behind Jess. The ankle is working. The strategy is not." },
+  { id: "f15", who: ["christina"], date: "2026-10-24", img: "/finds/f15.jpg", w: 1200, h: 900,
+    caption: "Christina and her partner in crime parked at the far end of the lot and walked store to store, peace sign up. Her message to the group: \"We're coming for you, Tedi!!!! 😎\" Tedi has been served notice." },
 ];

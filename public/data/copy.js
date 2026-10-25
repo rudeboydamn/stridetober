@@ -50,7 +50,7 @@ export const COURT_WALKING = [ // hero line, rotates by week number
   "The leaves fall. The walkers rise.",
   "October is short. The step counts should not be.",
   "Somewhere, a couch is being defended.",
-  "Week {n}. Brisk, please.",
+  "The final week. Leave nothing on the trail.",
 ];
 
 export const COUNTDOWN_LABELS = {

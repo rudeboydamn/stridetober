@@ -39,20 +39,36 @@ export const WEEKS = [
       cristina: [9367, 8677, 6173, 6014, 6677, 4965, 5009],
     },
     derived: [],
-    judgeNote: "Tedi takes week two by 74 steps over Brittany, who climbs to fourth. Jess slips past Rod Sr by 89. The top three hold, for now." }
+    judgeNote: "Tedi takes week two by 74 steps over Brittany, who climbs to fourth. Jess slips past Rod Sr by 89. The top three hold, for now." },
+  { week: 3, posted: "2026-10-25T13:30",
+    steps: { alicia: 110035, lizzie: 104765, brittany: 104426, tedi: 101743, jess: 95471, christina: 88875, "rod-jr": 71421, ashlea: 49943, cristina: 41656,
+             "rod-sr": 29286 },
+    days: {
+      alicia: null,
+      lizzie: [9339, 16446, 20786, 14362, 18110, 16254, 9468],
+      brittany: [16250, 2149, 20997, 18725, 19363, 14137, 12805],
+      tedi: [13940, 27806, 19239, 19328, 10394, 6098, 4938],
+      jess: [11717, 15672, 10584, 17162, 15501, 10144, 14691],
+      christina: [13929, 10530, 14691, 13221, 13062, 12957, 10485],
+      "rod-jr": [6176, 11060, 11626, 11487, 6543, 9574, 14955],
+      ashlea: [5265, 5825, 7192, 12531, 7207, 4150, 7773],
+      cristina: [5094, 9174, 4890, 4906, 5356, 6058, 6178],
+      "rod-sr": [4492, 5195, 4444, 11459, 2925, 504, 267],
+    },
+    derived: [],
+    judgeNote: "Alicia takes week three with 110,035, her first weekly win. Lizzie and Brittany finish 339 apart, and Brittany got there after a 2,149 Monday. Tedi's 27,806 on Monday is the biggest single day of Stridetober so far, and she still leads the season by 14,583. Jess posts her best week yet and climbs to seventh. One week left: fourth place sits 19,208 off the podium." }
 ];
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
 // until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.
-export const DOCKET = { week: 3, in: ["tedi", "lizzie", "alicia", "rod-sr", "christina", "ashlea", "cristina", "rod-jr", "jess"] };
+export const DOCKET = null;
 
-// Alicia's birthday falls on kickoff day. Live all day Sunday Oct 4, then it retires itself.
+// The final week: live from the week-3 posting until the clock strikes midnight on Halloween.
 export const ANNOUNCEMENT = {
-  from: "2026-10-04T00:00", until: "2026-10-05T00:00", mode: "note", who: "alicia",
-  kicker: "Hear ye, hear ye",
-  title: "🎂 The Maple turns a year more golden today!",
-  lead: "Born on the very first day of Stridetober, which the Judge finds *fairly* suspicious. Happy birthday, Alicia! Birthday steps still count exactly once. The Judge is generous, not careless.",
-  cta: "Read her Chronicle",
+  until: "2026-11-01T00:00", mode: "note",
+  kicker: "The final week",
+  title: "Seven days. One crown. 🍂",
+  lead: "Tedi leads by 14,583. Lizzie is second, Alicia is 30,912 back in third, and Brittany sits 19,208 off the podium. The clock strikes midnight on Halloween, and every step until then counts.",
 };
 // or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }

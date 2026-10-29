@@ -5,3 +5,4 @@ node_modules
 # Public repo: walkers' check-in screenshots stay on this machine.
 checkins/*
 !checkins/.gitkeep
+brag-output/

@@ -61,14 +61,14 @@ export const WEEKS = [
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
 // until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.
-export const DOCKET = null;
+export const DOCKET = { week: 4, in: ["alicia", "tedi", "lizzie", "christina", "rod-jr", "rod-sr", "cristina"] };
 
 // The final week: live from the week-3 posting until the clock strikes midnight on Halloween.
 export const ANNOUNCEMENT = {
   until: "2026-11-02T00:00", mode: "note",
   kicker: "Week 4 check-ins",
   title: "The final tallies are rolling in. 🍂",
-  lead: "Week 4 closed at midnight on Halloween. In so far: Alicia, Tedi, Lizzie, Christina B., Rod Jr, Rod Sr and Cristina C. Still to report: Brittany, Jess and Ashlea. The Chase below still runs on week 3 numbers, so every gap can change. Week 4 is still rolling in.",
+  lead: "Week 4 closed at midnight on Halloween. The Chase below still runs on week 3 numbers, so every gap can change. Week 4 is still rolling in.",
 };
 // or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }

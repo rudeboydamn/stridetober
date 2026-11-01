@@ -308,7 +308,7 @@ function ledgerPreview(ctx) {
     </section>`;
   }
   const behind = ctx.week && ctx.week.n - 1 > ctx.weeks.length;
-  const tag = ctx.phase === "counting" ? "unofficial" : behind ? ctx.copy.AS_COUNTED : `after week ${ctx.weeks.length}`;
+  const tag = ctx.phase === "counting" ? `through week ${ctx.weeks.length} · week ${ctx.weeks.length + 1} still rolling in` : behind ? ctx.copy.AS_COUNTED : `after week ${ctx.weeks.length}`;
   const S = ctx.standings;
   const rows = S.map((r, i) => `
     <li class="preview-row${i < 3 ? " is-podium" : ""}" style="--c:var(--walker-${r.walker.color})">

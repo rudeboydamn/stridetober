@@ -65,10 +65,10 @@ export const DOCKET = null;
 
 // The final week: live from the week-3 posting until the clock strikes midnight on Halloween.
 export const ANNOUNCEMENT = {
-  until: "2026-11-01T00:00", mode: "note",
-  kicker: "The final week",
-  title: "Seven days. Three spots on the podium. 🍂",
-  lead: "The leaves have turned and the mornings have teeth, but the podium is still up for grabs. Tedi leads by 14,583, Lizzie is second, Alicia is third, and Brittany sits 19,208 behind her. Bundle up. Every step until midnight on Halloween counts.",
+  until: "2026-11-02T00:00", mode: "note",
+  kicker: "Week 4 check-ins",
+  title: "The final tallies are rolling in. 🍂",
+  lead: "Week 4 closed at midnight on Halloween. In so far: Alicia, Tedi, Lizzie, Christina B., Rod Jr, Rod Sr and Cristina C. Still to report: Brittany, Jess and Ashlea. The Chase below still runs on week 3 numbers, so every gap can change. Week 4 is still rolling in.",
 };
 // or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }

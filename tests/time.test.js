@@ -99,7 +99,9 @@ test("nextMilestone: the final week counts down to the Final Bell", () => {
 });
 
 test("nextMilestone: counting and crowned have no digits", () => {
-  const c = nextMilestone({ now: at("2026-11-01T09:00"), challenge: CHALLENGE, weeks: [W(1), W(2), W(3)] });
+  const r = nextMilestone({ now: new Date("2026-11-01T16:59:00Z"), challenge: CHALLENGE, weeks: [W(1), W(2), W(3)] });
+  assert.equal(r.key, "reveal");
+  const c = nextMilestone({ now: new Date("2026-11-01T17:00:00Z"), challenge: CHALLENGE, weeks: [W(1), W(2), W(3)] });
   assert.deepEqual([c.key, c.target], ["counted", null]);
   const d = nextMilestone({ now: at("2026-11-01T21:00"), challenge: CHALLENGE, weeks: [W(1), W(2), W(3), W(4)] });
   assert.deepEqual([d.key, d.target], ["done", null]);

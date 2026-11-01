@@ -56,7 +56,23 @@ export const WEEKS = [
       "rod-sr": [4492, 5195, 4444, 11459, 2925, 504, 267],
     },
     derived: [],
-    judgeNote: "Alicia takes week three with 110,035, her first weekly win. Lizzie and Brittany finish 339 apart, and Brittany got there after a 2,149 Monday. Tedi's 27,806 on Monday is the biggest single day of Stridetober so far, and she still leads the season by 14,583. Jess posts her best week yet and climbs to seventh. One week left: fourth place sits 19,208 off the podium." }
+    judgeNote: "Alicia takes week three with 110,035, her first weekly win. Lizzie and Brittany finish 339 apart, and Brittany got there after a 2,149 Monday. Tedi's 27,806 on Monday is the biggest single day of Stridetober so far, and she still leads the season by 14,583. Jess posts her best week yet and climbs to seventh. One week left: fourth place sits 19,208 off the podium." },
+  { week: 4, posted: "2026-11-01T12:00",
+    steps: { brittany: 157936, alicia: 116331, tedi: 105560, lizzie: 102253, christina: 87100, "rod-jr": 71530, "rod-sr": 63152, jess: 59524, cristina: 42763, ashlea: 30459 },
+    days: {
+      brittany: [20138, 25042, 29741, 29275, 31153, 10079, 12508],
+      alicia: null,
+      tedi: [5553, 14958, 18327, 27284, 18196, 8229, 13013],
+      lizzie: null,
+      christina: [4119, 21916, 12041, 10240, 14593, 14143, 10048],
+      "rod-jr": [9642, 11267, 15345, 9897, 5355, 5596, 14428],
+      "rod-sr": [2806, 11758, 9568, 11924, 11228, 4593, 11275],
+      jess: [5299, 10084, 11740, 9908, 7147, 8019, 7327],
+      cristina: [5947, 7357, 7543, 5163, 4195, 5930, 6628],
+      ashlea: [4159, 5182, 4714, 5349, 82, 3286, 7687],
+    },
+    derived: [],
+    judgeNote: "Brittany closes Stridetober with 157,936, the biggest week of the challenge, and takes the crown by 2,256 over Tedi. Her 31,153 on Thursday is the biggest single day of the month. Lizzie finishes third, 2,251 ahead of Alicia, who won the most steps of anyone not named Brittany in the final week. So ordered." },
 ];
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
@@ -64,12 +80,7 @@ export const WEEKS = [
 export const DOCKET = { week: 4, in: ["alicia", "tedi", "lizzie", "christina", "rod-jr", "rod-sr", "cristina", "brittany", "jess", "ashlea"] };
 
 // The final week: live from the week-3 posting until the clock strikes midnight on Halloween.
-export const ANNOUNCEMENT = {
-  until: "2026-11-02T00:00", mode: "note",
-  kicker: "Week 4 check-ins",
-  title: "The final tallies are rolling in. 🍂",
-  lead: "Week 4 closed at midnight on Halloween. The Chase below still runs on week 3 numbers, so every gap can change. Week 4 is still rolling in.",
-};
+export const ANNOUNCEMENT = null;
 // or { from?:"2026-10-19T00:00", until:"2026-10-20T00:00", mode:"note"|"getwell", who:"sam",   // from = optional start
 //      kicker:"…", title:"…", lead:"…", points:[[emoji,text],…], note:"…", cta:"…" }
 // mode:"getwell" replaces the Court's ledger preview; mode:"note" is a dismissible banner.

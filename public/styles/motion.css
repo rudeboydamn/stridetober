@@ -272,3 +272,25 @@ html[data-motion="reduce"] *, html[data-motion="reduce"] *::before, html[data-mo
 }
 html[data-motion="reduce"] .leaves, html[data-motion="reduce"] .wild { display: none; }
 html[data-motion="reduce"] .tally.counting path { animation-name: none !important; stroke-dasharray: none; }
+
+/* ── the crowning ceremony. Every keyframe is from-only, so no animation at all shows the final scene. */
+@keyframes curtain-l { from { translate: 0 0; } }
+@keyframes curtain-r { from { translate: 0 0; } }
+@keyframes pod-rise { from { translate: 0 110%; opacity: 0; } }
+@keyframes pod-pop { from { scale: .4; opacity: 0; } }
+@keyframes crown-fall { from { translate: -50% -180px; rotate: -24deg; opacity: 0; } }
+@keyframes spot-l { from { rotate: -14deg; } 50% { rotate: 30deg; } }
+@keyframes spot-r { from { rotate: 14deg; } 50% { rotate: -30deg; } }
+@keyframes bulb { 50% { opacity: .45; } }
+.ceremony .curtain-l { animation: curtain-l 1.1s cubic-bezier(.7, 0, .3, 1) .3s both; }
+.ceremony .curtain-r { animation: curtain-r 1.1s cubic-bezier(.7, 0, .3, 1) .3s both; }
+.ceremony .spot-l { animation: spot-l 3.6s ease-in-out .3s both; }
+.ceremony .spot-r { animation: spot-r 3.6s ease-in-out .3s both; }
+.ceremony .pod-block { animation: pod-rise .7s cubic-bezier(.2, 1.2, .4, 1) both; }
+.ceremony .pod-who { animation: pod-pop .45s cubic-bezier(.2, 1.4, .4, 1) both; }
+.ceremony .pod-3 .pod-block { animation-delay: 1.4s; } .ceremony .pod-3 .pod-who { animation-delay: 1.9s; }
+.ceremony .pod-2 .pod-block { animation-delay: 2.3s; } .ceremony .pod-2 .pod-who { animation-delay: 2.8s; }
+.ceremony .pod-1 .pod-block { animation-delay: 3.2s; } .ceremony .pod-1 .pod-who { animation-delay: 3.7s; }
+.ceremony .pod-crown { animation: crown-fall .6s cubic-bezier(.3, 1.5, .5, 1) 4.1s both; }
+.ceremony .bulbs { animation: bulb 1.2s steps(2) infinite; }
+.ceremony.is-seen .curtain, .ceremony.is-seen .spot, .ceremony.is-seen .pod-block, .ceremony.is-seen .pod-who, .ceremony.is-seen .pod-crown { animation: none; }

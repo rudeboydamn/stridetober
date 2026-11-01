@@ -39,7 +39,10 @@ export function weekStatus(wk, now, weeks) {
 export function nextMilestone({ now, challenge, weeks }) {
   const phase = phaseOf(now, challenge, weeks);
   if (phase === "muster") return { key: "kickoff", target: parseLocal(challenge.kickoff) };
-  if (phase === "counting") return { key: "counted", target: null };
+  if (phase === "counting") {
+    const at = challenge.reveal && new Date(challenge.reveal);
+    return at && now < at ? { key: "reveal", target: at } : { key: "counted", target: null };
+  }
   if (phase === "crowned") return { key: "done", target: null };
 
   const due = challenge.weeks.find(w =>

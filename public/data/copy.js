@@ -59,6 +59,7 @@ export const COUNTDOWN_LABELS = {
   due: "until screenshots are past due",
   bell: "until the Final Bell",
   counted: "the count is on",
+  reveal: "until the final numbers and the podium",
   done: "the walking is done",
 };
 
@@ -123,6 +124,16 @@ export const EXCUSES = [ // pardon:true = PARDONED wax seal; otherwise OVERRULED
   { plea:"I was pacing during a call.", ruling:"Pacing counts. Show the screenshot next time.", pardon:true },
   { plea:"Big steps run in my family.", ruling:"Then the family may also walk." },
 ];
+
+export const SALUTES = { // the Court's last word on each Strider below the podium
+  alicia: "Won week three, then walked 116,331 in the last, pushing a stroller with three passengers.",
+  christina: "Finished HYROX Boston in the middle of all this, and still took fifth.",
+  "rod-jr": "Weighted vest, Times Square, a presentation the next day. Never stopped smiling.",
+  jess: "95,471 in week three, more than double the week before. The late surge of the month.",
+  ashlea: "Joined the day before kickoff and found golden trails all October.",
+  "rod-sr": "The Bean kept the whole family laughing, and set his best day in the final week.",
+  cristina: "28 days out of 28. Consistency is its own trophy.",
+};
 
 export const PODIUM = [ // the pot pays three places (challenge.split); medal is canon — third gets a chestnut
   { place:1, medal:"🥇", title:"THE OCTOBER STEP CHAMPION",    share:"half the pot" },

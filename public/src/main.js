@@ -33,7 +33,8 @@ const offset = DEMO && query.get("now") ? parseLocal(query.get("now")) - Date.no
 const clock = () => new Date(Date.now() + offset);
 
 // Demo weeks carry future "posted" stamps; only count what has been posted by the (demo) clock.
-const weeksAt = now => (DEMO ? allWeeks.filter(w => !w.posted || parseLocal(w.posted) <= now) : allWeeks);
+const weeksAt = now => (DEMO ? allWeeks.filter(w => !w.posted || parseLocal(w.posted) <= now)
+  : allWeeks.filter(w => w.week < CHALLENGE.weeks.length || !CHALLENGE.reveal || now >= new Date(CHALLENGE.reveal)));
 
 const crownedSeen = () => {
   try { return localStorage.getItem("stridetober:crowned-seen") === "1"; } catch { return false; }

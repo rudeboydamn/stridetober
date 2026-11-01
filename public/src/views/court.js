@@ -54,6 +54,7 @@ const CAPTIONS = {
   kickoff: (m, ctx) => `${longDay(ctx.challenge.kickoff)} · 12:00 AM, your time`,
   weekEnd: (m, ctx) => `Week ${m.week} is called ${longDay(ctx.challenge.weeks[m.week - 1].end)} at midnight`,
   due:     m => `Week ${m.week} check-ins are due tonight, 11:59 PM`,
+  reveal:  () => "Noon Eastern · 11 AM Central · 10 AM Mountain · 9 AM Pacific",
   bell:    () => "Midnight at the end of Halloween · 12:00 AM, November 1st",
 };
 
@@ -237,43 +238,109 @@ function coronation(ctx) {
   const champ = ctx.standings[0];
   if (!champ) return "";
   const { pot, shares } = purse(ctx.walkers, ctx.challenge);
-  const seen = ctx.crownedSeen;
-  const rows = ctx.copy.PODIUM.map((p, i) => {
-    const r = ctx.standings[i];
+  const step = i => {
+    const r = ctx.standings[i], p = ctx.copy.PODIUM[i];
     if (!r) return "";
     const sent = ctx.challenge.payouts?.[p.place];
-    return `<li class="card podium-row${i === 0 ? " first" : ""}" style="--c:var(--walker-${r.walker.color});--i:${i}">
-      <span class="podium-medal" aria-hidden="true">${p.medal}</span>
-      ${crest(r.walker)}
-      <a class="podium-name" href="#/walker/${r.walker.id}">${esc(r.walker.name)}</a>
-      <span class="num podium-total" data-count="${r.total}">${n(r.total)}</span>
-      <span class="chip pay-chip">${esc(p.share)} — $${n(shares[i].amount)}${sent ? " · sent ✓" : ""}</span>
+    return `<li class="pod pod-${p.place}" style="--c:var(--walker-${r.walker.color})">
+      <div class="pod-who">
+        ${i === 0 ? `<span class="pod-crown" aria-hidden="true">👑</span>` : ""}
+        ${crest(r.walker, "crest-56")}
+        <a class="pod-name" href="#/walker/${r.walker.id}">${esc(r.walker.short)}</a>
+        <b class="num pod-total">${n(r.total)}</b>
+      </div>
+      <div class="pod-block">
+        <span class="pod-medal" aria-hidden="true">${p.medal}</span>
+        <span class="pod-place">${p.place}</span>
+        <span class="pod-pay">$${n(shares[i].amount)}${sent ? " ✓" : ""}</span>
+      </div>
     </li>`;
+  };
+  const margin = champ.total - (ctx.standings[1]?.total ?? 0);
+  return `
+  <section class="ceremony${ctx.crownedSeen ? " is-seen" : ""}" id="ceremony">
+    <span class="spot spot-l" aria-hidden="true"></span><span class="spot spot-r" aria-hidden="true"></span>
+    <span class="bulbs" aria-hidden="true"></span>
+    <div class="ceremony-inner">
+      <span class="cer-kick">All rise</span>
+      <h1 class="cer-title">The October Step Champion</h1>
+      <p class="cer-name">${esc(champ.walker.name)}</p>
+      <ol class="stage">${step(1)}${step(0)}${step(2)}</ol>
+      <p class="cer-line"><b class="num">${n(champ.total)}</b> steps over four weeks. Won by <b class="num">${n(margin)}</b>.</p>
+      <button class="encore" id="encore" type="button">🔔 Ring the bell again</button>
+    </div>
+    <span class="curtain curtain-l" aria-hidden="true"></span><span class="curtain curtain-r" aria-hidden="true"></span>
+  </section>
+  ${hall(ctx)}
+  ${field(ctx, pot, shares)}`;
+}
+
+// The plaques: the month's records, read from the posted weeks.
+function hall(ctx) {
+  const name = id => ctx.walkers.find(w => w.id === id);
+  const weeks = ctx.weeks.flatMap(w => Object.entries(w.steps).map(([id, v]) => ({ id, v, week: w.week })));
+  const days = ctx.weeks.flatMap(w => Object.entries(w.days || {}).flatMap(([id, d]) => (d || []).map(v => ({ id, v, week: w.week }))));
+  const top = list => list.reduce((b, c) => (c.v > b.v ? c : b));
+  const bw = top(weeks), bd = top(days);
+  const plaque = (kick, x) => `<li class="plaque"><span class="kicker">${kick}</span>${crest(name(x.id))}
+    <b class="num plaque-n">${n(x.v)}</b><span class="caption">${esc(name(x.id).short)} · week ${x.week}</span></li>`;
+  const winners = ctx.weeks.map(w => {
+    const [id] = Object.entries(w.steps).sort((a, b) => b[1] - a[1])[0];
+    return `<li class="winner">${crest(name(id))}<span><b>Week ${w.week}</b>${esc(name(id).short)}</span></li>`;
   }).join("");
+  return `
+  <section class="wrap section" data-reveal>
+    <header class="section-head"><h2 class="h2">The Hall of Records</h2></header>
+    <ul class="plaques">${plaque("Biggest week", bw)}${plaque("Biggest day", bd)}</ul>
+    <ol class="winners">${winners}</ol>
+  </section>`;
+}
+
+// Everyone else walked too: every Strider below the podium gets the Court's salute.
+function field(ctx, pot, shares) {
+  const rows = ctx.standings.slice(3).map(r => `
+    <li class="salute" style="--c:var(--walker-${r.walker.color})">
+      <span class="salute-rank">${r.rank}</span>${crest(r.walker)}
+      <div class="salute-text"><a class="preview-name" href="#/walker/${r.walker.id}">${esc(r.walker.short)}</a>
+      <p class="caption">${esc(ctx.copy.SALUTES[r.walker.id] || "")}</p></div>
+      <b class="num">${n(r.total)}</b>
+    </li>`).join("");
   const allSent = shares.every(s => ctx.challenge.payouts?.[s.place]);
   return `
-  <section class="hero coronation" data-reveal>
-    <div class="wrap coronation-grid">
-      <div class="coronation-stage">
-        <span class="crown-slot">
-          <svg class="crown${seen ? "" : " dropping"}" viewBox="0 0 64 40" aria-hidden="true"><use href="${SPRITE}#wreath"/></svg>
-          ${crest(champ.walker, "crest-56")}
-        </span>
-        ${seal("Champion", { size: "seal-96", cls: seen ? "" : "stamping", label: "The October Step Champion" })}
-      </div>
-      <span class="ribbon">All rise</span>
-      <h1 class="hero-title">THE OCTOBER STEP CHAMPION</h1>
-      <p class="coronation-name">${esc(champ.walker.name)}</p>
-      <p class="coronation-total"><b class="num" data-count="${champ.total}">${n(champ.total)}</b> steps over four weeks</p>
-    </div>
-  </section>
   <section class="wrap section" data-reveal>
-    <header class="section-head"><h2 class="h2">The Podium</h2><p class="sub">Three walkers leave richer.</p></header>
-    <ol class="podium">${rows}</ol>
-    <p class="sub payout-line">${allSent
-      ? "The pot has been sent. The matter is settled."
-      : `The $${n(pot)} pot goes out by Venmo on November 1st — $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
+    <header class="section-head"><h2 class="h2">The Whole Field</h2><p class="sub">Ten walked. Every one of them counts.</p></header>
+    <ol class="salutes">${rows}</ol>
+    <p class="sub payout-line">${allSent ? "The pot has been sent. The matter is settled."
+      : `The $${n(pot)} pot goes out by Venmo: $${n(shares[0]?.amount ?? 0)} to the Champion, $${n(shares[1]?.amount ?? 0)} to second, $${n(shares[2]?.amount ?? 0)} to third.`}</p>
   </section>`;
+}
+
+// A short brass fanfare. Only ever after a tap: browsers refuse audio without one.
+function fanfare() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  const ac = new AC();
+  [[392, 0, .16], [392, .18, .16], [392, .36, .16], [523, .54, .36], [392, .92, .16], [523, 1.1, .16], [659, 1.28, .9]].forEach(([f, at, len]) => {
+    [f, f * 1.5].forEach((hz, i) => {
+      const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + at;
+      o.type = "sawtooth"; o.frequency.value = hz;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(i ? .04 : .09, t + .03);
+      g.gain.exponentialRampToValueAtTime(.001, t + len);
+      o.connect(g).connect(ac.destination);
+      o.start(t); o.stop(t + len + .05);
+    });
+  });
+}
+
+// The reveal: third, second, then the crown, then everything falls.
+function ceremony(root, delay = 4300) {
+  const de = document.documentElement.clientWidth;
+  setTimeout(() => {
+    burst({ x: de * .5, y: 220, power: 1.3 });
+    setTimeout(() => burst({ x: de * .15, y: 320 }), 350);
+    setTimeout(() => burst({ x: de * .85, y: 320 }), 700);
+  }, reduced() ? 0 : delay);
 }
 
 // ── walking / counting / crowned sections ─────────────────
@@ -288,9 +355,9 @@ function docket(ctx) {
   <section class="wrap section" data-reveal>
     <div class="card roll-call">
       <span class="kicker">Week ${DOCKET.week} · Screenshots</span>
-      <p class="h3">${waiting.length ? `${got.size} of ${paid.length} in. Waiting on ${waiting.length}.` : "All in. Numbers coming soon."}</p>
+      <p class="h3">${waiting.length ? `${got.size} of ${paid.length} in. Waiting on ${waiting.length}.` : "All in."}</p>
       <ul class="roll-call-list">${paid.filter(w => got.has(w.id)).map(row).join("")}${waiting.map(row).join("")}</ul>
-      <p class="sub">No numbers until every Strider is in.</p>
+      <p class="sub">${waiting.length ? "No numbers until every Strider is in." : "Everyone is in. The numbers land when the clock hits zero."}</p>
     </div>
   </section>`;
 }
@@ -368,9 +435,8 @@ export function render(ctx) {
     return hero(ctx) + countdownCard(ctx) + stakes(ctx) + roll(ctx) + trail(ctx) + calendarCard(ctx) + checkinSection(ctx)
       + `<div class="wrap section duo">${job()}${kit()}</div>` + how() + flourish;
   }
-  return (ctx.phase === "crowned" ? coronation(ctx) : hero(ctx))
-    + countdownCard(ctx) + docket(ctx) + ledgerPreview(ctx) + weekChart(ctx) + togetherTile(ctx)
-    + (ctx.phase === "crowned" ? "" : checkinSection(ctx));
+  if (ctx.phase === "crowned") return coronation(ctx) + weekChart(ctx) + togetherTile(ctx);
+  return (ctx.phase === "counting" ? countdownCard(ctx) + hero(ctx) : hero(ctx) + countdownCard(ctx)) + docket(ctx) + ledgerPreview(ctx) + weekChart(ctx) + togetherTile(ctx) + checkinSection(ctx);
 }
 
 let squirrelTimer = 0;
@@ -385,8 +451,15 @@ export function mount(root, ctx, params = {}) {
   // Coronation burst fires once per device; later views just bob (M24).
   if (ctx.phase === "crowned" && !ctx.crownedSeen) {
     try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }
-    setTimeout(() => burst({}), reduced() ? 0 : 300);
+    ceremony(root);
   }
+  root.querySelector("#encore")?.addEventListener("click", () => {
+    const stage = root.querySelector("#ceremony");
+    stage.classList.add("is-seen"); void stage.offsetWidth; stage.classList.remove("is-seen");
+    stage.scrollIntoView({ block: "start", behavior: "instant" });
+    fanfare();
+    ceremony(root);
+  });
   root.querySelector("#calBtn")?.addEventListener("click", () => downloadCalendar(ctx.challenge));
   // #/check-in is the Court, scrolled to its Check-in section.
   if (params.focus) root.querySelector("#" + params.focus)?.scrollIntoView({ block: "start", behavior: "instant" });

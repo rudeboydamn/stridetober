@@ -61,7 +61,7 @@ export const WEEKS = [
 
 // Who has handed in the week's screenshot — names only, never numbers. Shown on the Court
 // until that week is posted. Add ids as screenshots land; drop the week once WEEKS has it.
-export const DOCKET = { week: 4, in: ["alicia", "tedi", "lizzie", "christina", "rod-jr", "rod-sr", "cristina", "brittany", "jess"] };
+export const DOCKET = { week: 4, in: ["alicia", "tedi", "lizzie", "christina", "rod-jr", "rod-sr", "cristina", "brittany", "jess", "ashlea"] };
 
 // The final week: live from the week-3 posting until the clock strikes midnight on Halloween.
 export const ANNOUNCEMENT = {

@@ -257,8 +257,15 @@ function coronation(ctx) {
     </li>`;
   };
   const margin = champ.total - (ctx.standings[1]?.total ?? 0);
-  return `
-  <section class="ceremony${ctx.crownedSeen ? " is-seen" : ""}" id="ceremony">
+  // A first look on this device starts at the finished clock, whenever that look happens.
+  const zero = ctx.crownedSeen ? "" : `
+  <div class="zero-clock" id="zeroClock" aria-hidden="true">
+    <span class="kicker">The final numbers and the podium</span>
+    ${countdownHTML(countdownParts(ctx.now, ctx.now))}
+    <p class="zero-line">Time.</p>
+  </div>`;
+  return `${zero}
+  <section class="ceremony${ctx.crownedSeen ? " is-seen" : " with-zero"}" id="ceremony">
     <span class="spot spot-l" aria-hidden="true"></span><span class="spot spot-r" aria-hidden="true"></span>
     <span class="bulbs" aria-hidden="true"></span>
     <div class="ceremony-inner">
@@ -334,6 +341,7 @@ function fanfare() {
 }
 
 // The reveal: third, second, then the crown, then everything falls.
+const ZERO_MS = 5000; // matches --lead and the fade in motion.css
 function ceremony(root, delay = 4300) {
   const de = document.documentElement.clientWidth;
   setTimeout(() => {
@@ -450,12 +458,16 @@ export function mount(root, ctx, params = {}) {
   }, 18_000);
   // Coronation burst fires once per device; later views just bob (M24).
   if (ctx.phase === "crowned" && !ctx.crownedSeen) {
-    try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }
-    ceremony(root);
+    ceremony(root, reduced() ? 0 : ZERO_MS + 4300);
+    setTimeout(() => root.querySelector("#zeroClock")?.remove(), reduced() ? 0 : ZERO_MS + 200);
+    // Marked seen only once the show is over: marking it sooner re-renders the page mid-show.
+    setTimeout(() => {
+      try { localStorage.setItem("stridetober:crowned-seen", "1"); } catch { /* private mode */ }
+    }, reduced() ? 0 : ZERO_MS + 6000);
   }
   root.querySelector("#encore")?.addEventListener("click", () => {
     const stage = root.querySelector("#ceremony");
-    stage.classList.add("is-seen"); void stage.offsetWidth; stage.classList.remove("is-seen");
+    stage.classList.remove("with-zero"); stage.classList.add("is-seen"); void stage.offsetWidth; stage.classList.remove("is-seen");
     stage.scrollIntoView({ block: "start", behavior: "instant" });
     fanfare();
     ceremony(root);

@@ -647,3 +647,9 @@ a.lb-who:active .lb-name { text-decoration: underline; }
 .countdown-card[data-key="reveal"] .kicker { font-size: 15px; }
 .countdown-card[data-key="reveal"] .countdown { zoom: 1.5; justify-content: center; }
 @media (max-width: 480px) { .countdown-card[data-key="reveal"] .countdown { zoom: 1.15; } }
+
+/* the finished clock, shown before the first look at the ceremony */
+.zero-clock { position: fixed; inset: 0; z-index: 1000; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 16px; text-align: center; background: #150d0a; color: #f7ecdd; }
+.zero-clock .kicker { color: #f2c14e; }
+.zero-clock .countdown { zoom: 1.15; }
+.zero-line { font: 600 clamp(30px, 8vw, 56px)/1 var(--font-display); color: #f2c14e; margin: 0; }
